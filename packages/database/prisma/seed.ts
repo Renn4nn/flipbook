@@ -1,7 +1,7 @@
 import { PrismaPg } from '@prisma/adapter-pg'
 import { transformDatabaseUrl } from '@repo/config'
 import { PrismaClient } from '../src/generated/prisma/client'
-import { seedDocuments, seedUsers } from '../src/lib/seed/data'
+import { seedDocuments } from '../src/lib/seed/data'
 import { seedDatabase } from '../src/lib/utils'
 
 const connectionString = transformDatabaseUrl.parse(process.env)
@@ -14,13 +14,10 @@ async function main() {
 		prisma,
 		models: {
 			// biome-ignore-start lint/suspicious/noExplicitAny: Required
-			user: {
-				data: seedUsers,
-				whereCb: (item: any) => ({ email: item.email })
-			},
 			document: {
 				data: seedDocuments,
-				whereCb: (item: any) => ({ title: item.title })
+				// sujeito a erro por conta do id
+				whereCb: (item: any) => ({ id: item.id })
 			}
 			// biome-ignore-end lint/suspicious/noExplicitAny: Required
 		}

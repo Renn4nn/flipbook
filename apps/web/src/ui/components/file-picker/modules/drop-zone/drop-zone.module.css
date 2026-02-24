@@ -1,0 +1,25 @@
+.drop-zone {
+	all: unset;
+	width: 15rem;
+	height: 12rem;
+	border: 1px solid gray;
+	border-radius: 10px;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+}
+
+.drop-zone:focus-visible {
+	outline: 2px solid rgb(100, 100, 255);
+	outline-offset: 2px;
+}
+
+.banner {
+	margin: auto 1rem;
+	text-align: center;
+	font-size: 1.2rem;
+}
+
+.banner > span {
+	display: block;
+}

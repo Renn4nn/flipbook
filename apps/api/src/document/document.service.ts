@@ -16,10 +16,6 @@ export class DocumentService implements IDocumentService {
         return this.repository.document({ id })
     }
 
-    getDocumentByTitle(title: string): Promise<DocumentSchema> {
-        return this.repository.document({ title })
-    }
-
     createDocument(data: CreateDocumentDto): Promise<DocumentSchema> {
         return this.repository.createDocument(data)
     }

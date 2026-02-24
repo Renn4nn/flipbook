@@ -30,16 +30,6 @@ export class DocumentController {
 		}
 	}
 
-	@Get('/title/:title')
-	async getDocumentByTitle(
-		@Param('title') title: string
-	): Promise<ApiSuccessResponse<DocumentSchema>> {
-		const result = await this.service.getDocumentByTitle(title)
-		return {
-			data: result
-		}
-	}
-
 	@Get()
 	async getDocuments(): Promise<ApiSuccessResponse<DocumentSchema[]>> {
 		const result = await this.service.getDocuments()
