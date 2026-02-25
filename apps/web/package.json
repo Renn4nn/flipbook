@@ -13,8 +13,11 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@repo/constants": "workspace:*",
+    "@repo/schemas": "workspace:*",
     "@repo/ui": "workspace:*",
     "axios": "^1.13.5",
+    "axios-retry": "^4.5.0",
     "next": "16.1.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -28,6 +31,7 @@
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "babel-plugin-react-compiler": "^1.0.0",
+    "dotenv": "^17.2.3",
     "typescript": "5.9.2"
   }
 }
