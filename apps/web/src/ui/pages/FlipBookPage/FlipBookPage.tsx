@@ -1,10 +1,11 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import type { FlipBookType } from '../components/flipbook/type'
+import type { FlipBookType } from '../../components/flipbook/type'
 import FilePicker from '@/ui/components/file-picker/FilePicker'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './flipbook-page.module.css'
+import { CreateBookButton } from '@/ui/components/file-picker/CreateBookButton'
 
 const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {
 	ssr: false,
@@ -15,11 +16,26 @@ export default function FlipBookPage() {
 	const [file, setFile] = useState<File | null>(null)
 	const [type, setType] = useState<FlipBookType>('magazine')
 
+	
+	useEffect(() => {
+		if (!file) return
+
+		console.log({
+			name: file.name,
+			size: file.size,
+			type: file.type,
+			path: file.webkitRelativePath
+		})
+	}, [file])
+
+
 	return (
 		<div className={styles.wrapper}>
 			<FilePicker file={file} setFile={setFile} />
 			{file && (
+				
 				<>
+					<CreateBookButton file={file} type={type} />
 					<FlipBook type={type} file={file} />
 					<div className={styles['button-group']}>
 						<button
@@ -36,6 +52,7 @@ export default function FlipBookPage() {
 						>
 							Revista
 						</button>
+						
 					</div>
 				</>
 			)}

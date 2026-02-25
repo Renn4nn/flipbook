@@ -32,7 +32,7 @@ export default function useFilePicker({ setFile }: UseFilePickerParams) {
 	}
 
 	const fileInputHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (hasFiles(e.target.files)) {
+		if (hasFiles(e.target.files) && e.target.files[0]) {
 			setPdfFile(e.target.files[0])
 		}
 	}
@@ -46,7 +46,7 @@ export default function useFilePicker({ setFile }: UseFilePickerParams) {
 		e.preventDefault()
 		e.stopPropagation()
 
-		if (hasFiles(e.dataTransfer.files)) {
+		if (hasFiles(e.dataTransfer.files) && e.dataTransfer.files[0]) {
 			setPdfFile(e.dataTransfer.files[0])
 		}
 	}

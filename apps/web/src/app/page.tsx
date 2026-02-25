@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 }
 
 import MainPage from '@/ui/layout/main/MainPage'
-import FlipBookPage from '@/ui/pages/FlipBookPage'
+import FlipBookPage from '@/ui/pages/FlipBookPage/FlipBookPage'
 
 export default function Home() {
 	return (
