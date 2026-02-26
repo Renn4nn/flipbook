@@ -1,0 +1,41 @@
+.web-header {
+	z-index: 1;
+	top: 0;
+	position: sticky;
+	grid-area: header;
+	height: var(--header-height, 5rem);
+	padding: 0.5rem 1.25rem;
+	background-color: #005ca9;
+	color: white;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.button {
+	background-color: white;
+	color: #005ca9;
+	font-weight: 600;
+	border: 1px solid white;
+	border-radius: 4px;
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.1s active;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+.button:hover{
+	background-color: #fffffff6;
+	color: #2381cf;
+}
+
+.button-group {
+	display: flex;
+	justify-content: space-around;
+	gap: 1rem;
+	padding: 0 1rem;
+}

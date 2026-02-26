@@ -23,6 +23,8 @@ coverage
 out/
 build
 dist
+apps/api/uploads/
+
 
 
 # Debug

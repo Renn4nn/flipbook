@@ -6,13 +6,29 @@
 }
 
 .item {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 1rem;
-	border: 1px solid gray;
-	padding: 0.5rem;
-	border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  
+  /* Cores baseadas no tema Azul */
+  background-color: #f8fafc;
+  border: 1px solid #005ca9; /* Azul da sua Header */
+  color: #334155;
+  
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.item span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .remove-button {

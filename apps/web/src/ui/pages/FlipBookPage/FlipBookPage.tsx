@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
-import { CreateBookButton } from '@/ui/components/file-picker/CreateDocButton'
+import { CreateBookButton } from '@/ui/components/file-picker/modules/createbutton/CreateDocButton'
 import FilePicker from '@/ui/components/file-picker/FilePicker'
 import type { FlipBookType } from '../../components/flipbook/type'
 import styles from './flipbook-page.module.css'

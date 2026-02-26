@@ -4,6 +4,7 @@ import { RESOURCES } from '@repo/constants'
 import type { CreateDocumentSchema, DocumentSchema } from '@repo/schemas'
 import toast from 'react-hot-toast'
 import { apiAction } from '@/lib/api/actions'
+import styles from './create-button.module.css'
 
 interface CreateBookButtonProps {
 	file: File | null
@@ -31,8 +32,10 @@ export function CreateBookButton({ file }: CreateBookButtonProps) {
 		data ? toast.success(message) : toast.error(message)
 	}
 	return (
-		<button type="button" onClick={handleCreate}>
-			Criar Livro
-		</button>
+		<div className={styles['button-group']}>
+			<button className={styles.button} type="button" onClick={handleCreate}>
+				Criar Livro
+			</button>
+		</div>
 	)
 }
