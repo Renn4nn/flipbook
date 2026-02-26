@@ -11,4 +11,5 @@ export type ApiActionParams<T extends DataType> = ApiRequestParams<T> & {
 export type ApiActionReturn<T extends DataType> = {
 	message: string
 	data: T | null
+	headers?: Record<string, string>;
 }

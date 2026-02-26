@@ -6,7 +6,9 @@ import {
 	Param,
 	ParseUUIDPipe,
 	Patch,
-	Post
+	Post,
+	UploadedFile,
+	UseInterceptors
 } from '@nestjs/common'
 import { RESOURCES } from '@repo/constants'
 import { ApiSuccessResponse, DocumentSchema } from '@repo/schemas'
@@ -15,6 +17,9 @@ import {
 	UpdateDocumentDto
 } from 'src/lib/types/dto/document.dto'
 import { DocumentService } from './document.service'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { diskStorage } from 'multer';
+import { multerConfig } from 'src/lib/config/multer/multer.config'
 
 @Controller(RESOURCES.DOCUMENTS)
 export class DocumentController {
@@ -40,8 +45,10 @@ export class DocumentController {
 
 	@Post()
 	// ZodResponse({ type: DocumentDto }) This feature is currently disabled due to issues with SwaggerApi and Zod integration
+	@UseInterceptors(FileInterceptor('file', multerConfig))
 	async createDocument(
-		@Body() documentData: CreateDocumentDto
+		@Body() documentData: CreateDocumentDto,
+		@UploadedFile() file: Express.Multer.File
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
 		const result = await this.service.createDocument(documentData)
 		return {

@@ -1,7 +1,7 @@
 'use server'
 
 import { apiRequest } from "@/lib/api/request"
-import { ApiActionReturn } from "@/lib/types/action"
+import type { ApiActionReturn } from "@/lib/types/action"
 
 type CreateProps = {
   file: File

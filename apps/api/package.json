@@ -30,6 +30,8 @@
     "@repo/constants": "workspace:^",
     "@repo/database": "workspace:^",
     "@repo/schemas": "workspace:^",
+    "@types/multer": "^2.0.0",
+    "multer": "^2.0.2",
     "nestjs-prisma": "^0.27.0",
     "nestjs-zod": "^5.1.1",
     "reflect-metadata": "^0.2.2",
