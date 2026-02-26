@@ -3,7 +3,7 @@ import type { Prisma } from '@repo/database'
 import type { ApiSuccessResponse } from '../api/api.response.types.js'
 
 export const createDocumentSchema = z.strictObject({
-	filename: z.string().trim().nonempty().max(50),
+	filename: z.string().trim().nonempty(),
 	path: z.string().trim()
 }) satisfies z.ZodType<Prisma.DocumentCreateInput>
 
