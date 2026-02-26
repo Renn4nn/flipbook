@@ -1,5 +1,6 @@
 // biome-ignore-all lint/correctness/useHookAtTopLevel: Conflict
 
+import { join } from 'node:path'
 import { ConfigService } from '@nestjs/config'
 import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
@@ -9,7 +10,6 @@ import {
 	SwaggerModule
 } from '@nestjs/swagger'
 import { cleanupOpenApiDoc } from 'nestjs-zod'
-import { join } from 'node:path'
 import { AppModule } from './app.module'
 import {
 	PrismaClientExceptionFilter,

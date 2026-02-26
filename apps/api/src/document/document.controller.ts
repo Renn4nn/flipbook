@@ -10,16 +10,15 @@ import {
 	UploadedFile,
 	UseInterceptors
 } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 import { RESOURCES } from '@repo/constants'
 import { ApiSuccessResponse, DocumentSchema } from '@repo/schemas'
+import { multerConfig } from 'src/lib/config/multer/multer.config'
 import {
 	CreateDocumentDto,
 	UpdateDocumentDto
 } from 'src/lib/types/dto/document.dto'
 import { DocumentService } from './document.service'
-import { FileInterceptor } from '@nestjs/platform-express'
-import { diskStorage } from 'multer';
-import { multerConfig } from 'src/lib/config/multer/multer.config'
 
 @Controller(RESOURCES.DOCUMENTS)
 export class DocumentController {
@@ -48,7 +47,7 @@ export class DocumentController {
 	@UseInterceptors(FileInterceptor('file', multerConfig))
 	async createDocument(
 		@Body() documentData: CreateDocumentDto,
-		@UploadedFile() file: Express.Multer.File
+		@UploadedFile() _file: Express.Multer.File
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
 		const result = await this.service.createDocument(documentData)
 		return {

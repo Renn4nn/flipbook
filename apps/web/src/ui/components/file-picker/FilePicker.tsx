@@ -4,7 +4,6 @@ import styles from './file-picker.module.css'
 import useFilePicker from './hooks/useFilePicker'
 import DropZone from './modules/drop-zone/DropZone'
 import type { FilePickerProps } from './types/components'
-import { useEffect } from 'react'
 
 export default function FilePicker({ file, setFile }: FilePickerProps) {
 	const { clearFile, ...dropZoneProps } = useFilePicker({

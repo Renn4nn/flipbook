@@ -8,7 +8,6 @@ import { config, validate } from './lib/config/env'
 import { HttpExceptionFilter } from './lib/filters/http.exception.filter'
 import { PrismaClientFactory } from './lib/utils/prisma.utils'
 
-
 @Module({
 	imports: [
 		ConfigModule.forRoot({

@@ -7,20 +7,20 @@ import { use, useEffect } from 'react'
 import toast from 'react-hot-toast'
 
 export default function useApiResponse<T extends DataType>(
-  apiResponsePromise: Promise<ApiResponse<T>>
+	apiResponsePromise: Promise<ApiResponse<T>>
 ): T | null {
-  const res = use(apiResponsePromise)
+	const res = use(apiResponsePromise)
 
-  useEffect(() => {
-    if ('error' in res) {
-      toast.error(res.error.message)
-    }
-    if ('errors' in res) {
-      res.errors.map((e) => toast.error(e.message))
-    }
-  }, [res])
+	useEffect(() => {
+		if ('error' in res) {
+			toast.error(res.error.message)
+		}
+		if ('errors' in res) {
+			res.errors.map((e) => toast.error(e.message))
+		}
+	}, [res])
 
-  if ('data' in res) return res.data
+	if ('data' in res) return res.data
 
-  return null
+	return null
 }
