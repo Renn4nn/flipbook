@@ -1,22 +1,17 @@
-import Logo from '../../layout/logo'
+import Logo from '@/ui/layout/logo'
 import styles from './header.module.css'
 import SideNavToggler from '../sidebar/SideNavToggler'
+import Sidebar from '../sidebar/Sidebar'
+import { Book, House } from 'lucide-react'
 
 export default function Header() {
 	return (
 		<header className={styles['web-header']}>
 			<SideNavToggler />
-			<a href="/">
+			<a href="/" className={styles.logo}>
 				<Logo color="white" />
 			</a>
-			<div className={styles['button-group']}>
-				<button type="button" className={styles.button}>
-					Workspace
-				</button>
-				<button type="button" className={styles.button}>
-					New Flipbook
-				</button>
-			</div>
+			<Sidebar />
 		</header>
 	)
 }

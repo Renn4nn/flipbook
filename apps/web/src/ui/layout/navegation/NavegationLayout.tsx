@@ -1,5 +1,5 @@
-import Header from '../../components/header/Header'
-import Sidebar from '../../components/sidebar/Sidebar'
+import Header from '@/ui/components/header/Header'
+import Sidebar from '@/ui/components/sidebar/Sidebar'
 
 export default function NavegationLayout({
 	children
@@ -9,7 +9,6 @@ export default function NavegationLayout({
 	return (
 		<>
 			<Header />
-			<Sidebar />
 			{children}
 		</>
 	)
