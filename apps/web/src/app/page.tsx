@@ -8,11 +8,14 @@ export const metadata: Metadata = {
 
 import MainPage from '@/ui/layout/main/MainPage'
 import FlipBookPage from '@/ui/pages/FlipBookPage/FlipBookPage'
+import NavegationLayout from '@/ui/layout/navegation/NavegationLayout'
 
 export default function Home() {
 	return (
-		<MainPage>
-			<FlipBookPage />
-		</MainPage>
+		<NavegationLayout>
+			<MainPage>
+				<FlipBookPage />
+			</MainPage>
+		</NavegationLayout>
 	)
 }

@@ -1,0 +1,19 @@
+.sidenav-toggler {
+		display: none;
+		border: 1px solid #fff;
+		padding: 0.3rem;
+		border-radius: 5px;
+		margin-right: 1rem;
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--color-ctd-azul-01);
+			filter: brightness(1.3);
+		}
+	}
+
+	@media (max-width: 900px) {
+		.sidenav-toggler {
+			display: block;
+		}
+	}

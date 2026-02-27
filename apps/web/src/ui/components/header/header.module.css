@@ -39,3 +39,40 @@
 	gap: 1rem;
 	padding: 0 1rem;
 }
+
+/* 
+@media (max-width: 768px) {
+  .web-header {
+    height: auto;
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap; 
+    justify-content: space-around;
+  }
+
+  .logo {
+    width: auto;
+    max-width: 100%;
+  }
+
+  .button-group {
+    width: 100%;
+    order: 2;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .button {
+    flex: 1;
+    width: auto; 
+    padding: 0.8rem 0.5rem;
+    font-size: 0.85rem;
+    min-height: 48px;
+  }
+
+  .button:active {
+    background-color: #e0e0e0;
+    transform: scale(0.97);
+  }
+} */

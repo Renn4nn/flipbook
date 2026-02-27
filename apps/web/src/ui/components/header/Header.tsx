@@ -1,9 +1,11 @@
-import Logo from '../logo'
+import Logo from '../../layout/logo'
 import styles from './header.module.css'
+import SideNavToggler from '../sidebar/SideNavToggler'
 
 export default function Header() {
 	return (
 		<header className={styles['web-header']}>
+			<SideNavToggler />
 			<a href="/">
 				<Logo color="white" />
 			</a>
