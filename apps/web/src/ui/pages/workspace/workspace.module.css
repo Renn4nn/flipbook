@@ -1,0 +1,69 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 5rem);
+  background-color: #f4f7f9;
+  overflow: hidden;
+  padding: 2.5rem;
+  overflow-y: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.card {
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  background-color: #ffff;
+  padding: 1rem;
+  width: 95%;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 0.8rem;
+}
+
+.cardBody {
+  width: 100%;
+  aspect-ratio: 1 / 1.4;
+  overflow: hidden;
+  position: relative;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  object-fit: cover;
+  display: block;
+}
+
+.cardHeader h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .card {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .grid {
+    grid-template-columns: repeat(1, minmax(200px, 1fr));
+  }
+}

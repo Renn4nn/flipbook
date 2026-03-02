@@ -6,16 +6,17 @@ export const metadata: Metadata = {
 		'CTD flipbook is a web page where you can read documents in an interactive way.'
 }
 
-import MainPage from '@/ui/layout/main/MainPage'
-import FlipBookPage from '@/ui/pages/FlipBookPage/FlipBookPage'
-import NavegationLayout from '@/ui/layout/navegation/NavegationLayout'
+import Workspace from '@/ui/pages/workspace/page'
+import { cachedApiRequest } from '@/lib/api/request'
+import { DocumentSchema } from '@repo/schemas'
+import { API_ROUTES, RESOURCES } from '@repo/constants'
 
 export default function Home() {
+	const documentPromise = cachedApiRequest<DocumentSchema[]>({
+		url: API_ROUTES.DOCUMENTS.BASE,
+		tagsToCache: [RESOURCES.DOCUMENTS]
+	})
 	return (
-		<NavegationLayout>
-			<MainPage>
-				<FlipBookPage />
-			</MainPage>
-		</NavegationLayout>
+		<Workspace documentsPromise={documentPromise} />
 	)
 }

@@ -1,6 +1,7 @@
 'use client'
 import './globals.css'
 import Header from '@/ui/components/header/Header'
+import MainPage from '@/ui/layout/main/MainPage'
 
 export default function RootLayout({
 	children
@@ -9,7 +10,13 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="pt">
-			<body>{children}</body>
+			
+			<body>
+				<MainPage>
+					<Header />
+					{children}
+				</MainPage>
+			</body>
 		</html>
 	)
 }

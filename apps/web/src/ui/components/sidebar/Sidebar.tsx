@@ -8,7 +8,7 @@ export default function Sidebar() {
 
 	return (
 		<div className={`link-group ${isOpen ? 'show' : ''}`}>
-			<a href="/" className="nav-link">
+			<a href="/workspace" className="nav-link">
 				<House size={20} />
 				<span>Workspace</span>
 			</a>

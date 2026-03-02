@@ -14,26 +14,24 @@
 		rgba(0, 0, 0, 0.2) 100%
 	);
 
-	/* Efeito de Lombada e Vinco da Capa (Refinado) */
-	/* Simula a luz batendo na quina da lombada e a depressão do vinco */
 	--cover-book-effect: linear-gradient(
 		to right,
-		rgba(0, 0, 0, 0.15) 0% /* Borda extrema esquerda */,
+		rgba(0, 0, 0, 0.15) 0%,
 		rgba(0, 0, 0, 0.02) 2%,
-		rgba(255, 255, 255, 0.2) 3% /* Brilho da quina */,
+		rgba(255, 255, 255, 0.2) 3%,
 		rgba(255, 255, 255, 0) 4%,
-		rgba(0, 0, 0, 0.08) 5% /* Início do vinco */,
-		rgba(0, 0, 0, 0) 8% /* Fim do vinco */
+		rgba(0, 0, 0, 0.08) 5%,
+		rgba(0, 0, 0, 0) 8%
 	);
 
 	--cover-magazine-effect: linear-gradient(
 		to right,
-		rgba(0, 0, 0, 0.2) 0% /* Borda externa bem escura */,
+		rgba(0, 0, 0, 0.2) 0%,
 		/* rgba(0, 0, 0, 0.2) 0%, */
-		rgba(0, 0, 0, 0.1) 50% /* Sombra suave */,
-		rgba(255, 255, 255, 0.1) 100% /* Brilho leve na curva da dobra */,
-		rgba(255, 255, 255, 0) 25% /* Transição para o plano da capa */,
-		rgba(0, 0, 0, 0.05) 100% /* Sombra muito sutil no resto da página */
+		rgba(0, 0, 0, 0.1) 50% ,
+		rgba(255, 255, 255, 0.1) 100%,
+		rgba(255, 255, 255, 0) 25%,
+		rgba(0, 0, 0, 0.05) 100%
 	);
 }
 
@@ -43,20 +41,15 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 40px 0; /* Espaço para a sombra não cortar */
+	padding: 40px 0;
 }
 
 .flipbook-page-wrapper {
 	background-color: white;
 	position: relative;
 	box-shadow: var(--page-shadow);
-	/* Arredondamento sutil nas bordas externas para tirar o aspecto "vetorial" */
-	/* overflow: hidden; */
 }
 
-/* --- Estilo das Páginas Internas --- */
-
-/* Camada de efeitos (Pseudo-elemento) */
 .flipbook-page-wrapper::after {
 	content: '';
 	position: absolute;
@@ -68,19 +61,14 @@
 	z-index: 2;
 }
 
-/* Esquerda */
 .flipbook-page-wrapper:nth-of-type(even)::after {
 	background: var(--inner-fold-gradient-left);
 }
 
-/* Direita */
 .flipbook-page-wrapper:nth-of-type(odd):not(:first-of-type)::after {
 	background: var(--inner-fold-gradient-right);
 }
 
-/* --- Estilo de FlipBook --- */
-
-/* Book Style */
 .book:first-of-type::after {
 	background: var(--cover-book-effect);
 }
@@ -91,8 +79,8 @@
 	top: 0;
 	left: 0;
 	bottom: 0;
-	width: 6%; /* Largura da área da dobra */
+	width: 6%;
 	background: var(--cover-magazine-effect);
-	pointer-events: none; /* Garante que o gradiente não bloqueie cliques em links */
+	pointer-events: none;
 	z-index: 2;
 }
