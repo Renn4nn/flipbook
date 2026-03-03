@@ -23,7 +23,7 @@ export default function Workspace({ documentsPromise }: { documentsPromise: Prom
 							}).format(new Date(document.createdAt))}</span>
 							</div>
 						<div className={styles.cardBody}>
-							<Image src='/teste.jpg' alt={document.filename} width={500} height={500} className={styles.cardImage} />
+							<Image src='/blame.jpg' alt={document.filename} width={500} height={500} className={styles.cardImage} />
 						</div>
 					</div>
 				))}

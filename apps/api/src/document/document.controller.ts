@@ -8,7 +8,8 @@ import {
 	Patch,
 	Post,
 	UploadedFile,
-	UseInterceptors
+	UseInterceptors,
+	Request
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { RESOURCES } from '@repo/constants'
@@ -47,9 +48,16 @@ export class DocumentController {
 	@UseInterceptors(FileInterceptor('file', multerConfig))
 	async createDocument(
 		@Body() documentData: CreateDocumentDto,
-		@UploadedFile() _file: Express.Multer.File
+		@UploadedFile() _file: Express.Multer.File,
+		@Request() _req: unknown
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
-		const result = await this.service.createDocument(documentData)
+		const documentId = (_req as { body: { id: string } }).body.id
+		const result = await this.service.createDocument({
+			...documentData,
+			id: documentId,
+			filename: _file.filename,
+			path: `/uploads/${_file.filename}`
+		})
 		return {
 			data: result
 		}

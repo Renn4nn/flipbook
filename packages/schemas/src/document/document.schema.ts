@@ -3,6 +3,7 @@ import type { Prisma } from '@repo/database'
 import type { ApiSuccessResponse } from '../api/api.response.types.js'
 
 export const createDocumentSchema = z.strictObject({
+	id: z.uuid(),
 	filename: z.string().trim().nonempty(),
 	path: z.string().trim()
 }) satisfies z.ZodType<Prisma.DocumentCreateInput>
@@ -10,7 +11,6 @@ export const createDocumentSchema = z.strictObject({
 export const updateDocumentSchema = createDocumentSchema.partial()
 
 export const documentSchema = z.strictObject({
-	id: z.uuid(),
 	...createDocumentSchema.shape,
 	updatedAt: z.coerce.date(),
 	createdAt: z.coerce.date()
