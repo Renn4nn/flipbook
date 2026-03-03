@@ -23,6 +23,7 @@ async function bootstrap() {
 
 	const { httpAdapter } = app.get(HttpAdapterHost)
 	const PORT = app.get(ConfigService).getOrThrow('API_PORT')
+	app.enableCors();
 
 	const config = new DocumentBuilder()
 		.setTitle('CTD Resource API')
@@ -57,6 +58,9 @@ async function bootstrap() {
 	app.useGlobalFilters(new ZodValidationExceptionFilter())
 	app.useGlobalFilters(new ZodSerializationExceptionFilter())
 	app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter))
+	app.useStaticAssets(join(process.cwd(), 'uploads'), {
+		prefix: '/uploads/'
+	})
 
 	await app.listen(PORT)
 	console.info(`Running on port ${PORT}`)

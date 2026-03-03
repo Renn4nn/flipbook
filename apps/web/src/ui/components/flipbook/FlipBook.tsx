@@ -13,7 +13,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 type FlipBookProps = {
 	type: FlipBookType
-	file: File
+	file: File | string
 	width?: number
 	height?: number
 }
@@ -53,6 +53,10 @@ export default function FlipBook({
 			error={'Um erro ocorreu!'}
 			loading={'Carregando PDF…'}
 			noData={'Nenhum arquivo PDF selecionado'}
+			options={{
+				cMapUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/cmaps/',
+				cMapPacked: true
+			}}
 		>
 			{/* @ts-ignore */}
 			<HTMLFlipBook
