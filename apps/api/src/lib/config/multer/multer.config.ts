@@ -18,7 +18,7 @@ export const multerConfig = {
 			const documentId = randomUUID()
 			const extension = extname(file.originalname)
 			_req.body.id = documentId
-			
+
 			cb(null, `${documentId}${extension}`)
 		}
 	})

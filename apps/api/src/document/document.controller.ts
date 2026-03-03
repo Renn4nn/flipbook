@@ -51,13 +51,15 @@ export class DocumentController {
 		@UploadedFile() _file: Express.Multer.File,
 		@Request() _req: unknown
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
-		const documentId = (_req as { body: { id: string } }).body.id
+		const documentId = _file.filename
+		console.log(_file)
 		const result = await this.service.createDocument({
 			...documentData,
 			id: documentId,
-			filename: _file.filename,
+			filename: _file.originalname,
 			path: `/uploads/${_file.filename}`
 		})
+
 		return {
 			data: result
 		}
