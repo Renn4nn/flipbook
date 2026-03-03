@@ -2,20 +2,22 @@
 import { Book, House } from 'lucide-react'
 import './sidebar.css'
 import { useSidebarStore } from '@/lib/store/useSidebarStore'
+import { useModalStore } from '@/lib/store/useModal'
 
 export default function Sidebar() {
 	const { isOpen } = useSidebarStore()
+	const { openModal } = useModalStore()
 
 	return (
 		<div className={`link-group ${isOpen ? 'show' : ''}`}>
 			<a href="/workspace" className="nav-link">
-				<House size={20} />
+				<House size={20} />	
 				<span>Workspace</span>
 			</a>
-			<a href="/" className="nav-link">
+			<button type="button" className="nav-link" onClick={openModal}>
 				<Book size={20} />
 				<span>New Flipbook</span>
-			</a>
-		</div>
+			</button>
+		</div>	
 	)
 }

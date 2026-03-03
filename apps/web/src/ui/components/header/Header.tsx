@@ -2,15 +2,15 @@ import Logo from '@/ui/layout/logo'
 import styles from './header.module.css'
 import SideNavToggler from '../sidebar/SideNavToggler'
 import Sidebar from '../sidebar/Sidebar'
-import { Book, House } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Header() {
 	return (
 		<header className={styles['web-header']}>
 			<SideNavToggler />
-			<a href="/" className={styles.logo}>
+			<Link href="/" className={styles.logo}>
 				<Logo color="white" />
-			</a>
+			</Link>
 			<Sidebar />
 		</header>
 	)
