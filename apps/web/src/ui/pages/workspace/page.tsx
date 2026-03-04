@@ -29,7 +29,10 @@ export default function Workspace({
 								}).format(new Date(document.createdAt))}
 							</span>
 						</div>
-						<Link href={`/flipbook/${document.id}`} className={styles.cardBody}>
+						<Link
+							href={`/flipbook/${document.id}.pdf`}
+							className={styles.cardBody}
+						>
 							<Image
 								src="/blame.jpg"
 								alt={document.filename}

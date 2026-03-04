@@ -5,6 +5,7 @@ import type { CreateDocumentSchema, DocumentSchema } from '@repo/schemas'
 import toast from 'react-hot-toast'
 import { apiAction } from '@/lib/api/actions'
 import styles from './create-button.module.css'
+import { useModalStore } from '@/lib/store/useModal'
 
 interface CreateBookButtonProps {
 	file: File | null
@@ -29,7 +30,12 @@ export function CreateBookButton({ file }: CreateBookButtonProps) {
 		const { data, message } = await toast.promise(actionPromise, {
 			loading: 'Criando documento...'
 		})
-		data ? toast.success(message) : toast.error(message)
+		if (data) {
+			toast.success(message)
+			useModalStore.setState({ isOpen: false })
+		} else {
+			toast.error(message)
+		}
 	}
 	return (
 		<div className={styles['button-group']}>

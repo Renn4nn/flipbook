@@ -55,7 +55,7 @@ export class DocumentController {
 		console.log(_file)
 		const result = await this.service.createDocument({
 			...documentData,
-			id: documentId,
+			id: documentId.split('.pdf')[0],
 			filename: _file.originalname,
 			path: `/uploads/${_file.filename}`
 		})
