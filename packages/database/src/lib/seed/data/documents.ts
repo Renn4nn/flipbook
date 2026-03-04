@@ -2,23 +2,18 @@ import type { Prisma } from '../../../generated/prisma/client.js'
 
 export const seedDocuments: Prisma.DocumentCreateInput[] = [
     {
-        id: 'a1f3c9e2-7b44-4d8a-9c11-0f2e6b7d1a01',
-        filename: 'blame-vol01.pdf', 
-        path: '/uploads/a1f3c9e2-7b44-4d8a-9c11-0f2e6b7d1a01.pdf', 
+        id: "d2cccaf2-32d8-4707-a76d-a7e90f111ea1",
+        filename: "Death Note - 2004 (Shueisha) - 001.pdf",
+        path: "/uploads/d2cccaf2-32d8-4707-a76d-a7e90f111ea1.pdf",
     },
     {
-        id: 'b7d2a410-3c5e-4f91-8a22-1e9c4d6f2b02',
-        filename: 'one-piece-vol10.pdf',
-        path: '/uploads/b7d2a410-3c5e-4f91-8a22-1e9c4d6f2b02.pdf',
+        id: "3e4198c3-8955-4e2f-8998-e14decaf0421",
+        filename: "Naruto - 002.pdf",
+        path: "/uploads/3e4198c3-8955-4e2f-8998-e14decaf0421.pdf",
     },
     {
-        id: 'c4e8f123-9a77-4b2d-bc33-2a7f5d8e3c03',
-        filename: 'attack-on-titan-especial.pdf',
-        path: '/uploads/c4e8f123-9a77-4b2d-bc33-2a7f5d8e3c03.pdf',
-    },
-    {
-        id: 'd9a1b567-2f88-4c6e-ad44-3b8e6f1a4d04',
-        filename: 'jujutsu-kaisen-vol01.pdf',
-        path: '/uploads/d9a1b567-2f88-4c6e-ad44-3b8e6f1a4d04.pdf',
-    },
+        id: "4ad55d44-5793-40fc-87d3-606844d03522",
+        filename: "Amazing Spider-Man - 1963 (Marvel) - 001.pdf",
+        path: "/uploads/4ad55d44-5793-40fc-87d3-606844d03522.pdf",
+    }
 ]
