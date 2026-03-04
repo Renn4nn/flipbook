@@ -14,7 +14,7 @@ export default function Modal({ children }: ModalProps) {
 	return (
 		<div className={styles.overlay}>
       <div className={styles.content}>
-        <button type="button" className={styles.closeBtn} onClick={closeModal} />
+        <button type="button" className={styles.closeBtn} onClick={closeModal}>X</button>
 				{children}
       </div>
     </div>

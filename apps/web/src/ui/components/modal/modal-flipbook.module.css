@@ -3,6 +3,8 @@
   flex-direction: column;
   gap: 1.5rem;
   color: #333;
+  max-width: 450rem;
+  max-height: 45rem;
 }
 
 .container h2 {
@@ -13,7 +15,7 @@
 .pickerSection {
   min-height: 150px;
   border: 2px dashed #ddd;
-  border-radius: 8px;
+  padding: 2rem
 }
 
 .buttonGroup {

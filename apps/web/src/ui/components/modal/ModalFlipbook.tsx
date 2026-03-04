@@ -1,10 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import dynamic from 'next/dynamic' // Importante para componentes que usam window/document
 import FilePicker from "../file-picker/FilePicker"
 import { CreateBookButton } from "@/ui/components/file-picker/modules/createbutton/CreateDocButton"
 import type { FlipBookType } from "../flipbook/type"
 import styles from "./modal-flipbook.module.css"
+
+// Import dinâmico para evitar erros de SSR com o canvas do PDF
+const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {
+  ssr: false,
+  loading: () => <div className={styles.loadingPreview}>Carregando preview...</div>
+})
 
 export default function ModalFlipbook() {
   const [file, setFile] = useState<File | null>(null)
@@ -12,36 +19,14 @@ export default function ModalFlipbook() {
 
   return (
     <div className={styles.container}>
-      <h2>Novo Flipbook</h2>
-      <p>Selecione um arquivo PDF para começar</p>
-      
       <div className={styles.pickerSection}>
         <FilePicker file={file} setFile={setFile} />
       </div>
 
       {file && (
         <div className={styles.options}>
-          <label>Estilo de visualização:</label>
-          <div className={styles.buttonGroup}>
-            <button 
-              type="button"
-              className={type === 'book' ? styles.active : ''} 
-              onClick={() => setType('book')}
-            >
-              Livro (Capa dura)
-            </button>
-            <button 
-              type="button"
-              className={type === 'magazine' ? styles.active : ''} 
-              onClick={() => setType('magazine')}
-            >
-              Revista (Flexível)
-            </button>
-          </div>
-
-          <div className={styles.footer}>
-            {/* O botão de criar que você já tem */}
-            <CreateBookButton file={file} />
+          <div className={styles.previewWrapper}>
+            <FlipBook type={type} file={file} />
           </div>
         </div>
       )}
