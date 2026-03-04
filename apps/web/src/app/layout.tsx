@@ -3,7 +3,7 @@ import './globals.css'
 import Header from '@/ui/components/header/Header'
 import Modal from '@/ui/components/modal/Modal'
 import MainPage from '@/ui/layout/main/MainPage'
-import ModalFlipbook from '@/ui/components/modal/ModalFlipbook'
+import ModalFlipbook from '@/ui/components/modal/flipbook/ModalFlipbook'
 
 export default function RootLayout({
 	children
@@ -14,7 +14,7 @@ export default function RootLayout({
 		<html lang="pt">
 			<body>
 				<MainPage>
-					<Modal>
+					<Modal title="New Flipbook">
 						<ModalFlipbook />
 					</Modal>
 					<Header />

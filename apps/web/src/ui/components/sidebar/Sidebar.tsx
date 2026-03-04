@@ -10,14 +10,14 @@ export default function Sidebar() {
 
 	return (
 		<div className={`link-group ${isOpen ? 'show' : ''}`}>
-			<a href="/workspace" className="nav-link">
-				<House size={20} />	
+			<a href="/" className="nav-link">
+				<House size={20} />
 				<span>Workspace</span>
 			</a>
 			<button type="button" className="nav-link" onClick={openModal}>
 				<Book size={20} />
 				<span>New Flipbook</span>
 			</button>
-		</div>	
+		</div>
 	)
 }

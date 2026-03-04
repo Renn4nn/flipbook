@@ -20,7 +20,8 @@
   border: 1px solid #ccc;
   background-color: #ffff;
   padding: 1rem;
-  width: 95%;
+  display: flex;
+  flex-direction: column;
 }
 
 .cardHeader {
@@ -32,6 +33,8 @@
 
 .cardBody {
   width: 100%;
+  height: 100%;
+  display: block;
   aspect-ratio: 1 / 1.4;
   overflow: hidden;
   position: relative;

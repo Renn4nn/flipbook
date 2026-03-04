@@ -69,6 +69,7 @@ export default function FlipBook({
 				flippingTime={750}
 				onFlip={handleOnFlip}
 				showPageCorners={true}
+				usePortrait={false} // força 2 paginas lado a lado
 			>
 				{numPages &&
 					Array.from({ length: numPages }, (_, i) => i + 1).map((pn) => (

@@ -41,13 +41,13 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 40px 0;
 }
 
 .flipbook-page-wrapper {
 	background-color: white;
 	position: relative;
 	box-shadow: var(--page-shadow);
+	overflow: hidden;
 }
 
 .flipbook-page-wrapper::after {
