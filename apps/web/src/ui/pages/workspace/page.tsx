@@ -1,23 +1,28 @@
 'use client'
 
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import useApiResponse from '@/lib/api/hooks'
 import styles from './workspace.module.css'
-import Image from 'next/image'
-import { ApiResponse, DocumentSchema } from '@repo/schemas'
-import Link from 'next/link'
-import ThumbnailPdf from '@/ui/components/ThumbnailPdf'
-import dynamic from 'next/dynamic'
+import type { ApiResponse, DocumentSchema } from '@repo/schemas'
 
 export default function Workspace({
 	documentsPromise
 }: {
 	documentsPromise: Promise<ApiResponse<DocumentSchema[]>>
 }) {
-	
-	const ThumbnailPdf = dynamic(() => import('@/ui/components/ThumbnailPdf'), { 
-		ssr: false,
-		loading: () => <div style={{ height: '350px', background: '#222', borderRadius: '8px' }} />
-	})
+	const ThumbnailPdf = dynamic(
+		() => import('@/ui/components/thumbnail/ThumbnailPdf'),
+		{
+			ssr: false,
+			loading: () => (
+				// Adicionar um skeleton
+				<div
+					style={{ height: '100%', background: '#222', borderRadius: '8px' }}
+				/>
+			)
+		}
+	)
 	const documentsResponse = useApiResponse<DocumentSchema[]>(documentsPromise)
 	if (!documentsResponse)
 		return <div className={styles.container}>Carregando documentos...</div>
@@ -36,13 +41,11 @@ export default function Workspace({
 								}).format(new Date(document.createdAt))}
 							</span>
 						</div>
-						<Link
-							href={`/flipbook/${document.id}.pdf`}
-							className={styles.cardBody}
-						>
-							<ThumbnailPdf 
-                url={`http://localhost:3001${document.path}`}
-              />
+						<Link href={`/flipbook/${document.id}`} className={styles.cardBody}>
+							<ThumbnailPdf
+								url={`http://localhost:3001${document.path}`}
+								className={styles.cardImage}
+							/>
 						</Link>
 					</div>
 				))}
