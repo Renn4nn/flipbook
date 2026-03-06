@@ -2,7 +2,7 @@
 
 import { Document, Page } from 'react-pdf'
 import './styles.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import HTMLFlipBook from 'react-pageflip'
 import { pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/TextLayer.css'
@@ -46,6 +46,14 @@ export default function FlipBook({
 		audio.play()
 	}
 
+	useEffect(() => {
+		document.body.classList.add('no-scroll')
+
+		return () => {
+			document.body.classList.remove('no-scroll')
+		}
+	}, [])
+
 	return (
 		<Document
 			file={file}
@@ -76,9 +84,13 @@ export default function FlipBook({
 						<div
 							key={`flipbook-page-${pn}`}
 							className={`flipbook-page-wrapper ${type}`}
+							style={{ width: finalWidth, height: finalHeight }}
 						>
 							<Page
 								width={finalWidth}
+								height={finalHeight}
+								canvasBackground="transparent"
+								devicePixelRatio={1}
 								pageNumber={pn}
 								loading="Carregando página…"
 								noData="Página vazia"
