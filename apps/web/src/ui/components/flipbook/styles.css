@@ -43,9 +43,12 @@
 .react-pdf__Document {
 	/* biome-ignore lint/complexity/noImportantStyles: Required to FlipBook work properly and the value can be changed if needed */
 	width: 100% !important;
+  height: 100% !important;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	padding: 40px; 
+  box-sizing: border-box;
 }
 
 .flipbook-page-wrapper {
@@ -64,6 +67,10 @@
 	height: 100%;
 	pointer-events: none;
 	z-index: 2;
+}
+
+body.no-scroll {
+	overflow: hidden !important;
 }
 
 .flipbook-page-wrapper:nth-of-type(even)::after {
@@ -88,4 +95,17 @@
 	background: var(--cover-magazine-effect);
 	pointer-events: none;
 	z-index: 2;
+}
+
+.react-pdf__Page {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.react-pdf__Page__canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+	position: absolute;
 }

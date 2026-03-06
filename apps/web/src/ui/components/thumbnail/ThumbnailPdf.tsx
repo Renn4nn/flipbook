@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import styles from './thumbnail-pdf.module.css'
+
 export default function ThumbnailPdf({
 	url,
 	className
@@ -10,19 +12,22 @@ export default function ThumbnailPdf({
 	className?: string
 }) {
 	const [thumbnail, setThumbnail] = useState<string | null>(null)
+	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
+		let isMounted = true
+
 		async function generate() {
-			// REFATORAR ISSO AQUI
 			try {
 				const pdfjs = await import('pdfjs-dist')
-				pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-					'pdfjs-dist/build/pdf.worker.min.mjs',
-					import.meta.url
-				).toString()
+
+				// Configuração do Worker
+				pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
+
 				const loadingTask = pdfjs.getDocument(url)
 				const pdf = await loadingTask.promise
 				const page = await pdf.getPage(1)
+
 				const viewport = page.getViewport({ scale: 0.6 })
 				const canvas = document.createElement('canvas')
 				const context = canvas.getContext('2d')
@@ -30,46 +35,44 @@ export default function ThumbnailPdf({
 				canvas.height = viewport.height
 				canvas.width = viewport.width
 
-				if (context) {
+				if (context && isMounted) {
 					await page.render({
 						canvasContext: context,
 						viewport: viewport,
 						canvas: canvas
 					}).promise
+
 					setThumbnail(canvas.toDataURL('image/jpeg'))
 				}
 			} catch (err) {
-				console.error('Erro na capa:', err)
+				console.error('Erro ao gerar thumbnail:', err)
+			} finally {
+				if (isMounted) setLoading(false)
 			}
 		}
+
 		generate()
+
+		return () => {
+			isMounted = false
+		}
 	}, [url])
 
-	if (!thumbnail)
+	if (loading || !thumbnail) {
 		return (
-			<div
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					height: '350px',
-					background: '#222',
-					borderRadius: '8px',
-					color: '#fff',
-					fontWeight: 'bold'
-				}}
-			>
-				<span>Thumbnail não disponível</span>
+			<div className={`${styles.placeholder} ${className}`}>
+				<span>{loading ? 'Carregando...' : 'Thumbnail não disponível'}</span>
 			</div>
 		)
+	}
 
 	return (
 		<Image
 			src={thumbnail}
 			alt="Thumbnail do PDF"
 			width={300}
-			height={300}
-			sizes="100vw"
+			height={450}
+			priority={false}
 			className={className}
 		/>
 	)
