@@ -89,7 +89,7 @@ export default function FlipBook({
 							<Page
 								width={finalWidth}
 								height={finalHeight}
-								canvasBackground="transparent"
+								canvasBackground="white"
 								devicePixelRatio={1}
 								pageNumber={pn}
 								loading="Carregando página…"
