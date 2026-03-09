@@ -10,13 +10,21 @@ import Workspace from '@/ui/pages/workspace/page'
 import { cachedApiRequest } from '@/lib/api/request'
 import { DocumentSchema } from '@repo/schemas'
 import { API_ROUTES, RESOURCES } from '@repo/constants'
+import { Suspense } from 'react'
+import WorkspaceSkeleton from '@/ui/components/skeletons/workspace/WorkspaceSkeleton'
 
 export default function Home() {
 	const documentPromise = cachedApiRequest<DocumentSchema[]>({
 		url: API_ROUTES.DOCUMENTS.BASE,
 		tagsToCache: [RESOURCES.DOCUMENTS]
 	})
+	const delayedPromise = new Promise((resolve) =>
+		setTimeout(() => resolve(documentPromise), 3000)
+	)
 	return (
-		<Workspace documentsPromise={documentPromise} />
+		<Suspense fallback={<WorkspaceSkeleton />}>
+			{/* @ts-expect-error - ignorar tipos apenas para o teste do delay */}
+			<Workspace documentsPromise={delayedPromise} />
+		</Suspense>
 	)
 }

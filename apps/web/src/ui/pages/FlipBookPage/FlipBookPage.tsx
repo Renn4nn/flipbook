@@ -2,9 +2,9 @@
 
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
-import { CreateBookButton } from '@/ui/components/file-picker/modules/createbutton/CreateDocButton'
 import type { FlipBookType } from '@/ui/components/flipbook/type'
 import styles from './flipbook-page.module.css'
+import { ApiResponse, DocumentSchema } from '@repo/schemas'
 
 const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {
 	ssr: false,
@@ -13,6 +13,10 @@ const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {
 
 export default function FlipBookPage({ path }: { path: string }) {
 	const [type, setType] = useState<FlipBookType>('magazine')
+
+	if (!path || path === '') {
+		return null
+	}
 
 	return (
 		<div className={styles.wrapper}>
