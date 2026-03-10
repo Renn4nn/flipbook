@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# Rules
+.windsurfrules
+
 # production
 /build
 

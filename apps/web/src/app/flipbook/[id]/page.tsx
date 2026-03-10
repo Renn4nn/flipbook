@@ -1,31 +1,33 @@
-import { API_ROUTES } from '@repo/constants'
+import { API_ROUTES, RESOURCES } from '@repo/constants'
 import FlipBookPage from '@/ui/pages/FlipBookPage/FlipBookPage'
 import { Suspense } from 'react'
-import type { DocumentSchema } from '@repo/schemas'
-import { apiAction } from '@/lib/api/actions'
+import { cachedApiRequest } from '@/lib/api/request'
 import { notFound } from 'next/navigation'
+import { ApiSuccessResponse, DocumentSchema } from '@repo/schemas'
+
+async function FlipBookContent({ id }: { id: string }) {
+	const response = await cachedApiRequest<DocumentSchema>({
+		url: `${API_ROUTES.DOCUMENTS.BASE}/${id}`,
+		tagsToCache: [RESOURCES.DOCUMENTS]
+	})
+
+	const data = (response as ApiSuccessResponse<DocumentSchema>).data
+
+	if (!data) {
+		return notFound()
+	}
+
+	return <FlipBookPage path={data.path} />
+}
 
 export default async function DocPage(props: {
 	params: Promise<{ id: string }>
 }) {
-	const params = await props.params
-	const id = params.id
-
-	const response = (
-		await apiAction<DocumentSchema>({
-			method: 'get',
-			url: `${API_ROUTES.DOCUMENTS.BASE}/${id}`,
-			successMessage: 'Documento encontrado'
-		})
-	).data
-
-	if (!response) {
-		return notFound()
-	}
+	const { id } = await props.params
 
 	return (
 		<Suspense fallback="Carregando...">
-			<FlipBookPage path={response.path} />
+			<FlipBookContent id={id} />
 		</Suspense>
 	)
 }

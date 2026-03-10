@@ -34,3 +34,6 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Uploaded files - too large for Git
+apps/api/uploads/
