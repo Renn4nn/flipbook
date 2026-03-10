@@ -2,12 +2,13 @@
 
 import { Document, Page } from 'react-pdf'
 import './styles.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import HTMLFlipBook from 'react-pageflip'
 import { pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/TextLayer.css'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import type { FlipBookType } from './type'
+import { useFlipbookStore } from '@/lib/store/useFlipbook'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
@@ -16,6 +17,13 @@ type FlipBookProps = {
 	file: File | string
 	width?: number
 	height?: number
+}
+
+export type FlipBookRef = {
+	pageFlip: () => {
+		turnToPage: (page: number) => void
+		getCurrentPageIndex: () => number
+	}
 }
 
 export default function FlipBook({
@@ -34,16 +42,24 @@ export default function FlipBook({
 	}
 
 	const [numPages, setNumPages] = useState<number>()
+	const bookRef = useRef<FlipBookRef>(null)
+	const { setCurrentPage, setTotalPages, setCoverOpen, currentPage } =
+		useFlipbookStore()
 
 	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
 		setNumPages(numPages)
+		setTotalPages(numPages)
 	}
 
-	const handleOnFlip = () => {
+	const handleOnFlip = (e: { data: number }) => {
 		const audio = new Audio('/sounds/page_flip.MP3')
 		audio.playbackRate = 2.5
 		audio.volume = 1
 		audio.play()
+
+		const pageIndex = e.data
+		setCurrentPage(pageIndex)
+		setCoverOpen(pageIndex > 0)
 	}
 
 	useEffect(() => {
@@ -53,6 +69,15 @@ export default function FlipBook({
 			document.body.classList.remove('no-scroll')
 		}
 	}, [])
+
+	useEffect(() => {
+		if (bookRef.current?.pageFlip && currentPage >= 0) {
+			const currentIndex = bookRef.current.pageFlip().getCurrentPageIndex()
+			if (currentIndex !== currentPage) {
+				bookRef.current.pageFlip().turnToPage(currentPage)
+			}
+		}
+	}, [currentPage])
 
 	return (
 		<Document
@@ -68,6 +93,7 @@ export default function FlipBook({
 		>
 			{/* @ts-ignore */}
 			<HTMLFlipBook
+				ref={bookRef}
 				width={finalWidth}
 				height={finalHeight}
 				size="fixed"
@@ -77,7 +103,7 @@ export default function FlipBook({
 				flippingTime={750}
 				onFlip={handleOnFlip}
 				showPageCorners={true}
-				usePortrait={false} // força 2 paginas lado a lado
+				usePortrait={false}
 			>
 				{numPages &&
 					Array.from({ length: numPages }, (_, i) => i + 1).map((pn) => (
