@@ -41,10 +41,9 @@ export default function FlipBook({
 		finalWidth = Math.round(height * aspectRatio)
 	}
 
-	const [numPages, setNumPages] = useState<number>()
+	const [numPages, setNumPages] = useState<number>(0)
 	const bookRef = useRef<FlipBookRef>(null)
-	const { setCurrentPage, setTotalPages, setCoverOpen, currentPage } =
-		useFlipbookStore()
+	const { setCurrentPage, setTotalPages, currentPage } = useFlipbookStore()
 
 	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
 		setNumPages(numPages)
@@ -59,12 +58,10 @@ export default function FlipBook({
 
 		const pageIndex = e.data
 		setCurrentPage(pageIndex)
-		setCoverOpen(pageIndex > 0)
 	}
 
 	useEffect(() => {
 		document.body.classList.add('no-scroll')
-
 		return () => {
 			document.body.classList.remove('no-scroll')
 		}
@@ -97,14 +94,16 @@ export default function FlipBook({
 				width={finalWidth}
 				height={finalHeight}
 				size="fixed"
-				maxShadowOpacity={0.2}
-				drawShadow={true}
 				showCover={true}
-				flippingTime={750}
 				onFlip={handleOnFlip}
-				showPageCorners={true}
 				usePortrait={false}
-			>
+				startPage={currentPage}
+				clickEventForward={true}
+				useMouseEvents={true}
+				swipeDistance={30}
+				showPageCorners={true}
+				disableFlipByClick={false}
+		>
 				{numPages &&
 					Array.from({ length: numPages }, (_, i) => i + 1).map((pn) => (
 						<div

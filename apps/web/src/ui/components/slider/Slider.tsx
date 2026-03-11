@@ -1,33 +1,55 @@
-	import { useState, useRef } from 'react'
+	import { useState, useEffect } from 'react'
 	import { useFlipbookStore } from '@/lib/store/useFlipbook'
 	import styles from './slider.module.css'
 
 export default function Slider() {
 	const { currentPage, totalPages, goToPage } = useFlipbookStore()
 	const [showIndicator, setShowIndicator] = useState(false)
-	const sliderRef = useRef<HTMLInputElement>(null)
+
+	const [localValue, setLocalValue] = useState(currentPage)
+  useEffect(() => {
+    setLocalValue(currentPage)
+  }, [currentPage])
+
+	const handleCommit = async (value: string) => {
+    const pageIndex = parseInt(value, 10)
+    goToPage(pageIndex)
+    setShowIndicator(false)
+  }
+
+	const getPageLabel = () => {
+  if (localValue === 0) return "1";
+  if (localValue === totalPages) {
+    return `${totalPages * 2}`; 
+  }
+  const firstInPair = localValue * 2;
+  const secondInPair = firstInPair + 1;
+  return `${firstInPair}-${secondInPair}`;
+};
 
   return(
     <>
         <div
 					className={`${styles.pageIndicator} ${showIndicator ? styles.visible : ''}`}
 					style={{
-						left: totalPages > 0 ? `${(currentPage / totalPages) * 100}%` : '0%'
-					}}
+    					left: totalPages > 0 
+      					? `calc(${ (localValue / totalPages) * 100 }% + ${ 34 - (localValue / totalPages) * 68 }px)`
+      					: '34px'
+  					}}
 				>
-					{currentPage + 1}
+					{getPageLabel()}
 				</div>
 				<input
-					ref={sliderRef}
+
 					type="range"
 					min="0"
 					max={totalPages}
-					value={currentPage}
-					onChange={(e) => goToPage(parseInt(e.target.value, 10))}
+					value={localValue}
+					onChange={(e) => setLocalValue(parseInt(e.target.value, 10))}
 					onMouseDown={() => setShowIndicator(true)}
-					onMouseUp={() => setShowIndicator(false)}
+					onMouseUp={() => handleCommit(localValue.toString())}
 					onTouchStart={() => setShowIndicator(true)}
-					onTouchEnd={() => setShowIndicator(false)}
+					onTouchEnd={() => handleCommit(localValue.toString())}
 					onMouseLeave={() => setShowIndicator(false)}
 					className={styles.pageSlider}
 					disabled={totalPages === 0}

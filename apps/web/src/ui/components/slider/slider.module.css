@@ -1,20 +1,21 @@
 .pageIndicator {
-  position: absolute;
-  bottom: 24px;
-  transform: translateX(-50%);
   background-color: rgba(100, 100, 100, 0.95);
   color: white;
-  font-size: 13px;
+  font-size: 0.875rem;
   font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 6px;
-  min-width: 40px;
+  padding: 0.7rem;
+  border-radius: 2rem;
   text-align: center;
   user-select: none;
   opacity: 0;
+  bottom: 2rem;
   visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
   pointer-events: none;
+  position: absolute;
+  left: 0;
+  transform: translateX(-50%);
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 10;
 }
 
 .pageIndicator.visible {
