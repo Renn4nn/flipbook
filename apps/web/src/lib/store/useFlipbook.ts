@@ -17,7 +17,7 @@ export const useFlipbookStore = create<FlipbookState>((set) => ({
 	totalPages: 0,
 	isCoverOpen: false,
 	setCurrentPage: (page) => set({ currentPage: page }),
-	setTotalPages: (pages) => set({ totalPages: pages - 1 }),
+	setTotalPages: (pages) => set({ totalPages: pages }),
 	setCoverOpen: (open) => set({ isCoverOpen: open }),
 	goToPage: (page) => set({ currentPage: page }),
 	reset: () => set({
