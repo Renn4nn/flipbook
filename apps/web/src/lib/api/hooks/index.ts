@@ -10,7 +10,6 @@ export default function useApiResponse<T extends DataType>(
 	apiResponsePromise: Promise<ApiResponse<T>>
 ): T | null {
 	const res = use(apiResponsePromise)
-
 	useEffect(() => {
 		if ('error' in res) {
 			toast.error(res.error.message)

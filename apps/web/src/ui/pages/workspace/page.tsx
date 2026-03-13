@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import useApiResponse from '@/lib/api/hooks'
 import styles from './workspace.module.css'
+import LoadingSkeleton from '@/ui/components/skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
 
 export default function Workspace({
 	documentsPromise
@@ -16,16 +17,14 @@ export default function Workspace({
 		{
 			ssr: false,
 			loading: () => (
-				// Adicionar um skeleton
-				<div
-					style={{ height: '100%', background: '#222', borderRadius: '8px' }}
-				/>
+				<LoadingSkeleton />
 			)
+			
 		}
 	)
 	const documentsResponse = useApiResponse<DocumentSchema[]>(documentsPromise)
 	if (!documentsResponse)
-		return <div className={styles.container}>Carregando documentos...</div>
+		return <div className={styles.container}>Não existe Documentos...</div>
 	return (
 		<article className={styles.container}>
 			<div className={styles.grid}>

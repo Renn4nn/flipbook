@@ -10,7 +10,7 @@ import { API_ROUTES, RESOURCES } from '@repo/constants'
 import type { DocumentSchema } from '@repo/schemas'
 import { Suspense } from 'react'
 import { cachedApiRequest } from '@/lib/api/request'
-import WorkspaceSkeleton from '@/ui/components/skeletons/workspace/WorkspaceSkeleton'
+import WorkspaceSkeleton from '@/ui/components/skeletons/workspace/CardSkeleton/WorkspaceSkeleton'
 import Workspace from '@/ui/pages/workspace/page'
 
 export default function Home() {
