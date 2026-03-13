@@ -8,7 +8,7 @@ import { useFlipbookStore } from '@/lib/store/useFlipbook'
 import type { FlipBookType } from '@/ui/components/flipbook/type'
 import Slider from '@/ui/components/slider/Slider'
 import styles from './flipbook-page.module.css'
-
+import { Button } from '@repo/ui/button'
 type DocumentProps = {
 	documentPromise: Promise<ApiResponse<DocumentResponseSchema>>
 }
@@ -31,10 +31,17 @@ export default function FlipBookPage({ documentPromise }: DocumentProps) {
 	if (!data) {
 		return <div>Documento não encontrado.</div>
 	}
+	
 
 	return (
 		<div className={styles.wrapper}>
+				
 			<div className={styles.flipbookContainer}>
+				<div className={styles.fullscreenWrapper}>
+        <Button onClick={() => console.log("FULLSCREEN")}>
+          <span>fullscreen</span>
+        </Button>
+      </div>
 				<FlipBook
 					type={type}
 					// @ts-expect-error: a estrutura do ApiResponse extrai o data mas o TS não mapeou o nesting

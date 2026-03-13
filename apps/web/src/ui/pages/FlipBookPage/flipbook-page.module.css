@@ -11,6 +11,13 @@
 	overflow: hidden;
 }
 
+.fullscreenWrapper {
+	position: absolute;
+	top: 7rem;
+	right: 20px;
+	z-index: 100;
+}
+
 .flipbookContainer {
 	flex: 1;
 	display: flex;
