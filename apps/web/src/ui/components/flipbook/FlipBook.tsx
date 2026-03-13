@@ -7,8 +7,8 @@ import HTMLFlipBook from 'react-pageflip'
 import { pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/TextLayer.css'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
-import type { FlipBookType } from './type'
 import { useFlipbookStore } from '@/lib/store/useFlipbook'
+import type { FlipBookType } from './type'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
@@ -103,7 +103,7 @@ export default function FlipBook({
 				swipeDistance={30}
 				showPageCorners={true}
 				disableFlipByClick={false}
-		>
+			>
 				{numPages &&
 					Array.from({ length: numPages }, (_, i) => i + 1).map((pn) => (
 						<div

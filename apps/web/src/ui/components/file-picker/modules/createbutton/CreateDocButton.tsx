@@ -4,8 +4,8 @@ import { RESOURCES } from '@repo/constants'
 import type { CreateDocumentSchema, DocumentSchema } from '@repo/schemas'
 import toast from 'react-hot-toast'
 import { apiAction } from '@/lib/api/actions'
-import styles from './create-button.module.css'
 import { useModalStore } from '@/lib/store/useModal'
+import styles from './create-button.module.css'
 
 interface CreateBookButtonProps {
 	file: File | null

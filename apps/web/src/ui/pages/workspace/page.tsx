@@ -1,10 +1,10 @@
 'use client'
 
+import type { ApiResponse, DocumentSchema } from '@repo/schemas'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import useApiResponse from '@/lib/api/hooks'
 import styles from './workspace.module.css'
-import type { ApiResponse, DocumentSchema } from '@repo/schemas'
 
 export default function Workspace({
 	documentsPromise

@@ -1,5 +1,5 @@
-import styles from './workspace-skeleton.module.css'
 import { useId } from 'react'
+import styles from './workspace-skeleton.module.css'
 
 export default function WorkspaceSkeleton() {
 	const baseId = useId()

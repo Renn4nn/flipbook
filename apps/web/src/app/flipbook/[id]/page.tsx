@@ -1,13 +1,12 @@
 'use server'
 import { API_ROUTES, RESOURCES } from '@repo/constants'
-import FlipBookPage from '@/ui/pages/FlipBookPage/FlipBookPage'
+import type { ApiSuccessResponse, DocumentSchema } from '@repo/schemas'
+import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { cachedApiRequest } from '@/lib/api/request'
-import { notFound } from 'next/navigation'
-import { ApiSuccessResponse, DocumentSchema } from '@repo/schemas'
+import FlipBookPage from '@/ui/pages/FlipBookPage/FlipBookPage'
 
 async function FlipBookContent({ id }: { id: string }) {
-
 	const response = await cachedApiRequest<DocumentSchema>({
 		url: `${API_ROUTES.DOCUMENTS.BASE}/${id}`,
 		tagsToCache: [RESOURCES.DOCUMENTS]
@@ -27,7 +26,7 @@ export default async function DocPage(props: {
 }) {
 	const { id } = await props.params
 
-	if(!id) {
+	if (!id) {
 		return notFound()
 	}
 

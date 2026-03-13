@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import dynamic from 'next/dynamic' // Importante para componentes que usam window/document
+import { useState } from 'react'
 import FilePicker from '../../file-picker/FilePicker'
+import { CreateBookButton } from '../../file-picker/modules/createbutton/CreateDocButton'
 import type { FlipBookType } from '../../flipbook/type'
 import styles from './modal-flipbook.module.css'
-import { CreateBookButton } from '../../file-picker/modules/createbutton/CreateDocButton'
 
 // Import dinâmico para evitar erros de SSR com o canvas do PDF
 const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {

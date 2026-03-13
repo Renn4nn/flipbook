@@ -7,9 +7,9 @@ import {
 	ParseUUIDPipe,
 	Patch,
 	Post,
+	Request,
 	UploadedFile,
-	UseInterceptors,
-	Request
+	UseInterceptors
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { RESOURCES } from '@repo/constants'

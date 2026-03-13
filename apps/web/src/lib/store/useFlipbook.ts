@@ -11,7 +11,6 @@ interface FlipbookState {
 	reset: () => void
 }
 
-
 export const useFlipbookStore = create<FlipbookState>((set) => ({
 	currentPage: 0,
 	totalPages: 0,
@@ -20,9 +19,10 @@ export const useFlipbookStore = create<FlipbookState>((set) => ({
 	setTotalPages: (pages) => set({ totalPages: pages }),
 	setCoverOpen: (open) => set({ isCoverOpen: open }),
 	goToPage: (page) => set({ currentPage: page }),
-	reset: () => set({
-		currentPage: 0,
-		totalPages: 0,
-		isCoverOpen: false
-	})
+	reset: () =>
+		set({
+			currentPage: 0,
+			totalPages: 0,
+			isCoverOpen: false
+		})
 }))
