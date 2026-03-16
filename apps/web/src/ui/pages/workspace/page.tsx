@@ -16,10 +16,7 @@ export default function Workspace({
 		() => import('@/ui/components/thumbnail/ThumbnailPdf'),
 		{
 			ssr: false,
-			loading: () => (
-				<LoadingSkeleton />
-			)
-			
+			loading: () => <LoadingSkeleton />
 		}
 	)
 	const documentsResponse = useApiResponse<DocumentSchema[]>(documentsPromise)
@@ -40,7 +37,10 @@ export default function Workspace({
 								}).format(new Date(document.createdAt))}
 							</span>
 						</div>
-						<Link href={`/flipbook/${document.id}`} className={styles.cardBody}>
+						<Link
+							href={`/workspace/${document.id}`}
+							className={styles.cardBody}
+						>
 							<ThumbnailPdf
 								url={`http://localhost:3001${document.path}`}
 								className={styles.cardImage}

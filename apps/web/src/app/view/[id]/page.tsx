@@ -4,7 +4,7 @@ import { Suspense } from 'react'
 import { apiRequest } from '@/lib/api/request'
 import FlipBookPage from '@/ui/pages/FlipBookPage/FlipBookPage'
 
-export default async function Page({
+export default async function PublicViewPage({
 	params
 }: {
 	params: Promise<{ id: string }>

@@ -1,30 +1,31 @@
-import type { Metadata } from 'next'
+'use client'
+import styles from './page.module.css'
 
-export const metadata: Metadata = {
-	title: 'CTD Flipbook',
-	description:
-		'CTD flipbook is a web page where you can read documents in an interactive way.'
-}
-
-import { API_ROUTES, RESOURCES } from '@repo/constants'
-import type { DocumentSchema } from '@repo/schemas'
-import { Suspense } from 'react'
-import { cachedApiRequest } from '@/lib/api/request'
-import WorkspaceSkeleton from '@/ui/components/skeletons/workspace/CardSkeleton/WorkspaceSkeleton'
-import Workspace from '@/ui/pages/workspace/page'
-
-export default function Home() {
-	const documentPromise = cachedApiRequest<DocumentSchema[]>({
-		url: API_ROUTES.DOCUMENTS.BASE,
-		tagsToCache: [RESOURCES.DOCUMENTS]
-	})
-	const delayedPromise = new Promise((resolve) =>
-		setTimeout(() => resolve(documentPromise), 3000)
-	)
+export default function LandingPage() {
 	return (
-		<Suspense fallback={<WorkspaceSkeleton />}>
-			{/* @ts-expect-error - ignorar tipos apenas para o teste do delay */}
-			<Workspace documentsPromise={delayedPromise} />
-		</Suspense>
+		<div className={styles.landingContainer}>
+			<section className={styles.hero}>
+				<h1>CTD Documents</h1>
+				<p>Visualize seus documentos de forma interativa e moderna</p>
+			</section>
+
+			<section className={styles.previewSection}>
+				<div className={styles.card}>
+					<div className={styles.cardHeader}>
+						<h3>Preview</h3>
+						<span>Documento de exemplo</span>
+					</div>
+					<div className={styles.cardBody}>
+						<div className={styles.cardPlaceholder}>DOC</div>
+					</div>
+				</div>
+			</section>
+
+			<section className={styles.ctaSection}>
+				<a href="/workspace" className={styles.ctaButton}>
+					Acessar Workspace
+				</a>
+			</section>
+		</div>
 	)
 }
