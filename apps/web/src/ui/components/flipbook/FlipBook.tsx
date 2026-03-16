@@ -46,6 +46,8 @@ export default function FlipBook({
 	const { setCurrentPage, setTotalPages, currentPage } = useFlipbookStore()
 
 	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+		console.log('Numero de paginas: ', numPages)
+		console.log('Total de paginas: ', numPages)
 		setNumPages(numPages)
 		setTotalPages(numPages)
 	}
