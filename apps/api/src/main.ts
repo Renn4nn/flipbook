@@ -23,11 +23,11 @@ async function bootstrap() {
 
 	const { httpAdapter } = app.get(HttpAdapterHost)
 	const PORT = app.get(ConfigService).getOrThrow('API_PORT')
-	app.enableCors();
+	app.enableCors()
 
 	const config = new DocumentBuilder()
-		.setTitle('CTD Resource API')
-		.setDescription('Documentação da API da aplicação CTD Resource')
+		.setTitle('CTD FlipBook API')
+		.setDescription('Documentação da API da aplicação CTD FlipBook')
 		.setVersion('1.0')
 		.build()
 

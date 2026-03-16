@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import styles from './thumbnail-pdf.module.css'
 
 export default function ThumbnailPdf({

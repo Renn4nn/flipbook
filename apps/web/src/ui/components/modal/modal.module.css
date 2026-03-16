@@ -1,74 +1,80 @@
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100vw;
+	background-color: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(4px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	padding: 20px;
 }
 
 .content {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: var(--page-shadow);
-  animation: fadeIn 0.2s ease-out;
-  display: flex;
-  flex-direction: column;
-  padding-top: 0.5rem;
+	background: white;
+	padding: 1.5rem;
+	border-radius: 8px;
+	box-shadow: var(--page-shadow);
+	animation: fadeIn 0.2s ease-out;
+	display: flex;
+	flex-direction: column;
+	padding-top: 0.5rem;
 
-  max-width: 1200px;
-  max-height: 90vh;
-  overflow: hidden;
+	max-width: 1200px;
+	max-height: 90vh;
+	overflow: hidden;
 }
 
 .lineBreak {
-  width: 100%;
-  height: 1px;
-  background-color: #ccc;
-  margin: 1rem 0;
+	width: 100%;
+	height: 1px;
+	background-color: #ccc;
+	margin: 1rem 0;
 }
 
 .modalHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .modalTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #333;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: #333;
 }
 
 .closeBtn {
-  align-self: flex-end;
-  margin-bottom: 0.5rem;
-  border: none;
-  font-size: 10px;
-  background: var(--danger);
-  width: 2rem;
-  height: 2rem;
-  cursor: pointer;
-  color: white;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease-in-out;
+	align-self: flex-end;
+	margin-bottom: 0.5rem;
+	border: none;
+	font-size: 10px;
+	background: var(--danger);
+	width: 2rem;
+	height: 2rem;
+	cursor: pointer;
+	color: white;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s ease-in-out;
 }
 
 .closeBtn:hover {
-  background-color: #8f000e;
+	background-color: #8f000e;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }

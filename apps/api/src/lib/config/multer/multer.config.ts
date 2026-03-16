@@ -1,8 +1,7 @@
-import * as fs from 'node:fs'
-import { resolve } from 'node:path'
-import { diskStorage } from 'multer'
 import { randomUUID } from 'node:crypto'
-import { extname } from 'node:path'
+import * as fs from 'node:fs'
+import { extname, resolve } from 'node:path'
+import { diskStorage } from 'multer'
 
 export const multerConfig = {
 	storage: diskStorage({

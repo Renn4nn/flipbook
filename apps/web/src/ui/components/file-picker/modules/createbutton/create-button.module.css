@@ -6,14 +6,16 @@
 	border-radius: 4px;
 	padding: 0.5rem 1rem;
 	cursor: pointer;
-	transition: background-color 0.2s ease, transform 0.1s active;
+	transition:
+		background-color 0.2s ease,
+		transform 0.1s active;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	max-width: 200px;
 }
 
-.button:hover{
+.button:hover {
 	background-color: #005ca9;
 	color: #ffffff;
 }

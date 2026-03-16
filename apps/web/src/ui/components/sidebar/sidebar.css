@@ -1,11 +1,11 @@
 .sidenav-toggler {
-		display: none;
-		border: transparent;
-		background-color: transparent;
-		padding: 0.3rem;
-		border-radius: 5px;
-		margin-right: 1rem;
-		cursor: pointer;
+	display: none;
+	border: transparent;
+	background-color: transparent;
+	padding: 0.3rem;
+	border-radius: 5px;
+	margin-right: 1rem;
+	cursor: pointer;
 }
 
 .link-group {
@@ -25,24 +25,24 @@
 	font-size: 1rem;
 	transition: opacity 0.2s;
 
-  background: none;
-  border: none;
-  padding: 0;
-  color: inherit;
-  font-family: inherit;
-  cursor: pointer;
-  text-decoration: none;
-  width: auto;
+	background: none;
+	border: none;
+	padding: 0;
+	color: inherit;
+	font-family: inherit;
+	cursor: pointer;
+	text-decoration: none;
+	width: auto;
 }
 
 .nav-link:hover {
-  opacity: 0.7;
+	opacity: 0.7;
 }
 
-	@media (max-width: 900px) {
+@media (max-width: 900px) {
 	.sidenav-toggler {
-			display: block;
-		}
+		display: block;
+	}
 
 	.link-group {
 		display: none;
@@ -57,7 +57,7 @@
 		border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 	}
 
-  .link-group.show {
-    display: flex;
-  }
+	.link-group.show {
+		display: flex;
 	}
+}

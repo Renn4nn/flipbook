@@ -1,8 +1,8 @@
 'use client'
 import { Book, House } from 'lucide-react'
 import './sidebar.css'
-import { useSidebarStore } from '@/lib/store/useSidebarStore'
 import { useModalStore } from '@/lib/store/useModal'
+import { useSidebarStore } from '@/lib/store/useSidebarStore'
 
 export default function Sidebar() {
 	const { isOpen } = useSidebarStore()
