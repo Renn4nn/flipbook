@@ -1,138 +1,141 @@
 /* Landing Page - CTD Flipbook */
 
 .landingContainer {
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	background: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
 }
 
 /* Header */
 .header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 1rem;
-	padding: 1.5rem 2rem;
-	background: #ffffff;
-	border-bottom: 1px solid #e5e5e5;
-	box-shadow: 0 2px 8px rgba(0, 92, 169, 0.08);
-	z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 92, 169, 0.08);
+  z-index: 100;
 }
 
+.hidden {
+  display: none;
+}
 .headerContent {
-	display: flex;
-	align-items: center;
-	gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .headerText h1 {
-	font-size: 1.5rem;
-	font-weight: 700;
-	color: #005ca9;
-	margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #005ca9;
+  margin: 0;
 }
 
 .headerText p {
-	font-size: 0.9rem;
-	color: #706f6f;
-	margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
+  color: #706f6f;
+  margin: 0.25rem 0 0 0;
 }
 
 /* Main Content */
 .main {
-	flex: 1;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 100px 0 60px;
-	background: #f4f7f9;
-	overflow: hidden;
-	position: relative;
-	min-height: calc(100vh - 160px);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 0 60px;
+  background: #f4f7f9;
+  overflow: hidden;
+  position: relative;
+  min-height: calc(100vh - 160px);
 }
 
 .loading {
-	width: 500px;
-	height: 665px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #005ca9;
-	font-size: 1.1rem;
-	background: linear-gradient(135deg, #f4f7f9 0%, #ffffff 100%);
-	border-radius: 8px;
-	box-shadow: 0 4px 20px rgba(0, 92, 169, 0.15);
+  width: 500px;
+  height: 665px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #005ca9;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, #f4f7f9 0%, #ffffff 100%);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 92, 169, 0.15);
 }
 
 /* Remove file button */
 .removeButton {
-	background: transparent;
-	border: none;
-	color: #005ca9;
-	font-size: 0.9rem;
-	font-weight: 500;
-	cursor: pointer;
-	padding: 0.5rem 1rem;
-	transition: color 0.2s ease;
+  background: transparent;
+  border: none;
+  color: #005ca9;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s ease;
 }
 
 .removeButton:hover {
-	color: #00b1eb;
+  color: #00b1eb;
 }
 
 /* FlipBook with Controls */
 .flipbookWithControls {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: 100%;
-	height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 /* Footer */
 .footer {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	padding: 0.75rem;
-	text-align: center;
-	background: #ffffff;
-	border-top: 1px solid #e5e5e5;
-	z-index: 100;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.75rem;
+  text-align: center;
+  background: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  z-index: 100;
 }
 
 .footer p {
-	color: #706f6f;
-	font-size: 0.85rem;
-	margin: 0;
+  color: #706f6f;
+  font-size: 0.85rem;
+  margin: 0;
 }
 
 /* Responsive */
 @media (max-width: 900px) {
-	.header {
-		padding: 1rem;
-	}
+  .header {
+    padding: 1rem;
+  }
 
-	.headerText h1 {
-		font-size: 1.25rem;
-	}
+  .headerText h1 {
+    font-size: 1.25rem;
+  }
 
-	.headerText p {
-		font-size: 0.8rem;
-	}
+  .headerText p {
+    font-size: 0.8rem;
+  }
 
-	.main {
-		padding: 1rem;
-	}
+  .main {
+    padding: 1rem;
+  }
 
-	.loading {
-		width: 320px;
-		height: 427px;
-	}
+  .loading {
+    width: 320px;
+    height: 427px;
+  }
 }

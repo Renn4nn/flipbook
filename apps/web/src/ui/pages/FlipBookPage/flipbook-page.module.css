@@ -1,37 +1,43 @@
 /* flipbook-page.module.css */
 .wrapper {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100dvh;
-	display: flex;
-	flex-direction: column;
-	background-color: inherit;
-	overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: inherit;
+  overflow: hidden;
 }
 .fullscreenWrapper {
-	position: absolute;
-	top: 9rem;
-	right: 2rem;
-	z-index: 100;
+  position: absolute;
+  top: 9rem;
+  right: 2rem;
+  z-index: 100;
+}
+
+.fullscreenWrapper > button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .flipbookContainer {
-	flex: 1;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	overflow: hidden;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .sliderContainer {
-	position: absolute;
-	bottom: 4rem;
-	left: 50%;
-	transform: translateX(-50%);
-	display: flex;
-	align-items: center;
-	z-index: 100;
-	padding: 0 20px;
+  position: absolute;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  padding: 0 20px;
 }
