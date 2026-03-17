@@ -18,7 +18,7 @@ export default function FlipBookPage({ file }: DocumentProps) {
 	const [type] = useState<FlipBookType>('magazine')
 
 	return (
-		<div className={styles.wrapperEmbedded}>
+		<div className={styles.wrapper}>
 			<div className={styles.flipbookContainer}>
 				<div className={styles.fullscreenWrapper}>
 					<Button onClick={() => console.log('FULLSCREEN')}>
