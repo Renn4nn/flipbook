@@ -10,11 +10,10 @@
 	background-color: inherit;
 	overflow: hidden;
 }
-
 .fullscreenWrapper {
 	position: absolute;
-	top: 7rem;
-	right: 20px;
+	top: 9rem;
+	right: 2rem;
 	z-index: 100;
 }
 
@@ -27,8 +26,8 @@
 }
 
 .sliderContainer {
-	position: fixed;
-	bottom: 45px;
+	position: absolute;
+	bottom: 4rem;
 	left: 50%;
 	transform: translateX(-50%);
 	display: flex;

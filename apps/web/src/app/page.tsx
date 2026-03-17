@@ -1,31 +1,51 @@
 'use client'
 import styles from './page.module.css'
+import { useState } from 'react'
+import dynamic from 'next/dynamic'
+import { Logo } from '@repo/ui/logo'
+import FilePicker from '@/ui/components/file-picker/FilePicker'
+import FlipBookPagePreview from '@/ui/pages/FlipBookPage/FlipBookPagePreview'
+
+const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {
+	ssr: false,
+	loading: () => <div className={styles.loading}>Carregando preview...</div>
+})
 
 export default function LandingPage() {
+	const [file, setFile] = useState<File | null>(null)
+
 	return (
 		<div className={styles.landingContainer}>
-			<section className={styles.hero}>
-				<h1>CTD Documents</h1>
-				<p>Visualize seus documentos de forma interativa e moderna</p>
-			</section>
-
-			<section className={styles.previewSection}>
-				<div className={styles.card}>
-					<div className={styles.cardHeader}>
-						<h3>Preview</h3>
-						<span>Documento de exemplo</span>
-					</div>
-					<div className={styles.cardBody}>
-						<div className={styles.cardPlaceholder}>DOC</div>
+			<header className={styles.header}>
+				<div className={styles.headerContent}>
+					<Logo />
+					<div className={styles.headerText}>
+						<h1>CTD Flipbook</h1>
+						<p>Visualize seus documentos de forma interativa e moderna</p>
 					</div>
 				</div>
-			</section>
+				{file && (
+					<button
+						type="button"
+						className={styles.removeButton}
+						onClick={() => setFile(null)}
+					>
+						Remover arquivo
+					</button>
+				)}
+			</header>
 
-			<section className={styles.ctaSection}>
-				<a href="/workspace" className={styles.ctaButton}>
-					Acessar Workspace
-				</a>
-			</section>
+			<main className={styles.main}>
+				{!file ? (
+					<FilePicker file={file} setFile={setFile} />
+				) : (
+					<FlipBookPagePreview file={file} />
+				)}
+			</main>
+
+			<footer className={styles.footer}>
+				<p> 2026 CTD Flipbook. Todos os direitos reservados.</p>
+			</footer>
 		</div>
 	)
 }

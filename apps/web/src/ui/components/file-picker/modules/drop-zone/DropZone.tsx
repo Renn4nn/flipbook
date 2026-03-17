@@ -1,5 +1,6 @@
 'use client'
 
+import { Upload } from 'lucide-react'
 import type { DropZoneProps } from '../../types/components'
 import styles from './drop-zone.module.css'
 
@@ -21,6 +22,7 @@ export default function DropZone({
 			onKeyDown={handleKeyDown}
 		>
 			<div className={styles.banner}>
+				<Upload className={styles.icon} />
 				<span>
 					<b>Clique</b> aqui
 				</span>
@@ -28,7 +30,6 @@ export default function DropZone({
 				<span>
 					<b>Arraste</b> arquivos
 				</span>
-				<span>para carrega-los</span>
 			</div>
 			<input
 				ref={fileInputRef}

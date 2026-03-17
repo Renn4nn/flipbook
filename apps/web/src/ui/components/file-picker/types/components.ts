@@ -5,4 +5,6 @@ export type FilePickerProps = {
 	file: File | null
 	setFile: Dispatch<SetStateAction<File | null>>
 }
-export type DropZoneProps = Omit<UseFilePickerReturn, 'clearFile'>
+export type DropZoneProps = Omit<UseFilePickerReturn, 'clearFile'> & {
+	className?: string
+}

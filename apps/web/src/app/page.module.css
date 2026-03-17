@@ -1,120 +1,138 @@
+/* Landing Page - CTD Flipbook */
+
 .landingContainer {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 	min-height: 100vh;
-	padding: 2rem;
-	background: #f4f7f9;
-	color: #333;
-	font-family: sans-serif;
+	display: flex;
+	flex-direction: column;
+	background: #ffffff;
 }
 
-.hero {
-	text-align: center;
-	margin-bottom: 3rem;
+/* Header */
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+	padding: 1.5rem 2rem;
+	background: #ffffff;
+	border-bottom: 1px solid #e5e5e5;
+	box-shadow: 0 2px 8px rgba(0, 92, 169, 0.08);
+	z-index: 100;
 }
 
-.hero h1 {
-	font-size: 3rem;
-	font-weight: 900;
-	margin-bottom: 1rem;
+.headerContent {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.headerText h1 {
+	font-size: 1.5rem;
+	font-weight: 700;
 	color: #005ca9;
-}
-
-.hero p {
-	font-size: 1.2rem;
-	color: #706f6f;
-}
-
-.previewSection {
-	width: 100%;
-	max-width: 320px;
-	margin-bottom: 3rem;
-}
-
-/* Card styles - same as workspace */
-.card {
-	border-radius: 0.5rem;
-	border: 1px solid #ccc;
-	background-color: #fff;
-	padding: 1rem;
-	display: flex;
-	flex-direction: column;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.cardHeader {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-	padding-bottom: 0.8rem;
-}
-
-.cardHeader h3 {
 	margin: 0;
-	font-size: 1.1rem;
-	font-weight: 600;
-	color: #333;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 }
 
-.cardHeader span {
+.headerText p {
 	font-size: 0.9rem;
 	color: #706f6f;
+	margin: 0.25rem 0 0 0;
 }
 
-.cardBody {
-	width: 100%;
-	height: auto;
-	display: block;
-	aspect-ratio: 3 / 3.5;
+/* Main Content */
+.main {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 100px 0 60px;
+	background: #f4f7f9;
 	overflow: hidden;
 	position: relative;
+	min-height: calc(100vh - 160px);
 }
 
-.cardPlaceholder {
-	width: 100%;
-	height: 100%;
-	border-radius: 0.5rem;
-	border: 1px solid #ccc;
+.loading {
+	width: 500px;
+	height: 665px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: linear-gradient(135deg, #005ca9 0%, #00b1eb 100%);
-	color: white;
-	font-size: 2rem;
-	font-weight: 700;
-}
-
-.ctaSection {
-	margin-top: 2rem;
-}
-
-.ctaButton {
-	display: inline-block;
-	padding: 1rem 2.5rem;
-	background: linear-gradient(90deg, #005ca9 0%, #00b1eb 100%);
-	color: white;
-	text-decoration: none;
-	border-radius: 50px;
-	font-weight: 600;
+	color: #005ca9;
 	font-size: 1.1rem;
-	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	background: linear-gradient(135deg, #f4f7f9 0%, #ffffff 100%);
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 92, 169, 0.15);
+}
+
+/* Remove file button */
+.removeButton {
+	background: transparent;
 	border: none;
+	color: #005ca9;
+	font-size: 0.9rem;
+	font-weight: 500;
+	cursor: pointer;
+	padding: 0.5rem 1rem;
+	transition: color 0.2s ease;
 }
 
-.ctaButton:hover {
-	transform: scale(1.05);
-	box-shadow: 0 0 20px rgba(0, 177, 235, 0.5);
+.removeButton:hover {
+	color: #00b1eb;
 }
 
-@media (max-width: 768px) {
-	.hero h1 {
-		font-size: 2rem;
+/* FlipBook with Controls */
+.flipbookWithControls {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+/* Footer */
+.footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 0.75rem;
+	text-align: center;
+	background: #ffffff;
+	border-top: 1px solid #e5e5e5;
+	z-index: 100;
+}
+
+.footer p {
+	color: #706f6f;
+	font-size: 0.85rem;
+	margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+	.header {
+		padding: 1rem;
 	}
-	.hero p {
-		font-size: 1rem;
+
+	.headerText h1 {
+		font-size: 1.25rem;
+	}
+
+	.headerText p {
+		font-size: 0.8rem;
+	}
+
+	.main {
+		padding: 1rem;
+	}
+
+	.loading {
+		width: 320px;
+		height: 427px;
 	}
 }
