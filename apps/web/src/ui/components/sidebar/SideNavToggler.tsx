@@ -13,7 +13,7 @@ export default function SideNavToggler() {
 			className="sidenav-toggler"
 			onClick={isOpen ? close : open}
 		>
-			<ArrowDown color="white" strokeWidth={2} />
+			<ArrowDown color="#005ca9" strokeWidth={2} />
 		</button>
 	)
 }

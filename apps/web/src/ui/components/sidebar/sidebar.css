@@ -49,12 +49,12 @@
 		flex-direction: column;
 		position: absolute;
 		top: 5rem;
-		background-color: #005ca9;
+		background-color: white;
 		width: 100%;
 		left: 0;
 		gap: 1.5rem;
 		padding: 1rem;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+		border-bottom: 1px solid #e5e5e5;
 	}
 
 	.link-group.show {

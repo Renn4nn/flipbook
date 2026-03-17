@@ -9,7 +9,7 @@ export default function Header() {
 		<header className={styles['web-header']}>
 			<SideNavToggler />
 			<Link href="/" className={styles.logo}>
-				<Logo color="white" />
+				<Logo color={'#005ca9'} />
 			</Link>
 			<Sidebar />
 		</header>
