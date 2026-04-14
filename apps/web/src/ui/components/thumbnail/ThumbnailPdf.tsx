@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styles from './thumbnail-pdf.module.css'
+import LoadingSkeleton from '../skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
 
 export default function ThumbnailPdf({
 	url,
@@ -61,7 +62,7 @@ export default function ThumbnailPdf({
 	if (loading || !thumbnail) {
 		return (
 			<div className={`${styles.placeholder} ${className}`}>
-				<span>{loading ? 'Carregando...' : 'Thumbnail não disponível'}</span>
+				<span>{loading ? <LoadingSkeleton /> : 'Thumbnail não disponível'}</span>
 			</div>
 		)
 	}

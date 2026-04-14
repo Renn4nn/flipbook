@@ -21,7 +21,7 @@ export default async function DocumentPage({
 	})
 
 	return (
-		<Suspense fallback="Carregando documento...">
+		<Suspense fallback="Carregando...">
 			<FlipBookPage documentPromise={responsePromise} />
 		</Suspense>
 	)

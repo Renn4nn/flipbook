@@ -11,7 +11,7 @@
 	justify-content: start;
 }
 
-.logo svg {
+.logo-svg {
 	width: 9rem;
 	height: auto;
 }
@@ -19,5 +19,17 @@
 @media (max-width: 900px) {
 	.web-header {
 		justify-content: flex-start;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.web-header {
+		background-color: #2e2e2e;
+		color: white;
+		border-bottom: 1px solid #444444;
+	}
+	
+	.logo-svg {
+		color: white;
 	}
 }

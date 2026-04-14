@@ -17,7 +17,9 @@ type DocumentProps = {
 
 const FlipBook = dynamic(() => import("@/ui/components/flipbook"), {
   ssr: false,
-  loading: () => <p>Carregando leitor...</p>,
+  loading: () => (
+    <div>Carregando...</div>
+  ),
 });
 export default function FlipBookPage({ documentPromise }: DocumentProps) {
   const { reset } = useFlipbookStore();

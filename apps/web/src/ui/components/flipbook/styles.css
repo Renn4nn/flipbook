@@ -1,91 +1,162 @@
-:root {
-	/* Sombra projetada no fundo (Drop Shadow realista) */
-	--page-shadow:
-		0 1px 2px rgba(0, 0, 0, 0.07),
-		0 2px 4px rgba(0, 0, 0, 0.07),
-		0 4px 8px rgba(0, 0, 0, 0.07),
-		0 8px 16px rgba(0, 0, 0, 0.07),
-		0 16px 32px rgba(0, 0, 0, 0.07);
-
-	/* Sombreamento da dobra central (Páginas Internas) */
-	--inner-fold-gradient-left: linear-gradient(
-		to right,
-		rgba(0, 0, 0, 0) 94%,
-		rgba(0, 0, 0, 0.2) 100%
-	);
-	--inner-fold-gradient-right: linear-gradient(
-		to left,
-		rgba(0, 0, 0, 0) 94%,
-		rgba(0, 0, 0, 0.2) 100%
-	);
-
-	--cover-book-effect: linear-gradient(
-		to right,
-		rgba(0, 0, 0, 0.15) 0%,
-		rgba(0, 0, 0, 0.02) 2%,
-		rgba(255, 255, 255, 0.2) 3%,
-		rgba(255, 255, 255, 0) 4%,
-		rgba(0, 0, 0, 0.08) 5%,
-		rgba(0, 0, 0, 0) 8%
-	);
-
-	--cover-magazine-effect: linear-gradient(
-		to right,
-		rgba(0, 0, 0, 0.2) 0%,
-		/* rgba(0, 0, 0, 0.2) 0%, */
-		rgba(0, 0, 0, 0.1) 50%,
-		rgba(255, 255, 255, 0.1) 100%,
-		rgba(255, 255, 255, 0) 25%,
-		rgba(0, 0, 0, 0.05) 100%
-	);
-}
-
-.flipbook-page-wrapper {
-	background-color: white;
-	position: relative;
-	box-shadow: var(--page-shadow);
-	overflow: hidden;
-	width: 100%;
-	height: 100%;
-}
-
-.flipbook-page-wrapper::after {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	pointer-events: none;
-	z-index: 2;
-}
-
 body.no-scroll {
 	overflow: hidden;
 }
 
-.flipbook-page-wrapper:nth-of-type(even)::after {
-	background: var(--inner-fold-gradient-left);
+/* ─── Container ─── */
+.custom-flipbook-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	position: relative;
 }
 
-.flipbook-page-wrapper:nth-of-type(odd):not(:first-of-type)::after {
-	background: var(--inner-fold-gradient-right);
+.loading-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 40rem;
+	width: 100%;
 }
 
-.book:first-of-type::after {
-	background: var(--cover-book-effect);
+/* ─── Nav Buttons ─── */
+.flip-btn {
+	border: none;
+	background-color: transparent;
+	margin: 10px;
+	cursor: pointer;
+	color: rgba(0, 0, 0, 0.75);
+	transition:
+		transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1),
+		color 0.2s ease,
+		opacity 0.3s ease;
+	z-index: 100;
+	flex-shrink: 0;
 }
 
-.magazine:first-of-type::before {
-	content: '';
+.flip-btn:focus {
+	outline: none;
+}
+
+.flip-btn:hover:not(:disabled) {
+	color: rgba(117, 117, 117, 0.75);
+}
+
+
+.flip-btn:disabled {
+	opacity: 0.15;
+	cursor: not-allowed;
+}
+
+/* ─── Book ─── */
+.book {
+	position: relative;
+	transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+	will-change: transform;
+	flex-shrink: 0;
+}
+
+/* ─── Paper (leaf) ─── */
+.paper {
+	height: 100%;
+	width: 100%;
 	position: absolute;
 	top: 0;
 	left: 0;
-	bottom: 0;
-	width: 6%;
-	background: var(--cover-magazine-effect);
-	pointer-events: none;
+	perspective: 2500px;
+	z-index: var(--z-unflipped);
+	transition: z-index 0s 0s;
+}
+
+.paper.flipped {
+	z-index: var(--z-flipped);
+	transition: z-index 0s 0.6s;
+}
+
+/* ─── Page Turner (3D hinge) ─── */
+.page-turner {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform-style: preserve-3d;
+	transform-origin: left center;
+	transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+	will-change: transform;
+}
+
+.paper.flipped .page-turner {
+	transform: rotateY(-180deg);
+}
+
+/* ─── Shared face styles ─── */
+.front,
+.back {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	backface-visibility: hidden;
+	background-color: white;
+	overflow: hidden;
+}
+
+.front {
 	z-index: 2;
+	cursor: default;
+	transform: translateZ(1px);
+}
+
+.back {
+	cursor: default;
+	z-index: 1;
+	transform: rotateY(180deg) translateZ(1px);
+}
+
+/* ─── Content wrappers ─── */
+.front-content,
+.back-content {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	overflow: hidden;
+	transition: clip-path 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* ─── Page depth shadows ─── */
+.front::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 10;
+	background: linear-gradient(to right, transparent 88%, rgba(0, 0, 0, 0.08) 100%);
+}
+
+.back::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 10;
+	background: linear-gradient(to right, transparent 88%, rgba(0, 0, 0, 0.08) 100%);
+}
+
+/* ─── React PDF wrappers ─── */
+.book-document {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .react-pdf__Page {
@@ -95,9 +166,163 @@ body.no-scroll {
 }
 
 .react-pdf__Page__canvas {
-	padding: 0.4rem;
-	width: 100%;
-	height: 100%;
+	width: 100% !important;
+	height: 100% !important;
 	display: block;
 	position: absolute;
+	object-fit: contain;
+}
+
+/* ─── Interactive Page Curls (Fold Zones) ─── */
+
+.fold-zone {
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	z-index: 50;
+	cursor: pointer;
+	background-color: transparent;
+	outline: none;
+	border: none;
+}
+
+.front .fold-zone-top {
+	top: 0;
+	right: 0;
+}
+
+.front .fold-zone-bottom {
+	bottom: 0;
+	right: 0;
+}
+
+.back .fold-zone-top {
+	top: 0;
+	left: 0;
+}
+
+.back .fold-zone-bottom {
+	bottom: 0;
+	left: 0;
+}
+
+.front .fold-zone-top:hover~.front-content {
+	clip-path: polygon(0 0, calc(100% - 55px) 0, 100% 55px, 100% 100%, 0 100%);
+}
+
+.front .fold-zone-bottom:hover~.front-content {
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 55px), calc(100% - 55px) 100%, 0 100%);
+}
+
+.back .fold-zone-top:hover~.back-content {
+	clip-path: polygon(55px 0, 100% 0, 100% 100%, 0 100%, 0 55px);
+}
+
+.back .fold-zone-bottom:hover~.back-content {
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 55px 100%, 0 calc(100% - 55px));
+}
+
+.paper.interactive-right,
+.paper.interactive-left {
+  cursor: pointer;
+}
+
+.front .fold-zone-top::before {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	background: linear-gradient(225deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, #eee 50%, #fff 100%);
+	pointer-events: none;
+	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.front .fold-zone-top:hover::before {
+	width: 55px;
+	height: 55px;
+	box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.front .fold-zone-bottom::before {
+	content: '';
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 0;
+	height: 0;
+	background: linear-gradient(315deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, #eee 50%, #fff 100%);
+	pointer-events: none;
+	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.front .fold-zone-bottom:hover::before {
+	width: 55px;
+	height: 55px;
+	box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.back .fold-zone-top::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	background: linear-gradient(135deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, #eee 50%, #fff 100%);
+	pointer-events: none;
+	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.back .fold-zone-top:hover::before {
+	width: 55px;
+	height: 55px;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.back .fold-zone-bottom::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 0;
+	height: 0;
+	background: linear-gradient(45deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, #eee 50%, #fff 100%);
+	pointer-events: none;
+	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.back .fold-zone-bottom:hover::before {
+	width: 55px;
+	height: 55px;
+	box-shadow: 2px -2px 5px rgba(0, 0, 0, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: #282828c5;
+	}
+	.style-arrow {
+		color: white;
+	}
+	html {
+		color-scheme: dark;
+	}
+
+	.front .fold-zone-top::before {
+		background: linear-gradient(225deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
+	}
+	
+	.front .fold-zone-bottom::before {
+		background: linear-gradient(315deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
+	}
+	
+	.back .fold-zone-top::before {
+		background: linear-gradient(135deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
+	}
+	
+	.back .fold-zone-bottom::before {
+		background: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
+	}
 }

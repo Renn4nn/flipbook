@@ -16,7 +16,7 @@ export default function Workspace({
 		() => import('@/ui/components/thumbnail/ThumbnailPdf'),
 		{
 			ssr: false,
-			loading: () => <LoadingSkeleton />
+			loading: () => <div className={styles.loadingContainer}><LoadingSkeleton /></div>
 		}
 	)
 	const documentsResponse = useApiResponse<DocumentSchema[]>(documentsPromise)
