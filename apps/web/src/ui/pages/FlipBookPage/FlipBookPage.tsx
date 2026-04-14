@@ -53,9 +53,14 @@ export default function FlipBookPage({ documentPromise }: DocumentProps) {
     <div className={styles.wrapper}>
       <div className={styles.flipbookContainer}>
         <div className={styles.fullscreenWrapper}>
-          <Button onClick={toggleFullscreen}>
-            {isFullscreen ? <Expand /> : <Maximize />}
-          </Button>
+          <button 
+            className={styles.fullscreenButton}
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
+            title={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
+          >
+            {isFullscreen ? <Expand size={22} /> : <Maximize size={22} />}
+          </button>
         </div>
         <FlipBook
           type={type}

@@ -100,6 +100,8 @@ export default function Slider() {
 
 	if (totalPages === 0) return null
 
+	const percentage = totalSpreads <= 1 ? 0 : (tempSpread / (totalSpreads - 1)) * 100
+
 	return (
 		<div className={styles.sliderWrapper}>
 			<div
@@ -124,6 +126,7 @@ export default function Slider() {
 				onTouchEnd={handleTouchEnd}
 				onMouseLeave={handleMouseLeave}
 				className={styles.pageSlider}
+				style={{ '--progress': `${percentage}%` } as React.CSSProperties}
 			/>
 		</div>
 	)

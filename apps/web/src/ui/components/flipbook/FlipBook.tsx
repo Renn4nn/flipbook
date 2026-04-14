@@ -87,6 +87,7 @@ export default function FlipBook({
 			setCurrentState(nextState)
 			setCurrentPage((nextState - 1) * 2)
 		}
+		console.log('handleFlipNext', currentState, maxState)
 	}, [currentState, maxState, playFlipSound, setCurrentPage])
 
 	const handleFlipPrev = useCallback(() => {
@@ -96,7 +97,8 @@ export default function FlipBook({
 			setCurrentState(prevState)
 			setCurrentPage((prevState - 1) * 2)
 		}
-	}, [currentState, playFlipSound, setCurrentPage])
+		console.log('handleFlipPrev', currentState, maxState)
+	}, [currentState, maxState, playFlipSound, setCurrentPage])
 
 	useEffect(() => {
 		document.body.classList.add('no-scroll')
@@ -182,9 +184,12 @@ export default function FlipBook({
 
 							const isFlipped = currentState > paperNumber
 
-							// Using CSS variables to handle the z-index delayed transitions
-							const zUnflipped = numOfPapers - paperIndex
-							const zFlipped = paperNumber
+							// z-index base: páginas não viradas (direita) ficam em ordem decrescente,
+							// páginas viradas (esquerda) ficam em ordem crescente.
+							// Ao virar, o CSS preserva o z-index alto pelo tempo da animação.
+							const zIndex = isFlipped
+								? paperNumber
+								: numOfPapers * 2 - paperIndex
 
 							// Windowed rendering: only materialise the 2 papers around
 							// the current page to keep the DOM light.
@@ -196,8 +201,7 @@ export default function FlipBook({
 							const isLastPaper = paperNumber === numOfPapers
 
 							const isInteractiveRight =
-								(paperNumber === currentState && currentState <= numOfPapers) ||
-								(currentState > numOfPapers && isLastPaper)
+								paperNumber === currentState && currentState < maxState
 
 							const isInteractiveLeft =
 								paperNumber === currentState - 1
@@ -213,8 +217,7 @@ export default function FlipBook({
 									: ''
 
 							const paperStyle = {
-								'--z-unflipped': zUnflipped,
-								'--z-flipped': zFlipped,
+								'--z-index': zIndex,
 							} as React.CSSProperties
 
 							return (

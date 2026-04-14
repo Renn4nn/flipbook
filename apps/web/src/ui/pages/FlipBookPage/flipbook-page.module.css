@@ -12,15 +12,60 @@
 }
 .fullscreenWrapper {
   position: absolute;
-  top: 9rem;
-  right: 2rem;
+  bottom: 2.5rem;
+  right: 3rem;
   z-index: 100;
 }
 
-.fullscreenWrapper > button {
-  background-color: transparent;
-  border: none;
+.fullscreenButton {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+  color: #555;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fullscreenButton:hover {
+  transform: translateY(-4px) scale(1.05);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  color: #000;
+}
+
+.fullscreenButton:active {
+  transform: translateY(0) scale(0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.fullscreenButton svg {
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.26, 1.55);
+}
+
+.fullscreenButton:hover svg {
+  transform: scale(1.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .fullscreenButton {
+    background: rgba(40, 40, 40, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  .fullscreenButton:hover {
+    background: rgba(60, 60, 60, 0.8);
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  }
 }
 
 .flipbookContainer {
