@@ -11,6 +11,8 @@ import type { FlipBookType } from './type'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import LoadingSkeleton from '@/ui/components/skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
 import { Button } from '@repo/ui/button'
+import { PageSkeleton } from '../skeletons/workspace/PageSkeleton/PageSkeleton'
+import { PageRander } from './PageRander/PageRander'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
@@ -28,6 +30,18 @@ export default function FlipBook({
 	height = 565,
 }: FlipBookProps) {
 	const aspectRatio = 0.70796
+	const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 900 : false)
+	const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
+
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobile(window.innerWidth <= 900)
+			setScreenWidth(window.innerWidth)
+		}
+		window.addEventListener('resize', handleResize)
+		return () => window.removeEventListener('resize', handleResize)
+	}, [])
+
 	let finalWidth = width
 	let finalHeight = height
 
@@ -37,25 +51,26 @@ export default function FlipBook({
 		finalWidth = Math.round(height * aspectRatio)
 	}
 
+	if (isMobile) {
+		const calculatedWidth = Math.min(340, screenWidth - 24)
+		finalWidth = calculatedWidth
+		finalHeight = Math.round(calculatedWidth / aspectRatio)
+	}
+
 	const { setCurrentPage, setTotalPages, currentPage } = useFlipbookStore()
 	const [numPages, setNumPages] = useState<number>(0)
 	const [currentState, setCurrentState] = useState(1)
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 
-	// Pre-load audio once
 	useEffect(() => {
 		audioRef.current = new Audio('/sounds/page_flip.MP3')
 		audioRef.current.playbackRate = 2.5
 		audioRef.current.volume = 1
 	}, [])
 
-	// Derived values:
-	// - numOfPapers: each paper has a front and back face, holding 2 PDF pages
-	const numOfPapers = Math.ceil(numPages / 2)
-	// Se a contagem total de páginas for par, permitimos fechar o livro na última capa vazia (+)
-	// Se for ímpar, o documento termina naturalmente no último spread aberto.
+	const numOfPapers = isMobile ? numPages : Math.ceil(numPages / 2)
 	const maxState = numPages > 0
-		? (numPages % 2 === 0 ? numOfPapers + 1 : numOfPapers)
+		? (isMobile ? numPages : (numPages % 2 === 0 ? numOfPapers + 1 : numOfPapers))
 		: 1;
 
 	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
@@ -63,15 +78,14 @@ export default function FlipBook({
 		setTotalPages(numPages)
 	}
 
-	// Sync external store → internal state (e.g. slider navigation)
 	useEffect(() => {
 		if (currentPage >= 0 && numPages > 0) {
-			const targetState = Math.floor(currentPage / 2) + 1
+			const targetState = isMobile ? currentPage + 1 : Math.floor(currentPage / 2) + 1
 			if (currentState !== targetState) {
 				setCurrentState(targetState)
 			}
 		}
-	}, [currentPage, numPages])
+	}, [currentPage, numPages, isMobile])
 
 	const playFlipSound = useCallback(() => {
 		if (audioRef.current) {
@@ -85,36 +99,30 @@ export default function FlipBook({
 			playFlipSound()
 			const nextState = currentState + 1
 			setCurrentState(nextState)
-			setCurrentPage((nextState - 1) * 2)
+			setCurrentPage(isMobile ? nextState - 1 : (nextState - 1) * 2)
 		}
-		console.log('handleFlipNext', currentState, maxState)
-	}, [currentState, maxState, playFlipSound, setCurrentPage])
+	}, [currentState, maxState, playFlipSound, setCurrentPage, isMobile])
 
 	const handleFlipPrev = useCallback(() => {
 		if (currentState > 1) {
 			playFlipSound()
 			const prevState = currentState - 1
 			setCurrentState(prevState)
-			setCurrentPage((prevState - 1) * 2)
+			setCurrentPage(isMobile ? prevState - 1 : (prevState - 1) * 2)
 		}
-		console.log('handleFlipPrev', currentState, maxState)
-	}, [currentState, maxState, playFlipSound, setCurrentPage])
+	}, [currentState, playFlipSound, setCurrentPage, isMobile])
 
 	useEffect(() => {
 		document.body.classList.add('no-scroll')
 		return () => document.body.classList.remove('no-scroll')
 	}, [])
-
-	// ── Book positioning ──────────────────────────────────────────────
-	// State 1  → closed, cover on right  →  translateX(0%)
-	// State Max (if it's a true back cover) → translateX(100%)
-	// Otherwise → book open, centered    →  translateX(50%)
 	const isClosedFront = currentState === 1
 	const isClosedBack = currentState > numOfPapers
 	const isOpen = currentState > 1 && currentState <= numOfPapers
 
-	const bookTransform =
-		isClosedFront
+	const bookTransform = isMobile
+		? 'none'
+		: isClosedFront
 			? 'translateX(0%)'
 			: isClosedBack
 				? 'translateX(100%)'
@@ -122,13 +130,13 @@ export default function FlipBook({
 
 	// Buttons slide outward when book is open
 	const btnOffset = finalWidth / 2 + 24;
-	const prevBtnTransform = isOpen
+	const prevBtnTransform = isMobile ? 'none' : (isOpen
 		? `translateX(-${btnOffset}px)`
-		: 'translateX(0px)'
+		: 'translateX(0px)')
 
-	const nextBtnTransform = isOpen
+	const nextBtnTransform = isMobile ? 'none' : (isOpen
 		? `translateX(${btnOffset}px)`
-		: 'translateX(0px)'
+		: 'translateX(0px)')
 
 	return (
 		<div
@@ -160,52 +168,25 @@ export default function FlipBook({
 					options={{
 						cMapUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/cmaps/',
 						cMapPacked: true,
+						disableAutoFetch: true,
+						disableStream: true,
 					}}
 				>
 					{numPages > 0 &&
 						Array.from({ length: numOfPapers }).map((_, paperIndex) => {
-							const paperNumber = paperIndex + 1
-
-							// Page layout per paper:
-							//   front face → odd  PDF page  (1, 3, 5 …)
-							//   back face  → even PDF page  (2, 4, 6 …)
-							//
-							// After flipping paper N the book spread shows:
-							//   LEFT  = back  of paper N   (even page)
-							//   RIGHT = front of paper N+1 (next odd page)
-							//
-							// Example with cover PDF:
-							//   Paper 0 front = pg1 (cover)   | Paper 0 back = pg2
-							//   Paper 1 front = pg3           | Paper 1 back = pg4
-							//
-							// Flip paper 0 → LEFT: pg2, RIGHT: pg3  ✓
-							const pageFront = paperIndex * 2 + 1
-							const pageBack = paperIndex * 2 + 2
-
+							const paperNumber = paperIndex + 1;
+							const isVisible = Math.abs(paperNumber - currentState) <= 2;
+							if (!isVisible) return null;
+							const pageFront = isMobile ? paperIndex + 1 : paperIndex * 2 + 1;
+							const pageBack = isMobile ? null : paperIndex * 2 + 2;
 							const isFlipped = currentState > paperNumber
-
-							// z-index base: páginas não viradas (direita) ficam em ordem decrescente,
-							// páginas viradas (esquerda) ficam em ordem crescente.
-							// Ao virar, o CSS preserva o z-index alto pelo tempo da animação.
 							const zIndex = isFlipped
 								? paperNumber
 								: numOfPapers * 2 - paperIndex
-
-							// Windowed rendering: only materialise the 2 papers around
-							// the current page to keep the DOM light.
-							const isNear =
-								Math.abs(paperNumber - currentState) <= 2 ||
-								(currentState === 1 && paperNumber <= 3) ||
-								(currentState === maxState && paperNumber >= numOfPapers - 2)
-
-							const isLastPaper = paperNumber === numOfPapers
-
 							const isInteractiveRight =
 								paperNumber === currentState && currentState < maxState
-
 							const isInteractiveLeft =
 								paperNumber === currentState - 1
-
 							let paperOnClick = undefined
 							if (isInteractiveRight) paperOnClick = handleFlipNext
 							if (isInteractiveLeft) paperOnClick = handleFlipPrev
@@ -227,7 +208,6 @@ export default function FlipBook({
 									style={paperStyle}
 								>
 									<div className="page-turner">
-										{/* ── Front face (right side when book is open) ── */}
 										<div className="front">
 											{isInteractiveRight && (
 												<>
@@ -236,23 +216,13 @@ export default function FlipBook({
 												</>
 											)}
 											<div className={`front-content ${type}`}>
-												{isNear && (
-													<Page
-														width={finalWidth}
-														height={finalHeight}
-														canvasBackground="white"
-														devicePixelRatio={1}
-														pageNumber={pageFront}
-														loading=""
-														noData=""
-														renderAnnotationLayer={false}
-														renderTextLayer={false}
-													/>
-												)}
+												<PageRander
+													pageNumber={pageFront}
+													width={finalWidth}
+													height={finalHeight}
+												/>
 											</div>
 										</div>
-
-										{/* ── Back face (left side after flip) ── */}
 										<div className="back">
 											{isInteractiveLeft && (
 												<>
@@ -261,18 +231,14 @@ export default function FlipBook({
 												</>
 											)}
 											<div className={`back-content ${type}`}>
-												{isNear && pageBack <= numPages && (
-													<Page
+												{pageBack && pageBack <= numPages ? (
+													<PageRander
+														pageNumber={pageBack}
 														width={finalWidth}
 														height={finalHeight}
-														canvasBackground="white"
-														devicePixelRatio={1}
-														pageNumber={pageBack}
-														loading=""
-														noData=""
-														renderAnnotationLayer={false}
-														renderTextLayer={false}
 													/>
+												) : (
+													<div style={{ width: '100%', height: '100%', backgroundColor: '#fff' }} />
 												)}
 											</div>
 										</div>

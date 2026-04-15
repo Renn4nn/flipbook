@@ -59,7 +59,7 @@
 	border-radius: 8px;
 	outline: none;
 	cursor: pointer;
-	height: 6px;
+	height: 10px;
 	width: 550px;
 	max-width: 90vw;
 	transition: height 0.2s ease;
@@ -73,7 +73,7 @@
 	-webkit-appearance: none;
 	appearance: none;
 	width: 68px;
-	height: 12px;
+	height: 16px;
 	background-color: #b1b1b1;
 	border-radius: 6px;
 	cursor: grab;
@@ -95,7 +95,7 @@
 
 .pageSlider::-moz-range-thumb {
 	width: 68px;
-	height: 12px;
+	height: 16px;
 	background-color: #fff;
 	border-radius: 6px;
 	cursor: grab;

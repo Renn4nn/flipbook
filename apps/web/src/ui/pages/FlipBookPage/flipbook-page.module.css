@@ -13,9 +13,15 @@
 
 .fullscreenWrapper {
   position: absolute;
-  bottom: 2.5rem;
-  right: 3rem;
+  top: 7rem;
+  right: 2rem;
   z-index: 100;
+}
+
+@media (max-width: 900px) {
+  .fullscreenWrapper {
+    display: none;
+  }
 }
 
 .fullscreenButton {
@@ -87,4 +93,15 @@
   align-items: center;
   z-index: 100;
   padding: 0 20px;
+}
+
+@media (max-width: 900px) {
+  .sliderContainer {
+    bottom: 2rem;
+  }
+
+  .flipbookContainer {
+    align-items: flex-start;
+    padding-top: 40px;
+  }
 }

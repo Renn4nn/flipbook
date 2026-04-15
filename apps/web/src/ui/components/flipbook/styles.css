@@ -180,8 +180,8 @@ body.no-scroll {
 	position: absolute;
 	width: 5rem;
 	height: 5rem;
-	z-index: 1000 !important; 
-  pointer-events: auto;
+	z-index: 1000 !important;
+	pointer-events: auto;
 	cursor: pointer;
 	background-color: transparent;
 	outline: none;
@@ -226,7 +226,7 @@ body.no-scroll {
 
 .paper.interactive-right,
 .paper.interactive-left {
-  cursor: auto;
+	cursor: auto;
 }
 
 .front .fold-zone-top::before {
@@ -301,13 +301,64 @@ body.no-scroll {
 	box-shadow: 2px -2px 5px rgba(0, 0, 0, 0.15);
 }
 
+@media (max-width: 900px) {
+	.custom-flipbook-container {
+		display: grid !important;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto auto;
+		column-gap: 30px;
+		row-gap: 1px;
+		padding-bottom: 20px;
+		padding-top: 5rem;
+	}
+
+	.book {
+		grid-column: 1 / -1;
+		grid-row: 1;
+		transform: none !important;
+		margin: 0 auto;
+	}
+
+	.paper {
+		width: 100%;
+		transition: z-index 0s, opacity 0s 0s, visibility 0s 0s;
+	}
+
+	.paper.flipped {
+		opacity: 0;
+		visibility: hidden;
+		transition: z-index 0s 0.6s, opacity 0s 0.6s, visibility 0s 0.6s;
+	}
+
+	.flip-btn {
+		transform: none !important;
+		position: relative;
+		z-index: 1000;
+		margin: 0 4px;
+	}
+
+	.flip-btn:first-of-type {
+		grid-column: 1;
+		grid-row: 2;
+		justify-self: end;
+	}
+
+	.flip-btn:last-of-type {
+		grid-column: 2;
+		grid-row: 2;
+		justify-self: start;
+	}
+}
+
 @media (prefers-color-scheme: dark) {
 	body {
 		background-color: #282828c5;
 	}
+
 	.style-arrow {
 		color: white;
 	}
+
 	html {
 		color-scheme: dark;
 	}
@@ -315,15 +366,15 @@ body.no-scroll {
 	.front .fold-zone-top::before {
 		background: linear-gradient(225deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
 	}
-	
+
 	.front .fold-zone-bottom::before {
 		background: linear-gradient(315deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
 	}
-	
+
 	.back .fold-zone-top::before {
 		background: linear-gradient(135deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
 	}
-	
+
 	.back .fold-zone-bottom::before {
 		background: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
 	}
