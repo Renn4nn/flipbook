@@ -61,3 +61,11 @@
 		display: flex;
 	}
 }
+
+@media (prefers-color-scheme: dark) {
+	.link-group {
+		background-color: #2e2e2e;
+		color: white;
+		border-bottom: 1px solid #444444;
+	}
+}

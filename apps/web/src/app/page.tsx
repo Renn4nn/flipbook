@@ -60,7 +60,7 @@ export default function LandingPage() {
       <footer
         className={`${styles.footer} ${isFullscreen ? styles.hidden : ""}`}
       >
-        <p> 2026 CTD Flipbook. Todos os direitos reservados.</p>
+        <p>CTD - Companhia de Tecnologia e Desenvolvimento</p>
       </footer>
     </div>
   );
