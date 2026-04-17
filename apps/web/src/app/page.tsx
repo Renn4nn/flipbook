@@ -6,10 +6,11 @@ import { Logo } from "@repo/ui/logo";
 import FilePicker from "@/ui/components/file-picker/FilePicker";
 import FlipBookPagePreview from "@/ui/pages/FlipBookPage/FlipBookPagePreview";
 import { useFullscreenStore } from "@/lib/store/useFullScreen";
+import PageLoadingSkeleton from "@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton";
 
 const FlipBook = dynamic(() => import("@/ui/components/flipbook"), {
   ssr: false,
-  loading: () => <div className={styles.loading}>Carregando preview...</div>,
+  loading: () => <PageLoadingSkeleton />,
 });
 
 export default function LandingPage() {

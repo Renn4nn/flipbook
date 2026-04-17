@@ -38,7 +38,7 @@ export default function Workspace({
 							</span>
 						</div>
 						<Link
-							href={`/workspace/${document.id}`}
+							href={`/view/${document.id}`}
 							className={styles.cardBody}
 						>
 							<ThumbnailPdf

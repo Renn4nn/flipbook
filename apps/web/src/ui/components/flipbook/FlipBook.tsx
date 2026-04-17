@@ -138,6 +138,12 @@ export default function FlipBook({
 		? `translateX(${btnOffset}px)`
 		: 'translateX(0px)')
 
+	const pdfOptions = {
+		cMapUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/cmaps/',
+		cMapPacked: true,
+		standardFontDataUrl: 'standard_fonts/',
+	};
+
 	return (
 		<div
 			className="custom-flipbook-container"
@@ -165,12 +171,7 @@ export default function FlipBook({
 					error="Um erro ocorreu!"
 					loading={<div className="loading-container"><LoadingSkeleton /></div>}
 					noData="Nenhum arquivo PDF selecionado"
-					options={{
-						cMapUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/cmaps/',
-						cMapPacked: true,
-						disableAutoFetch: true,
-						disableStream: true,
-					}}
+					options={pdfOptions}
 				>
 					{numPages > 0 &&
 						Array.from({ length: numOfPapers }).map((_, paperIndex) => {

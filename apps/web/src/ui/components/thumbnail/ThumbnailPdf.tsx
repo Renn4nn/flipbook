@@ -17,6 +17,7 @@ export default function ThumbnailPdf({
 
 	useEffect(() => {
 		let isMounted = true
+		let loadingTask: any = null
 
 		async function generate() {
 			try {
@@ -25,7 +26,7 @@ export default function ThumbnailPdf({
 				// Configuração do Worker
 				pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
-				const loadingTask = pdfjs.getDocument(url)
+				loadingTask = pdfjs.getDocument(url)
 				const pdf = await loadingTask.promise
 				const page = await pdf.getPage(1)
 
@@ -45,6 +46,12 @@ export default function ThumbnailPdf({
 
 					setThumbnail(canvas.toDataURL('image/jpeg'))
 				}
+				
+				// Limpa a memória quando finaliza a geração
+				if (loadingTask && isMounted) {
+					await loadingTask.destroy()
+					loadingTask = null
+				}
 			} catch (err) {
 				console.error('Erro ao gerar thumbnail:', err)
 			} finally {
@@ -56,6 +63,9 @@ export default function ThumbnailPdf({
 
 		return () => {
 			isMounted = false
+			if (loadingTask) {
+				loadingTask.destroy().catch(() => {})
+			}
 		}
 	}, [url])
 

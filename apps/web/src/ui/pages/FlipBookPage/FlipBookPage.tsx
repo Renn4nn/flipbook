@@ -8,9 +8,9 @@ import { useFlipbookStore } from "@/lib/store/useFlipbook";
 import type { FlipBookType } from "@/ui/components/flipbook/type";
 import Slider from "@/ui/components/slider/Slider";
 import styles from "./flipbook-page.module.css";
-import { Button } from "@repo/ui/button";
 import { Maximize, Expand } from "lucide-react";
 import { useFullscreenStore } from "@/lib/store/useFullScreen";
+import PageLoadingSkeleton from "@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton";
 type DocumentProps = {
   documentPromise: Promise<ApiResponse<DocumentResponseSchema>>;
 };
@@ -18,7 +18,7 @@ type DocumentProps = {
 const FlipBook = dynamic(() => import("@/ui/components/flipbook"), {
   ssr: false,
   loading: () => (
-    <div>Carregando...</div>
+    <PageLoadingSkeleton />
   ),
 });
 export default function FlipBookPage({ documentPromise }: DocumentProps) {
@@ -31,6 +31,7 @@ export default function FlipBookPage({ documentPromise }: DocumentProps) {
   useEffect(() => {
     reset();
   }, [reset]);
+
 
   const data = useApiResponse<DocumentResponseSchema>(documentPromise);
 

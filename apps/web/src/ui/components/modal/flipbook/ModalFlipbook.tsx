@@ -6,12 +6,13 @@ import FilePicker from '../../file-picker/FilePicker'
 import { CreateBookButton } from '../../file-picker/modules/createbutton/CreateDocButton'
 import type { FlipBookType } from '../../flipbook/type'
 import styles from './modal-flipbook.module.css'
+import PageLoadingSkeleton from '@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton'
 
 // Import dinâmico para evitar erros de SSR com o canvas do PDF
 const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {
 	ssr: false,
 	loading: () => (
-		<div className={styles.loadingPreview}>Carregando preview...</div>
+		<PageLoadingSkeleton />
 	)
 })
 

@@ -12,11 +12,8 @@ export default function ViewLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang="pt">
-			{/* adicionar estilo */}
-			<body style={{ margin: 0, padding: 0, overflow: 'hidden' }}>
-				{children}
-			</body>
-		</html>
+		<div style={{ margin: 0, padding: 0, overflow: 'hidden' }}>
+			{children}
+		</div>
 	)
 }

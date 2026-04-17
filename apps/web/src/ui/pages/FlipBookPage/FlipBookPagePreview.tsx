@@ -8,13 +8,14 @@ import styles from "./flipbook-page.module.css";
 import { Button } from "@repo/ui/button";
 import { useFullscreenStore } from "@/lib/store/useFullScreen";
 import { Expand, Maximize } from "lucide-react";
+import PageLoadingSkeleton from "@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton";
 type DocumentProps = {
   file: File;
 };
 
 const FlipBook = dynamic(() => import("@/ui/components/flipbook"), {
   ssr: false,
-  loading: () => <p>Carregando leitor...</p>,
+  loading: () => <PageLoadingSkeleton />,
 });
 export default function FlipBookPage({ file }: DocumentProps) {
   const [type] = useState<FlipBookType>("magazine");
