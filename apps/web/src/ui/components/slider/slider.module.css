@@ -85,7 +85,6 @@
 .pageSlider::-webkit-slider-thumb:hover,
 .pageSlider:active::-webkit-slider-thumb {
 	transform: scale(1.05);
-	/* Escala menor para o formato largo */
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -107,7 +106,6 @@
 .pageSlider::-moz-range-thumb:hover,
 .pageSlider:active::-moz-range-thumb {
 	transform: scale(1.05);
-	/* Escala menor para o formato largo */
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 

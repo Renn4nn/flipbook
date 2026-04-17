@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useFlipbookStore } from '@/lib/store/useFlipbook'
 import styles from './slider.module.css'
 
-// Helper: convert page index to spread index
 const pageToSpread = (pageIndex: number): number => {
 	if (pageIndex === 0) return 0
 	return Math.ceil(pageIndex / 2)

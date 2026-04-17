@@ -10,8 +10,6 @@ import { useFlipbookStore } from '@/lib/store/useFlipbook'
 import type { FlipBookType } from './type'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import LoadingSkeleton from '@/ui/components/skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
-import { Button } from '@repo/ui/button'
-import { PageSkeleton } from '../skeletons/workspace/PageSkeleton/PageSkeleton'
 import { PageRander } from './PageRander/PageRander'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
@@ -128,7 +126,6 @@ export default function FlipBook({
 				? 'translateX(100%)'
 				: 'translateX(50%)'
 
-	// Buttons slide outward when book is open
 	const btnOffset = finalWidth / 2 + 24;
 	const prevBtnTransform = isMobile ? 'none' : (isOpen
 		? `translateX(-${btnOffset}px)`

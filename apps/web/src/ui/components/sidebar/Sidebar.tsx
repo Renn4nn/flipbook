@@ -1,5 +1,5 @@
 'use client'
-import { Book, House } from 'lucide-react'
+import { Book } from 'lucide-react'
 import './sidebar.css'
 import { useModalStore } from '@/lib/store/useModal'
 import { useSidebarStore } from '@/lib/store/useSidebarStore'
