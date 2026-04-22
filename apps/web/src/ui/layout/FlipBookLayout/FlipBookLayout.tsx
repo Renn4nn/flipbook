@@ -8,9 +8,13 @@ import { useFlipbookStore } from "@/lib/store/useFlipbook";
 import type { FlipBookType } from "@/ui/components/flipbook/type";
 import Slider from "@/ui/components/slider/Slider";
 import styles from "./flipbook-layout.module.css";
-import { Maximize, Expand } from "lucide-react";
+import { Maximize, Expand, ZoomIn, ZoomOut } from "lucide-react";
 import { useFullscreenStore } from "@/lib/store/useFullScreen";
 import PageLoadingSkeleton from "@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton";
+import {
+  TransformWrapper,
+  TransformComponent,
+} from "react-zoom-pan-pinch";
 type DocumentProps = {
   documentPromise: Promise<ApiResponse<DocumentResponseSchema>>;
 };
@@ -24,7 +28,6 @@ const FlipBook = dynamic(() => import("@/ui/components/flipbook"), {
 export default function FlipBookLayout({ documentPromise }: DocumentProps) {
   const { reset } = useFlipbookStore();
   const [type] = useState<FlipBookType>("magazine");
-
   const { isFullscreen, toggleFullscreen, setFullscreen } =
     useFullscreenStore();
 
@@ -53,25 +56,54 @@ export default function FlipBookLayout({ documentPromise }: DocumentProps) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.flipbookContainer}>
-        <div className={styles.fullscreenWrapper}>
-          <button 
-            className={styles.fullscreenButton}
-            onClick={toggleFullscreen}
-            aria-label={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
-            title={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
-          >
-            {isFullscreen ? <Expand size={22} /> : <Maximize size={22} />}
-          </button>
-        </div>
-        <FlipBook
-          type={type}
-          // @ts-expect-error: a estrutura do ApiResponse extrai o data mas o TS não mapeou o nesting
-          file={`http://localhost:3001${data?.path}`}
-          width={500}
-          height={665}
-        />
       </div>
+      <div className={styles.zoomScrollArea}>
+        <TransformWrapper
+          initialScale={1}
+          minScale={1}
+          maxScale={4}
+          centerOnInit
+          centerZoomedOut
+          limitToBounds={true}
+        >
+          {({ zoomIn, zoomOut, resetTransform }) => (
+            <>
+              <div className={styles.fullscreenWrapper}>
+                <button onClick={toggleFullscreen} className={styles.fullscreenButton}>
+                  {isFullscreen ? <Expand size={22} /> : <Maximize size={22} />}
+                </button>
 
+                <button onClick={() => zoomIn()} className={styles.fullscreenButton}>
+                  <ZoomIn size={22} />
+                </button>
+
+                <button onClick={() => zoomOut()} className={styles.fullscreenButton}>
+                  <ZoomOut size={22} />
+                </button>
+              </div>
+              <TransformComponent
+                wrapperStyle={{ width: "100%", height: "100%" }}
+                contentStyle={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div className={styles.zoomScalingWrapper}>
+                  <FlipBook
+                    type={type}
+                    file={`http://localhost:3001${data?.path}`}
+                    width={500}
+                    height={665}
+                  />
+                </div>
+              </TransformComponent>
+            </>
+          )}
+        </TransformWrapper>
+      </div>
       <div className={styles.sliderContainer}>
         <Slider />
       </div>

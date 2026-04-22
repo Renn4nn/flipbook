@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import FilePicker from '../../file-picker/FilePicker'
-import { CreateBookButton } from '../../file-picker/modules/createbutton/CreateDocButton'
+import { CreateBookButton } from '../../createbutton/CreateDocButton'
 import type { FlipBookType } from '../../flipbook/type'
 import styles from './modal-flipbook.module.css'
 import PageLoadingSkeleton from '@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton'
