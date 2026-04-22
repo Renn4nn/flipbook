@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import type { FlipBookType } from "@/ui/components/flipbook/type";
 import Slider from "@/ui/components/slider/Slider";
-import styles from "./flipbook-page.module.css";
+import styles from "./flipbook-layout.module.css";
 import { Button } from "@repo/ui/button";
 import { useFullscreenStore } from "@/lib/store/useFullScreen";
 import { Expand, Maximize } from "lucide-react";
@@ -17,7 +17,7 @@ const FlipBook = dynamic(() => import("@/ui/components/flipbook"), {
   ssr: false,
   loading: () => <PageLoadingSkeleton />,
 });
-export default function FlipBookPage({ file }: DocumentProps) {
+export default function FlipBookLayoutPreview({ file }: DocumentProps) {
   const [type] = useState<FlipBookType>("magazine");
   const { isFullscreen, toggleFullscreen, setFullscreen } =
     useFullscreenStore();

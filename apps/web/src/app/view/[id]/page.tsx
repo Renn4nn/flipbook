@@ -2,7 +2,7 @@ import { API_ROUTES } from '@repo/constants'
 import type { DocumentResponseSchema } from '@repo/schemas'
 import { Suspense } from 'react'
 import { apiRequest } from '@/lib/api/request'
-import FlipBookPage from '@/ui/pages/FlipBookPage/FlipBookPage'
+import FlipBookLayout from '@/ui/layout/FlipBookLayout/FlipBookLayout'
 import PageLoadingSkeleton from '@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton'
 
 export default async function PublicViewPage({
@@ -27,5 +27,5 @@ async function ViewContainer({ params }: { params: Promise<{ id: string }> }) {
     url: API_ROUTES.DOCUMENTS.BY_ID(id)
   });
 
-  return <FlipBookPage documentPromise={responsePromise} />;
+  return <FlipBookLayout documentPromise={responsePromise} />;
 }

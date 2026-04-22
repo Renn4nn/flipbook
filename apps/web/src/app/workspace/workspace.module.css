@@ -71,6 +71,25 @@
 	height: 100%;
 }
 
+@media (prefers-color-scheme: dark) {
+	.container {
+		background-color: #121212;
+	}
+
+	.card {
+		background-color: #212121;
+		border-color: #404040;
+	}
+
+	.cardHeader h3 {
+		color: #fff;
+	}
+
+	.cardImage {
+		border-color: #404040;
+	}
+}
+
 @media (max-width: 900px) {
 	.card {
 		width: 100%;

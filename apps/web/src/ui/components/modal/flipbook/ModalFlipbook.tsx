@@ -1,6 +1,6 @@
 'use client'
 
-import dynamic from 'next/dynamic' // Importante para componentes que usam window/document
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import FilePicker from '../../file-picker/FilePicker'
 import { CreateBookButton } from '../../file-picker/modules/createbutton/CreateDocButton'
@@ -30,12 +30,10 @@ export default function ModalFlipbook() {
 
 			{file && (
 				<>
-					{/* O Preview ocupa o topo/centro */}
 					<div className={styles.previewWrapper}>
 						<FlipBook type={type} file={file} />
 					</div>
 
-					{/* O Footer agora está fora do wrapper que tem overflow hidden */}
 					<div className={styles.footer}>
 						<div className={styles.typeSelection}>
 							<button
@@ -60,7 +58,6 @@ export default function ModalFlipbook() {
 							</button>
 						</div>
 
-						{/* Certifique-se de que o componente renderiza um botão visível */}
 						<CreateBookButton file={file} />
 					</div>
 				</>

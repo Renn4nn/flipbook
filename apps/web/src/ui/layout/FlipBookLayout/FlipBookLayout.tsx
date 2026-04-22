@@ -7,7 +7,7 @@ import useApiResponse from "@/lib/api/hooks";
 import { useFlipbookStore } from "@/lib/store/useFlipbook";
 import type { FlipBookType } from "@/ui/components/flipbook/type";
 import Slider from "@/ui/components/slider/Slider";
-import styles from "./flipbook-page.module.css";
+import styles from "./flipbook-layout.module.css";
 import { Maximize, Expand } from "lucide-react";
 import { useFullscreenStore } from "@/lib/store/useFullScreen";
 import PageLoadingSkeleton from "@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton";
@@ -21,7 +21,7 @@ const FlipBook = dynamic(() => import("@/ui/components/flipbook"), {
     <PageLoadingSkeleton />
   ),
 });
-export default function FlipBookPage({ documentPromise }: DocumentProps) {
+export default function FlipBookLayout({ documentPromise }: DocumentProps) {
   const { reset } = useFlipbookStore();
   const [type] = useState<FlipBookType>("magazine");
 

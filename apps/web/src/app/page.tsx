@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Logo } from "@repo/ui/logo";
 import FilePicker from "@/ui/components/file-picker/FilePicker";
-import FlipBookPagePreview from "@/ui/pages/FlipBookPage/FlipBookPagePreview";
+import FlipBookLayoutPreview from "@/ui/layout/FlipBookLayout/FlipBookLayoutPreview";
 import { useFullscreenStore } from "@/lib/store/useFullScreen";
 import PageLoadingSkeleton from "@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton";
 
@@ -15,7 +15,7 @@ const FlipBook = dynamic(() => import("@/ui/components/flipbook"), {
 
 export default function LandingPage() {
   const [file, setFile] = useState<File | null>(null);
-  const { isFullscreen, toggleFullscreen, setFullscreen } =
+  const { isFullscreen, setFullscreen } =
     useFullscreenStore();
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function LandingPage() {
         {!file ? (
           <FilePicker file={file} setFile={setFile} />
         ) : (
-          <FlipBookPagePreview file={file} />
+          <FlipBookLayoutPreview file={file} />
         )}
       </main>
 

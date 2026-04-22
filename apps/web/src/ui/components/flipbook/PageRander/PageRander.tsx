@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Page } from "react-pdf";
 import { PageSkeleton } from "../../skeletons/workspace/PageSkeleton/PageSkeleton";
-import { ErrorBoundary } from "@/ui/components/error-boundary/ErrorBoundary";
+import { ErrorBoundary } from "@/lib/error-boundary/ErrorBoundary";
 
 export const PageRander = ({ pageNumber, width, height }: { pageNumber: number, width: number, height: number }) => {
   const [isRendered, setIsRendered] = useState(false);

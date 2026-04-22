@@ -17,9 +17,12 @@ export function CreateBookButton({ file }: CreateBookButtonProps) {
 			return toast.error('Por favor, selecione um arquivo.')
 		}
 		const formData = new FormData()
+		// Formulario para upload de arquivos no backend
 		formData.append('file', file)
 		formData.append('filename', file.name)
 		formData.append('path', 'uploads')
+		
+		// Envio de dados para backend
 		const actionPromise = apiAction<DocumentSchema, CreateDocumentSchema>({
 			method: 'post',
 			url: '/documents',

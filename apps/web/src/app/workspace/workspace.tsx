@@ -8,9 +8,9 @@ import styles from './workspace.module.css'
 import LoadingSkeleton from '@/ui/components/skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
 
 export default function Workspace({
-	documentsPromise
+	documents
 }: {
-	documentsPromise: Promise<ApiResponse<DocumentSchema[]>>
+	documents: Promise<ApiResponse<DocumentSchema[]>> // Promise
 }) {
 	const ThumbnailPdf = dynamic(
 		() => import('@/ui/components/thumbnail/ThumbnailPdf'),
@@ -19,7 +19,7 @@ export default function Workspace({
 			loading: () => <div className={styles.loadingContainer}><LoadingSkeleton /></div>
 		}
 	)
-	const documentsResponse = useApiResponse<DocumentSchema[]>(documentsPromise)
+	const documentsResponse = useApiResponse<DocumentSchema[]>(documents)
 	if (!documentsResponse)
 		return <div className={styles.container}>Não existe Documentos...</div>
 	return (
