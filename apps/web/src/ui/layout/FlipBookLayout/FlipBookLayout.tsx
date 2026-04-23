@@ -65,19 +65,20 @@ export default function FlipBookLayout({ documentPromise }: DocumentProps) {
           centerOnInit
           centerZoomedOut
           limitToBounds={true}
+          doubleClick={{ disabled: true }}
         >
-          {({ zoomIn, zoomOut, resetTransform }) => (
+          {({ zoomIn, zoomOut }) => (
             <>
               <div className={styles.fullscreenWrapper}>
                 <button onClick={toggleFullscreen} className={styles.fullscreenButton}>
                   {isFullscreen ? <Expand size={22} /> : <Maximize size={22} />}
                 </button>
 
-                <button onClick={() => zoomIn()} className={styles.fullscreenButton}>
+                <button onClick={() => zoomIn(0.4, 300, "easeOut")} className={styles.fullscreenButton}>
                   <ZoomIn size={22} />
                 </button>
 
-                <button onClick={() => zoomOut()} className={styles.fullscreenButton}>
+                <button onClick={() => zoomOut(0.4, 300, "easeOut")} className={styles.fullscreenButton}>
                   <ZoomOut size={22} />
                 </button>
               </div>

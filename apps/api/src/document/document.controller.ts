@@ -20,10 +20,12 @@ import {
 	UpdateDocumentDto
 } from 'src/lib/types/dto/document.dto'
 import { DocumentService } from './document.service'
+import * as path from "path";
+import * as fs from "fs";
 
 @Controller(RESOURCES.DOCUMENTS)
 export class DocumentController {
-	constructor(private readonly service: DocumentService) {}
+	constructor(private readonly service: DocumentService) { }
 
 	@Get(':id')
 	async getDocumentById(
@@ -82,6 +84,16 @@ export class DocumentController {
 		@Param('id', ParseUUIDPipe) id: string
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
 		const result = await this.service.deleteDocumentById(id)
+
+		if (result.path) {
+			try {
+				const filename = path.basename(result.path);
+				const filePath = path.join(process.cwd(), 'uploads', filename)
+				fs.unlinkSync(filePath)
+			} catch (error) {
+				console.log("Failed to delete file:", error)
+			}
+		}
 		return {
 			data: result
 		}

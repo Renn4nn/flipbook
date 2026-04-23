@@ -18,7 +18,8 @@ const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {
 
 export default function ModalFlipbook() {
 	const [file, setFile] = useState<File | null>(null)
-	const [type, setType] = useState<FlipBookType>('magazine')
+	const [isUploading, setIsUploading] = useState(false)
+	const [uploadProgress, setUploadProgress] = useState(0)
 
 	return (
 		<div className={styles.container}>
@@ -30,35 +31,25 @@ export default function ModalFlipbook() {
 
 			{file && (
 				<>
-					<div className={styles.previewWrapper}>
-						<FlipBook type={type} file={file} />
-					</div>
-
-					<div className={styles.footer}>
-						<div className={styles.typeSelection}>
-							<button
-								type="button"
-								className={styles.button}
-								style={{
-									backgroundColor: type === 'magazine' ? '#003d70' : '#005ca9'
-								}}
-								onClick={() => setType('magazine')}
-							>
-								Revista
-							</button>
-							<button
-								type="button"
-								className={styles.button}
-								style={{
-									backgroundColor: type === 'book' ? '#003d70' : '#005ca9'
-								}}
-								onClick={() => setType('book')}
-							>
-								Livro
-							</button>
+					{isUploading && (
+						<div className={styles.progressContainer}>
+							<div className={styles.progressLabel}>Enviando documento...</div>
+							<div className={styles.progressBar}>
+								<div
+									className={styles.progressFill}
+									style={{ width: `${uploadProgress}%` }}
+								/>
+							</div>
+							<span className={styles.progressText}>{uploadProgress}%</span>
 						</div>
-
-						<CreateBookButton file={file} />
+					)}
+					<div className={styles.footer}>
+						<CreateBookButton
+							file={file}
+							setIsUploading={setIsUploading}
+							setUploadProgress={setUploadProgress}
+							disabled={isUploading}
+						/>
 					</div>
 				</>
 			)}
