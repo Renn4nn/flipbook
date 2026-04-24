@@ -12,7 +12,7 @@ export default function WorkspaceLayout({
 }>) {
 	return (
 		<MainPage>
-			<Modal title="New Flipbook">
+			<Modal title="New Flipbook" id="new-flipbook" closeButton={true}>
 				<ModalFlipbook />
 			</Modal>
 			<Header />

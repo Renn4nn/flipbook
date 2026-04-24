@@ -6,24 +6,26 @@ import styles from './modal.module.css'
 type ModalProps = {
 	children: React.ReactNode
 	title: string
+	id: string
+	closeButton?: boolean
 }
-export default function Modal({ children, title }: ModalProps) {
-	const { isOpen, closeModal } = useModalStore()
+export default function Modal({ children, title, id, closeButton = false }: ModalProps) {
+	const { modalId, closeModal } = useModalStore()
 
-	if (!isOpen) return null
+	if (modalId !== id) return null
 
 	return (
 		<div className={styles.overlay}>
 			<div className={styles.content}>
 				<div className={styles.modalHeader}>
 					<span className={styles.modalTitle}>{title}</span>
-					<button
+					{closeButton && <button
 						type="button"
 						className={styles.closeBtn}
 						onClick={closeModal}
 					>
 						X
-					</button>
+					</button>}
 				</div>
 				<div className={styles.lineBreak}></div>
 				{children}

@@ -54,7 +54,6 @@ export class DocumentController {
 		@Request() _req: unknown
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
 		const documentId = _file.filename
-		console.log(_file)
 		const result = await this.service.createDocument({
 			...documentData,
 			id: documentId.split('.pdf')[0],
@@ -91,7 +90,7 @@ export class DocumentController {
 				const filePath = path.join(process.cwd(), 'uploads', filename)
 				fs.unlinkSync(filePath)
 			} catch (error) {
-				console.log("Failed to delete file:", error)
+				console.error("Failed to delete file:", error)
 			}
 		}
 		return {

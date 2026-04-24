@@ -1,0 +1,75 @@
+.modalContent {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	padding: 1rem 0;
+	color: #333;
+}
+
+.modalActions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+	margin-top: 1rem;
+}
+
+.modalActions button {
+	padding: 0.5rem 1.5rem;
+	border-radius: 0.375rem;
+	font-weight: 500;
+	cursor: pointer;
+	border: 1px solid #e5e7eb;
+	background-color: transparent;
+	transition: all 0.2s;
+}
+
+.modalActions button:hover:not(:disabled) {
+	background-color: #f3f4f6;
+}
+
+.modalActions button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.message {
+	font-size: 1.1rem;
+	font-weight: 400;
+}
+
+.confirmButton {
+	background-color: #ef4444 !important;
+	color: white !important;
+	border: none !important;
+	font-weight: 700 !important;
+}
+
+.cancelButton {
+	background-color: transparent !important;
+	color: #333 !important;
+	border: 1px solid #e5e7eb !important;
+	font-weight: 700 !important;
+}
+
+.cancelButton:hover:not(:disabled) {
+	background-color: #f3f4f6 !important;
+}
+
+.confirmButton:hover:not(:disabled) {
+	background-color: #dc2626 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+	.modalContent {
+		color: #f3f4f6;
+	}
+
+	.modalActions button {
+		border-color: #374151;
+		color: #f3f4f6;
+	}
+
+	.modalActions button:hover:not(:disabled) {
+		background-color: #374151;
+	}
+}
