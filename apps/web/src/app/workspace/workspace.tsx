@@ -94,7 +94,7 @@ export default function Workspace({
 						<div className={styles.cardHeader}>
 							<h3 className={styles.title} title={document.filename}>{document.title}</h3>
 							<span className={styles.date}>
-								Criado em:{' '}
+								Criado em{' '}
 								{new Intl.DateTimeFormat('pt-BR', {
 									day: '2-digit',
 									month: 'long',
