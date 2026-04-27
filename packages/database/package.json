@@ -17,6 +17,7 @@
     "check-types": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:generate": "prisma generate",
+    "db:reset": "dotenv -e ../../.env.database.development -- prisma migrate reset",
     "db:seed": "prisma db seed",
     "db:deploy": "prisma migrate deploy",
     "db:migrate": "dotenv -e ../../.env.database.development -- prisma migrate dev",

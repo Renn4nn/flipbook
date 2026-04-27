@@ -147,9 +147,62 @@
 	font-weight: 700;
 }
 
+.date {
+	color: #838181;
+}
+
+.title {
+	color: #212121;
+}
+
+/* sem documentos */
+.emptyContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 60%;
+}
+
+.emptyContent {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.iconWrapper {
+	padding: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.emptyIcon {
+	opacity: 0.6;
+}
+
+.emptyTitle {
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: var(--text-primary);
+	margin-bottom: 0.75rem;
+}
+
+.emptyDescription {
+	font-size: 0.95rem;
+	color: var(--text-muted);
+	line-height: 1.6;
+	margin-bottom: 2rem;
+}
+
+
 @media (prefers-color-scheme: dark) {
 	.container {
 		background-color: #121212;
+	}
+
+	.date {
+		color: #d3d0d0;
 	}
 
 	.card {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { RESOURCES } from '@repo/constants'
 import type { CreateDocumentSchema, DocumentSchema } from '@repo/schemas'
 import toast from 'react-hot-toast'
@@ -48,6 +48,25 @@ export function CreateBookButton({
 		formData.append('file', file)
 		formData.append('filename', file.name)
 		formData.append('path', 'uploads')
+		formData.append('title', file.name.replace('.pdf', ''))
+		formData.append('size', file.size.toString())
+
+		// Calcula o número de páginas com pdfjs
+		let numPages = 0
+		try {
+			const pdfjs = await import('pdfjs-dist')
+			pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
+
+			const arrayBuffer = await file.arrayBuffer()
+			const loadingTask = pdfjs.getDocument(arrayBuffer)
+			const pdf = await loadingTask.promise
+			numPages = pdf.numPages
+			await loadingTask.destroy()
+		} catch (err) {
+			console.error("Erro ao ler número de páginas do PDF", err)
+		}
+
+		formData.append('pages', numPages.toString())
 
 		const actionPromise = apiAction<DocumentSchema, CreateDocumentSchema>({
 			method: 'post',

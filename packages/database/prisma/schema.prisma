@@ -15,9 +15,15 @@ datasource db {
 }
 
 model Document {
-  id        String   @id @default(uuid())
-  filename  String
-  path      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String    @id @default(uuid())
+  filename    String
+  path        String
+  title       String?
+  size        String
+  pages       Int
+  isPublic    Boolean   @default(false)
+  accessToken String?   @unique
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

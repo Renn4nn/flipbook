@@ -13,6 +13,7 @@ import { API_ROUTES, RESOURCES } from '@repo/constants'
 import toast from 'react-hot-toast'
 import ModalDelete from '@/ui/components/modal/delete/ModalDelete'
 import { useModalStore } from '@/lib/store/useModal'
+import { FolderOpen, Plus } from 'lucide-react'
 
 const ThumbnailPdf = dynamic(
 	() => import('@/ui/components/thumbnail/ThumbnailPdf'),
@@ -41,7 +42,7 @@ export default function Workspace({
 
 	async function confirmDelete() {
 		if (!documentToDelete) return;
-		
+
 		setIsDeleting(true);
 
 		const response = await apiAction({
@@ -68,8 +69,22 @@ export default function Workspace({
 		setDocumentToDelete(null);
 	}
 
-	if (!documentsResponse)
-		return <div className={styles.container}>Não existe Documentos...</div>
+	if (!documentsResponse || documentsResponse.length === 0) {
+		return (
+			<div className={styles.emptyContainer}>
+				<div className={styles.emptyContent}>
+					<div className={styles.iconWrapper}>
+						<FolderOpen size={48} strokeWidth={1.2} className={styles.emptyIcon} />
+					</div>
+					<h2 className={styles.emptyTitle}>Sua biblioteca está vazia</h2>
+					<p className={styles.emptyDescription}>
+						Nenhum documento encontrado :(
+					</p>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<article className={styles.container}>
 			<ModalDelete onConfirm={confirmDelete} onCancel={handleCloseModal} isDeleting={isDeleting} />
@@ -77,8 +92,9 @@ export default function Workspace({
 				{documentsResponse.map((document) => (
 					<div key={document.id} className={styles.card}>
 						<div className={styles.cardHeader}>
-							<h3 title={document.filename}>{document.filename}</h3>
-							<span>
+							<h3 className={styles.title} title={document.filename}>{document.title}</h3>
+							<span className={styles.date}>
+								Criado em:{' '}
 								{new Intl.DateTimeFormat('pt-BR', {
 									day: '2-digit',
 									month: 'long',
