@@ -9,6 +9,7 @@ import useApiResponse from '@/lib/api/hooks'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import Slider from '@/ui/components/slider/Slider'
 import { FlipbookToolbar } from './components'
+import { BackButton } from './components/BackButton'
 import styles from './flipbook-layout.module.css'
 import PageLoadingSkeleton from '@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton'
 
@@ -69,6 +70,7 @@ const FlipBookLayout = memo(function FlipBookLayout({ documentPromise }: FlipBoo
         >
           {({ zoomIn, zoomOut }) => (
             <div className={styles.transformContainer}>
+              <BackButton />
               <FlipbookToolbar
                 isFullscreen={isFullscreen}
                 onToggleFullscreen={toggleFullscreen}
