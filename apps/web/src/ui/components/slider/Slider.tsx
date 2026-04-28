@@ -1,132 +1,83 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+'use client'
+
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useFlipbookStore } from '@/lib/store/useFlipbook'
 import styles from './slider.module.css'
 
-const pageToSpread = (pageIndex: number): number => {
+const PAGE_TO_SPREAD = (pageIndex: number): number => {
 	if (pageIndex === 0) return 0
 	return Math.ceil(pageIndex / 2)
 }
 
-export default function Slider() {
+const Slider = memo(function Slider() {
 	const { currentPage, totalPages, goToPage } = useFlipbookStore()
 	const [isDragging, setIsDragging] = useState(false)
-	const [tempSpread, setTempSpread] = useState(currentPage)
-	const sliderRef = useRef<HTMLInputElement>(null)
-	const [thumbPosition, setThumbPosition] = useState(0)
+	const [tempSpread, setTempSpread] = useState(() => PAGE_TO_SPREAD(currentPage))
 
-	const totalSpreads = Math.floor(totalPages / 2) + 1
+	const totalSpreads = useMemo(() => Math.floor(totalPages / 2) + 1, [totalPages])
 
+	// Sincronizar tempSpread com currentPage imediatamente (para setas funcionarem)
 	useEffect(() => {
 		if (!isDragging) {
-			setTempSpread(pageToSpread(currentPage))
+			setTempSpread(PAGE_TO_SPREAD(currentPage))
 		}
 	}, [currentPage, isDragging])
 
-	const calculateThumbPosition = useCallback(
-		(spreadIndex: number) => {
-			if (!sliderRef.current || totalSpreads <= 1) return 0
-			const sliderWidth = sliderRef.current.offsetWidth
-			const thumbWidth = window.innerWidth <= 900 ? 45 : 68
-			const trackWidth = sliderWidth - thumbWidth
-			const percentage = spreadIndex / (totalSpreads - 1)
-			return percentage * trackWidth + thumbWidth / 2
-		},
-		[totalSpreads]
-	)
-
-	useEffect(() => {
-		const position = calculateThumbPosition(tempSpread)
-		setThumbPosition(position)
-	}, [tempSpread, calculateThumbPosition])
-
-	useEffect(() => {
-		const handleResize = () => {
-			const position = calculateThumbPosition(tempSpread)
-			setThumbPosition(position)
-		}
-
-		window.addEventListener('resize', handleResize)
-		return () => window.removeEventListener('resize', handleResize)
-	}, [tempSpread, calculateThumbPosition])
-
-	const getSpreadLabel = (spreadIndex: number): string => {
+	// Calcular label da spread baseada na spread atual
+	const spreadLabel = useMemo(() => {
 		if (totalPages === 0) return '0'
-		const leftPage = spreadIndex === 0 ? 1 : spreadIndex * 2
+		const leftPage = tempSpread === 0 ? 1 : tempSpread * 2
 		const rightPage = leftPage + 1
-		if (spreadIndex === 0) {
-			return '1'
-		}
-		if (rightPage > totalPages) {
-			return `${leftPage}`
-		}
+
+		if (tempSpread === 0) return '1'
+		if (rightPage > totalPages) return `${leftPage}`
 		return `${leftPage}-${rightPage}`
-	}
+	}, [tempSpread, totalPages])
 
-	const handleMouseDown = () => {
-		setIsDragging(true)
-	}
+	// Calcular porcentagem do progresso
+	const progressPercentage = useMemo(() => {
+		if (totalSpreads <= 1) return 0
+		return (tempSpread / (totalSpreads - 1)) * 100
+	}, [tempSpread, totalSpreads])
 
-	const handleTouchStart = () => {
-		setIsDragging(true)
-	}
-
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		const newSpread = parseInt(e.target.value, 10)
 		setTempSpread(newSpread)
-	}
+	}, [])
 
-	const commitChange = () => {
-		console.log('Committing change:', tempSpread)
+	const handleCommit = useCallback(() => {
 		const pageIndex = tempSpread === 0 ? 0 : tempSpread * 2 - 1
-		console.log('Converted to page index:', pageIndex)
 		goToPage(pageIndex)
 		setIsDragging(false)
-	}
+	}, [tempSpread, goToPage])
 
-	const handleMouseUp = () => {
-		commitChange()
-	}
-
-	const handleTouchEnd = () => {
-		commitChange()
-	}
-
-	const handleMouseLeave = () => {
-		if (!isDragging) {
-			setTempSpread(pageToSpread(currentPage))
-		}
-	}
+	const handleStart = useCallback(() => {
+		setIsDragging(true)
+	}, [])
 
 	if (totalPages === 0) return null
 
-	const percentage = totalSpreads <= 1 ? 0 : (tempSpread / (totalSpreads - 1)) * 100
-
 	return (
 		<div className={styles.sliderWrapper}>
-			<div
-				className={`${styles.pageIndicator} ${isDragging ? styles.visible : ''}`}
-				style={{
-					left: `${thumbPosition}px`,
-					transform: 'translateX(-50%)'
-				}}
-			>
-				{getSpreadLabel(tempSpread)}
+			<div className={styles.pageIndicator}>
+				{spreadLabel}
 			</div>
 			<input
-				ref={sliderRef}
 				type="range"
 				min={0}
 				max={Math.max(0, totalSpreads - 1)}
 				value={tempSpread}
-				onMouseDown={handleMouseDown}
-				onTouchStart={handleTouchStart}
+				onMouseDown={handleStart}
+				onTouchStart={handleStart}
 				onChange={handleChange}
-				onMouseUp={handleMouseUp}
-				onTouchEnd={handleTouchEnd}
-				onMouseLeave={handleMouseLeave}
+				onMouseUp={handleCommit}
+				onTouchEnd={handleCommit}
 				className={styles.pageSlider}
-				style={{ '--progress': `${percentage}%` } as React.CSSProperties}
+				style={{ '--progress': `${progressPercentage}%` } as React.CSSProperties}
+				aria-label="Navegar entre páginas"
 			/>
 		</div>
 	)
-}
+})
+
+export default Slider

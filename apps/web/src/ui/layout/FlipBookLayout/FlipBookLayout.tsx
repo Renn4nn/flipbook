@@ -1,63 +1,63 @@
-"use client";
+'use client'
 
-import type { ApiResponse, DocumentResponseSchema } from "@repo/schemas";
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import useApiResponse from "@/lib/api/hooks";
-import { useFlipbookStore } from "@/lib/store/useFlipbook";
-import type { FlipBookType } from "@/ui/components/flipbook/type";
-import Slider from "@/ui/components/slider/Slider";
-import styles from "./flipbook-layout.module.css";
-import { Maximize, Expand, ZoomIn, ZoomOut } from "lucide-react";
-import { useFullscreenStore } from "@/lib/store/useFullScreen";
-import PageLoadingSkeleton from "@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton";
-import {
-  TransformWrapper,
-  TransformComponent,
-} from "react-zoom-pan-pinch";
-type DocumentProps = {
-  documentPromise: Promise<ApiResponse<DocumentResponseSchema>>;
-};
+import { useEffect, useCallback, memo } from 'react'
+import type { ApiResponse, DocumentResponseSchema } from '@repo/schemas'
+import dynamic from 'next/dynamic'
+import { useFlipbookStore } from '@/lib/store/useFlipbook'
+import { useFullscreenStore } from '@/lib/store/useFullScreen'
+import useApiResponse from '@/lib/api/hooks'
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
+import Slider from '@/ui/components/slider/Slider'
+import { FlipbookToolbar } from './components'
+import styles from './flipbook-layout.module.css'
+import PageLoadingSkeleton from '@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton'
 
-const FlipBook = dynamic(() => import("@/ui/components/flipbook"), {
+interface FlipBookLayoutProps {
+  documentPromise: Promise<ApiResponse<DocumentResponseSchema>>
+}
+
+const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {
   ssr: false,
-  loading: () => (
-    <PageLoadingSkeleton />
-  ),
-});
-export default function FlipBookLayout({ documentPromise }: DocumentProps) {
-  const { reset } = useFlipbookStore();
-  const [type] = useState<FlipBookType>("magazine");
-  const { isFullscreen, toggleFullscreen, setFullscreen } =
-    useFullscreenStore();
+  loading: () => <PageLoadingSkeleton />
+})
+
+const FlipBookLayout = memo(function FlipBookLayout({ documentPromise }: FlipBookLayoutProps) {
+  const { reset } = useFlipbookStore()
+  const { isFullscreen, toggleFullscreen, setFullscreen } = useFullscreenStore()
+  const data = useApiResponse<DocumentResponseSchema>(documentPromise)
 
   useEffect(() => {
-    reset();
-  }, [reset]);
-
-
-  const data = useApiResponse<DocumentResponseSchema>(documentPromise);
-
-  // Fazer SKELETON
-  if (!data) {
-    return <div>Documento não encontrado.</div>;
-  }
+    reset()
+  }, [reset])
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setFullscreen(!!document.fullscreenElement);
-    };
+      setFullscreen(!!document.fullscreenElement)
+    }
 
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () =>
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, [setFullscreen]);
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [setFullscreen])
+
+  const handleZoomIn = useCallback((zoomIn: (step: number, animationTime: number, animationType: string) => void) => {
+    zoomIn(0.4, 300, 'easeOut')
+  }, [])
+
+  const handleZoomOut = useCallback((zoomOut: (step: number, animationTime: number, animationType: string) => void) => {
+    zoomOut(0.4, 300, 'easeOut')
+  }, [])
+
+  if (!data) {
+    return (
+      <div className={styles.errorContainer}>
+        <p>Documento não encontrado.</p>
+      </div>
+    )
+  }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.flipbookContainer}>
-      </div>
-      <div className={styles.zoomScrollArea}>
+    <div className={styles.gridContainer}>
+      <div className={styles.flipbookArea}>
         <TransformWrapper
           initialScale={1}
           minScale={1}
@@ -68,46 +68,42 @@ export default function FlipBookLayout({ documentPromise }: DocumentProps) {
           doubleClick={{ disabled: true }}
         >
           {({ zoomIn, zoomOut }) => (
-            <>
-              <div className={styles.fullscreenWrapper}>
-                <button onClick={toggleFullscreen} className={styles.fullscreenButton}>
-                  {isFullscreen ? <Expand size={22} /> : <Maximize size={22} />}
-                </button>
+            <div className={styles.transformContainer}>
+              <FlipbookToolbar
+                isFullscreen={isFullscreen}
+                onToggleFullscreen={toggleFullscreen}
+                onZoomIn={() => handleZoomIn(zoomIn)}
+                onZoomOut={() => handleZoomOut(zoomOut)}
+              />
 
-                <button onClick={() => zoomIn(0.4, 300, "easeOut")} className={styles.fullscreenButton}>
-                  <ZoomIn size={22} />
-                </button>
-
-                <button onClick={() => zoomOut(0.4, 300, "easeOut")} className={styles.fullscreenButton}>
-                  <ZoomOut size={22} />
-                </button>
-              </div>
               <TransformComponent
-                wrapperStyle={{ width: "100%", height: "100%" }}
+                wrapperStyle={{ width: '100%', height: '100%' }}
                 contentStyle={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
                 }}
               >
-                <div className={styles.zoomScalingWrapper}>
-                  <FlipBook
-                    type={type}
-                    file={`http://localhost:3001${data?.path}`}
-                    width={500}
-                    height={665}
-                  />
-                </div>
+                <FlipBook
+                  type="magazine"
+                  file={`http://localhost:3001${data.path}`}
+                  width={500}
+                  height={665}
+                />
               </TransformComponent>
-            </>
+            </div>
           )}
         </TransformWrapper>
       </div>
-      <div className={styles.sliderContainer}>
+
+      <div className={styles.sliderArea}>
         <Slider />
       </div>
     </div>
-  );
-}
+  )
+})
+
+export default FlipBookLayout
+

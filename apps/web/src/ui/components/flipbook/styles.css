@@ -9,6 +9,7 @@ body.no-scroll {
 	width: 100%;
 	height: 100%;
 	position: relative;
+	margin-bottom: -3rem;
 }
 
 .loading-container {
@@ -290,7 +291,7 @@ body.no-scroll {
 	box-shadow: 2px -2px 5px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
 	.custom-flipbook-container {
 		display: grid !important;
 		grid-template-columns: 1fr 1fr;

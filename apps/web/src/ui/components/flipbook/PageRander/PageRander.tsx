@@ -3,7 +3,14 @@ import { Page } from "react-pdf";
 import { PageSkeleton } from "../../skeletons/workspace/PageSkeleton/PageSkeleton";
 import { ErrorBoundary } from "@/lib/error-boundary/ErrorBoundary";
 
-export const PageRander = ({ pageNumber, width, height }: { pageNumber: number, width: number, height: number }) => {
+interface PageRanderProps {
+  pageNumber: number
+  width: number
+  height: number
+  scale?: number
+}
+
+export const PageRander = ({ pageNumber, width, height, scale = 1.5 }: PageRanderProps) => {
   const [isRendered, setIsRendered] = useState(false);
   const isMounted = useRef(true);
 
@@ -38,14 +45,20 @@ export const PageRander = ({ pageNumber, width, height }: { pageNumber: number, 
             key={`page_${pageNumber}`}
             width={width}
             height={height}
+            scale={scale}
             pageNumber={pageNumber}
             devicePixelRatio={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)}
             renderAnnotationLayer={false}
             renderTextLayer={false}
-            loading=""
+            canvasBackground="transparent"
+            loading={<div style={{ width, height }} />}
             error={<PageSkeleton width={width} height={height} />}
             onRenderSuccess={handleRenderSuccess}
-            onRenderError={(err) => console.log('Renderização cancelada ou erro:', err.message)}
+            onRenderError={(err) => {
+              if (err.message.includes('destroyed') || !isMounted.current) return;
+              console.error('Erro real de renderização:', err);
+            }}
+            renderMode={"canvas"}
           />
         </ErrorBoundary>
       </div>

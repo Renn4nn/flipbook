@@ -1,81 +1,70 @@
 'use client'
 
-import { Document, Page } from 'react-pdf'
-import './styles.css'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { Document } from 'react-pdf'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { pdfjs } from 'react-pdf'
-import 'react-pdf/dist/Page/TextLayer.css'
-import 'react-pdf/dist/Page/AnnotationLayer.css'
 import { useFlipbookStore } from '@/lib/store/useFlipbook'
 import type { FlipBookType } from './type'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import LoadingSkeleton from '@/ui/components/skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
-import { PageRander } from './PageRander/PageRander'
+import { useMediaQuery, useFlipbookAudio, useContainerSize } from './hooks'
+import { FlipButton } from './components/FlipButton'
+import { Paper } from './components/Paper'
+import './styles.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
-type FlipBookProps = {
-	type: FlipBookType
+const ASPECT_RATIO = 0.70796
+const MOBILE_BREAKPOINT = 900
+const DEFAULT_MAX_WIDTH = 500
+const DEFAULT_MAX_HEIGHT = 700
+
+interface FlipBookProps {
+	type?: FlipBookType
 	file: File | string
 	width?: number
 	height?: number
 }
 
-export default function FlipBook({
+const FlipBook = memo(function FlipBook({
 	file,
 	type = 'magazine',
-	width = 400,
-	height = 565,
+	width = DEFAULT_MAX_WIDTH,
+	height = DEFAULT_MAX_HEIGHT,
 }: FlipBookProps) {
-	const aspectRatio = 0.70796
-	const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 900 : false)
-	const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
-
-	useEffect(() => {
-		const handleResize = () => {
-			setIsMobile(window.innerWidth <= 900)
-			setScreenWidth(window.innerWidth)
-		}
-		window.addEventListener('resize', handleResize)
-		return () => window.removeEventListener('resize', handleResize)
-	}, [])
-
-	let finalWidth = width
-	let finalHeight = height
-
-	if (width !== 400) {
-		finalHeight = Math.round(width / Math.max(aspectRatio, 0.1))
-	} else if (height !== 565) {
-		finalWidth = Math.round(height * aspectRatio)
-	}
-
-	if (isMobile) {
-		const calculatedWidth = Math.min(340, screenWidth - 24)
-		finalWidth = calculatedWidth
-		finalHeight = Math.round(calculatedWidth / aspectRatio)
-	}
-
+	const bookRef = useRef<HTMLDivElement>(null)
+	const isMobile = useMediaQuery(MOBILE_BREAKPOINT)
 	const { setCurrentPage, setTotalPages, currentPage } = useFlipbookStore()
-	const [numPages, setNumPages] = useState<number>(0)
+	const { play: playFlipSound } = useFlipbookAudio()
+
+	const [numPages, setNumPages] = useState(0)
 	const [currentState, setCurrentState] = useState(1)
-	const audioRef = useRef<HTMLAudioElement | null>(null)
 
-	useEffect(() => {
-		audioRef.current = new Audio('/sounds/page_flip.MP3')
-		audioRef.current.playbackRate = 2.5
-		audioRef.current.volume = 1
-	}, [])
+	// Usar container size para dimensões responsivas
+	const containerSize = useContainerSize(bookRef, width, height)
 
-	const numOfPapers = isMobile ? numPages : Math.ceil(numPages / 2)
-	const maxState = numPages > 0
-		? (isMobile ? numPages : (numPages % 2 === 0 ? numOfPapers + 1 : numOfPapers))
-		: 1;
+	// Memoizar dimensões finais (container size ou mobile)
+	const dimensions = useMemo(() => {
+		if (isMobile) {
+			const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1200
+			const calculatedWidth = Math.min(340, screenWidth - 24)
+			return {
+				width: calculatedWidth,
+				height: Math.round(calculatedWidth / ASPECT_RATIO)
+			}
+		}
+		return containerSize
+	}, [isMobile, containerSize])
 
-	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-		setNumPages(numPages)
-		setTotalPages(numPages)
-	}
+	// Calcular número de papers e estado máximo
+	const { numOfPapers, maxState } = useMemo(() => {
+		const papers = isMobile ? numPages : Math.ceil(numPages / 2)
+		const max = numPages > 0
+			? (isMobile ? numPages : (numPages % 2 === 0 ? papers + 1 : papers))
+			: 1
+		return { numOfPapers: papers, maxState: max }
+	}, [numPages, isMobile])
 
+	// Sincronizar estado com currentPage do store
 	useEffect(() => {
 		if (currentPage >= 0 && numPages > 0) {
 			const targetState = isMobile ? currentPage + 1 : Math.floor(currentPage / 2) + 1
@@ -83,14 +72,12 @@ export default function FlipBook({
 				setCurrentState(targetState)
 			}
 		}
-	}, [currentPage, numPages, isMobile])
+	}, [currentPage, numPages, isMobile, currentState])
 
-	const playFlipSound = useCallback(() => {
-		if (audioRef.current) {
-			audioRef.current.currentTime = 0
-			audioRef.current.play().catch(() => { })
-		}
-	}, [])
+	const handleDocumentLoad = useCallback(({ numPages }: { numPages: number }) => {
+		setNumPages(numPages)
+		setTotalPages(numPages)
+	}, [setTotalPages])
 
 	const handleFlipNext = useCallback(() => {
 		if (currentState < maxState) {
@@ -110,153 +97,116 @@ export default function FlipBook({
 		}
 	}, [currentState, playFlipSound, setCurrentPage, isMobile])
 
+	// Calcular transformações do book e botões
+	const bookTransform = useMemo(() => {
+		if (isMobile) return 'none'
+		if (currentState === 1) return 'translateX(0%)'
+		if (currentState > numOfPapers) return 'translateX(100%)'
+		return 'translateX(50%)'
+	}, [isMobile, currentState, numOfPapers])
+
+	const { prevBtnTransform, nextBtnTransform } = useMemo(() => {
+		if (isMobile) return { prevBtnTransform: 'none', nextBtnTransform: 'none' }
+
+		const isOpen = currentState > 1 && currentState <= numOfPapers
+		const btnOffset = dimensions.width / 2 + 24
+
+		return {
+			prevBtnTransform: isOpen ? `translateX(-${btnOffset}px)` : 'translateX(0px)',
+			nextBtnTransform: isOpen ? `translateX(${btnOffset}px)` : 'translateX(0px)'
+		}
+	}, [isMobile, currentState, numOfPapers, dimensions.width])
+
+	// Bloquear scroll do body
 	useEffect(() => {
 		document.body.classList.add('no-scroll')
 		return () => document.body.classList.remove('no-scroll')
 	}, [])
-	const isClosedFront = currentState === 1
-	const isClosedBack = currentState > numOfPapers
-	const isOpen = currentState > 1 && currentState <= numOfPapers
 
-	const bookTransform = isMobile
-		? 'none'
-		: isClosedFront
-			? 'translateX(0%)'
-			: isClosedBack
-				? 'translateX(100%)'
-				: 'translateX(50%)'
-
-	const btnOffset = finalWidth / 2 + 24;
-	const prevBtnTransform = isMobile ? 'none' : (isOpen
-		? `translateX(-${btnOffset}px)`
-		: 'translateX(0px)')
-
-	const nextBtnTransform = isMobile ? 'none' : (isOpen
-		? `translateX(${btnOffset}px)`
-		: 'translateX(0px)')
-
-	const pdfOptions = {
+	const pdfOptions = useMemo(() => ({
 		cMapUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/cmaps/',
 		cMapPacked: true,
 		standardFontDataUrl: 'standard_fonts/',
-	};
+	}), [])
+
+	// Memoizar array de papers visíveis
+	const visiblePapers = useMemo(() => {
+		if (numPages === 0) return []
+
+		return Array.from({ length: numOfPapers }).map((_, paperIndex) => {
+			const paperNumber = paperIndex + 1
+			const isVisible = Math.abs(paperNumber - currentState) <= 2
+
+			if (!isVisible) return null
+
+			const pageFront = isMobile ? paperIndex + 1 : paperIndex * 2 + 1
+			const pageBack = isMobile ? null : paperIndex * 2 + 2
+
+			return (
+				<Paper
+					key={`paper-${paperIndex}`}
+					paperIndex={paperIndex}
+					currentState={currentState}
+					maxState={maxState}
+					numOfPapers={numOfPapers}
+					pageFront={pageFront}
+					pageBack={pageBack}
+					numPages={numPages}
+					finalWidth={dimensions.width}
+					finalHeight={dimensions.height}
+					type={type}
+					onFlipNext={handleFlipNext}
+					onFlipPrev={handleFlipPrev}
+				/>
+			)
+		})
+	}, [numPages, numOfPapers, currentState, isMobile, dimensions, type, maxState, handleFlipNext, handleFlipPrev])
 
 	return (
-		<div
-			className="custom-flipbook-container"
-			style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
-		>
-			<button
-				className="flip-btn"
+		<div className="custom-flipbook-container">
+			<FlipButton
+				direction="prev"
 				onClick={handleFlipPrev}
-				style={{ transform: prevBtnTransform }}
 				disabled={currentState === 1}
-				aria-label="Página anterior"
-				type="button"
-			>
-				<ChevronLeft size={64} className="style-arrow" />
-			</button>
+				transform={prevBtnTransform}
+			/>
 
 			<div
+				ref={bookRef}
 				className="book"
-				style={{ width: finalWidth, height: finalHeight, transform: bookTransform }}
+				style={{
+					width: dimensions.width,
+					height: dimensions.height,
+					transform: bookTransform
+				}}
 			>
 				<Document
 					className="book-document"
 					file={file}
-					onLoadSuccess={onDocumentLoadSuccess}
+					onLoadSuccess={handleDocumentLoad}
 					error="Um erro ocorreu!"
-					loading={<div className="loading-container"><LoadingSkeleton /></div>}
+					loading={
+						<div className="loading-container">
+							<LoadingSkeleton />
+						</div>
+					}
 					noData="Nenhum arquivo PDF selecionado"
 					options={pdfOptions}
+					scale={10}
 				>
-					{numPages > 0 &&
-						Array.from({ length: numOfPapers }).map((_, paperIndex) => {
-							const paperNumber = paperIndex + 1;
-							const isVisible = Math.abs(paperNumber - currentState) <= 2;
-							if (!isVisible) return null;
-							const pageFront = isMobile ? paperIndex + 1 : paperIndex * 2 + 1;
-							const pageBack = isMobile ? null : paperIndex * 2 + 2;
-							const isFlipped = currentState > paperNumber
-							const zIndex = isFlipped
-								? paperNumber
-								: numOfPapers * 2 - paperIndex
-							const isInteractiveRight =
-								paperNumber === currentState && currentState < maxState
-							const isInteractiveLeft =
-								paperNumber === currentState - 1
-							let paperOnClick = undefined
-							if (isInteractiveRight) paperOnClick = handleFlipNext
-							if (isInteractiveLeft) paperOnClick = handleFlipPrev
-
-							const interactiveClass = isInteractiveRight
-								? ' interactive-right'
-								: isInteractiveLeft
-									? ' interactive-left'
-									: ''
-
-							const paperStyle = {
-								'--z-index': zIndex,
-							} as React.CSSProperties
-
-							return (
-								<div
-									key={`paper-${paperIndex}`}
-									className={`paper${isFlipped ? ' flipped' : ''}${interactiveClass}`}
-									style={paperStyle}
-								>
-									<div className="page-turner">
-										<div className="front">
-											{isInteractiveRight && (
-												<>
-													<button className="fold-zone fold-zone-top" onClick={paperOnClick} tabIndex={0} type="button" />
-													<button className="fold-zone fold-zone-bottom" onClick={paperOnClick} tabIndex={0} type="button" />
-												</>
-											)}
-											<div className={`front-content ${type}`}>
-												<PageRander
-													pageNumber={pageFront}
-													width={finalWidth}
-													height={finalHeight}
-												/>
-											</div>
-										</div>
-										<div className="back">
-											{isInteractiveLeft && (
-												<>
-													<button className="fold-zone fold-zone-top" onClick={paperOnClick} tabIndex={0} type="button" />
-													<button className="fold-zone fold-zone-bottom" onClick={paperOnClick} tabIndex={0} type="button" />
-												</>
-											)}
-											<div className={`back-content ${type}`}>
-												{pageBack && pageBack <= numPages ? (
-													<PageRander
-														pageNumber={pageBack}
-														width={finalWidth}
-														height={finalHeight}
-													/>
-												) : (
-													<div style={{ width: '100%', height: '100%', backgroundColor: '#fff' }} />
-												)}
-											</div>
-										</div>
-									</div>
-								</div>
-							)
-						})}
+					{visiblePapers}
 				</Document>
 			</div>
 
-			<button
-				className="flip-btn"
+			<FlipButton
+				direction="next"
 				onClick={handleFlipNext}
-				style={{ transform: nextBtnTransform }}
 				disabled={currentState >= maxState}
-				aria-label="Próxima página"
-				type="button"
-			>
-				<ChevronRight size={64} className="style-arrow" />
-			</button>
+				transform={nextBtnTransform}
+			/>
 		</div>
 	)
-}
+})
+
+export default FlipBook
+
