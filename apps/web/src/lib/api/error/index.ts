@@ -1,33 +1,52 @@
 import type { ApiErrorResponse, ApiResponse, DataType } from '@repo/schemas'
 import axios, { type AxiosResponse } from 'axios'
 
-// Requisição assíncrona com tratamento de erro
 export async function asyncApiTryCatch<T extends DataType>(
 	promise: Promise<AxiosResponse<ApiResponse<T>>>
 ): Promise<ApiResponse<T>> {
 	try {
-		return (await promise).data
+		const data: unknown = (await promise).data
+
+		if (isApiResponse<T>(data)) return data
+
+		return createDefaultError('A API retornou uma resposta inválida.')
 	} catch (err) {
 		return handleApiError(err)
 	}
 }
 
-// Tratamento de erro padrão para requisições API
 function handleApiError(err: unknown): ApiErrorResponse {
-	const defaultErr: ApiErrorResponse = {
-		error: {
-			type: 'API_ERROR',
-			message: 'Erro da api não tratado, vejo o log para mais detalhes',
-			details: 'Erro interno ou de rede, vejo o log para mais detalhes'
-		}
-	}
-
-	if (axios.isAxiosError(err)) {
-		if (err.response) {
-			return err.response.data
-		}
+	if (axios.isAxiosError(err) && isApiErrorResponse(err.response?.data)) {
+		return err.response.data
 	}
 
 	console.error('asyncTryCatch:', err)
-	return defaultErr
+	return createDefaultError('Não foi possível comunicar com a API.')
+}
+
+function createDefaultError(message: string): ApiErrorResponse {
+	return {
+		error: {
+			type: 'API_ERROR',
+			message,
+			details: 'A resposta recebida não segue o formato esperado.'
+		}
+	}
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === 'object' && value !== null
+}
+
+function isApiErrorResponse(value: unknown): value is ApiErrorResponse {
+	return isRecord(value) && ('error' in value || 'errors' in value)
+}
+
+function isApiResponse<T extends DataType>(
+	value: unknown
+): value is ApiResponse<T> {
+	return (
+		isRecord(value) &&
+		('data' in value || 'error' in value || 'errors' in value)
+	)
 }

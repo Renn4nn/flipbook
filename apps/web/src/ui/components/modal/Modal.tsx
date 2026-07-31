@@ -9,7 +9,12 @@ type ModalProps = {
 	id: string
 	closeButton?: boolean
 }
-export default function Modal({ children, title, id, closeButton = false }: ModalProps) {
+export default function Modal({
+	children,
+	title,
+	id,
+	closeButton = false
+}: ModalProps) {
 	const { modalId, closeModal } = useModalStore()
 
 	if (modalId !== id) return null
@@ -19,13 +24,15 @@ export default function Modal({ children, title, id, closeButton = false }: Moda
 			<div className={styles.content}>
 				<div className={styles.modalHeader}>
 					<span className={styles.modalTitle}>{title}</span>
-					{closeButton && <button
-						type="button"
-						className={styles.closeBtn}
-						onClick={closeModal}
-					>
-						X
-					</button>}
+					{closeButton && (
+						<button
+							type="button"
+							className={styles.closeBtn}
+							onClick={closeModal}
+						>
+							X
+						</button>
+					)}
 				</div>
 				<div className={styles.lineBreak}></div>
 				{children}

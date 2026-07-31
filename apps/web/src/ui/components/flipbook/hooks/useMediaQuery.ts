@@ -3,19 +3,19 @@
 import { useSyncExternalStore } from 'react'
 
 function subscribe(callback: () => void) {
-  window.addEventListener('resize', callback)
-  return () => window.removeEventListener('resize', callback)
+	window.addEventListener('resize', callback)
+	return () => window.removeEventListener('resize', callback)
 }
 
 function getSnapshot() {
-  return window.innerWidth
+	return window.innerWidth
 }
 
 function getServerSnapshot() {
-  return 1200
+	return 1200
 }
 
 export function useMediaQuery(breakpoint: number): boolean {
-  const width = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
-  return width <= breakpoint
+	const width = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+	return width <= breakpoint
 }

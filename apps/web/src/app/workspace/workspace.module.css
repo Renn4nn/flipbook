@@ -120,7 +120,9 @@
 	justify-content: center;
 	gap: 0.5rem;
 	transform: perspective(500px) translateZ(0);
-	transition: transform 0.2s ease, color 0.2s ease;
+	transition:
+		transform 0.2s ease,
+		color 0.2s ease;
 }
 
 .actionButton:hover {
@@ -138,7 +140,9 @@
 	cursor: pointer;
 	color: #fff;
 	transform: perspective(500px) translateZ(0);
-	transition: transform 0.2s ease, color 0.2s ease;
+	transition:
+		transform 0.2s ease,
+		color 0.2s ease;
 }
 
 .closeBtn:hover {
@@ -195,7 +199,6 @@
 	margin-bottom: 2rem;
 }
 
-
 @media (prefers-color-scheme: dark) {
 	.container {
 		background-color: #121212;
@@ -226,7 +229,6 @@
 		color: #a3a3a3;
 	}
 }
-
 
 /* Tablets (acima de 600px) */
 @media (min-width: 600px) {

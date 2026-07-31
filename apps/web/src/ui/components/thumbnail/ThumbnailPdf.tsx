@@ -1,9 +1,10 @@
 'use client'
 
 import Image from 'next/image'
+import type { PDFDocumentLoadingTask } from 'pdfjs-dist'
 import { useEffect, useState } from 'react'
-import styles from './thumbnail-pdf.module.css'
 import LoadingSkeleton from '../skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
+import styles from './thumbnail-pdf.module.css'
 
 export default function ThumbnailPdf({
 	url,
@@ -17,7 +18,7 @@ export default function ThumbnailPdf({
 
 	useEffect(() => {
 		let isMounted = true
-		let loadingTask: any = null
+		let loadingTask: PDFDocumentLoadingTask | null = null
 
 		async function generate() {
 			try {
@@ -46,7 +47,7 @@ export default function ThumbnailPdf({
 
 					setThumbnail(canvas.toDataURL('image/jpeg'))
 				}
-				
+
 				// Limpa a memória quando finaliza a geração
 				if (loadingTask && isMounted) {
 					await loadingTask.destroy()
@@ -72,7 +73,9 @@ export default function ThumbnailPdf({
 	if (loading || !thumbnail) {
 		return (
 			<div className={`${styles.placeholder} ${className}`}>
-				<span>{loading ? <LoadingSkeleton /> : 'Thumbnail não disponível'}</span>
+				<span>
+					{loading ? <LoadingSkeleton /> : 'Thumbnail não disponível'}
+				</span>
 			</div>
 		)
 	}

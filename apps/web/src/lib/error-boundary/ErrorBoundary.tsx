@@ -1,34 +1,34 @@
 'use client'
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react'
 
 interface Props {
-  children?: ReactNode;
-  fallback?: ReactNode;
+	children?: ReactNode
+	fallback?: ReactNode
 }
 
 interface State {
-  hasError: boolean;
+	hasError: boolean
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false
-  };
+	public state: State = {
+		hasError: false
+	}
 
-  public static getDerivedStateFromError(_: Error): State {
-    return { hasError: true };
-  }
+	public static getDerivedStateFromError(_: Error): State {
+		return { hasError: true }
+	}
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error in component:', error, errorInfo);
-  }
+	public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+		console.error('Uncaught error in component:', error, errorInfo)
+	}
 
-  public render() {
-    if (this.state.hasError) {
-      return this.props.fallback || null;
-    }
+	public render() {
+		if (this.state.hasError) {
+			return this.props.fallback || null
+		}
 
-    return this.props.children;
-  }
+		return this.props.children
+	}
 }

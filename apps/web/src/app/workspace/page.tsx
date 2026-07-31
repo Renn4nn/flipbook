@@ -1,9 +1,9 @@
 import { API_ROUTES, RESOURCES } from '@repo/constants'
 import type { DocumentSchema } from '@repo/schemas'
 import { Suspense } from 'react'
+import Workspace from '@/app/workspace/workspace'
 import { cachedApiRequest } from '@/lib/api/request/cached'
 import WorkspaceSkeleton from '@/ui/components/skeletons/workspace/CardSkeleton/WorkspaceSkeleton'
-import Workspace from '@/app/workspace/workspace'
 
 export default function WorkspacePage() {
 	const documentPromise = cachedApiRequest<DocumentSchema[]>({

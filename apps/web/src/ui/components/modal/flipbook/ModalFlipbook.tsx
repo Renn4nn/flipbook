@@ -1,20 +1,9 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useState } from 'react'
-import FilePicker from '../../file-picker/FilePicker'
 import { CreateBookButton } from '../../createbutton/CreateDocButton'
-import type { FlipBookType } from '../../flipbook/type'
+import FilePicker from '../../file-picker/FilePicker'
 import styles from './modal-flipbook.module.css'
-import PageLoadingSkeleton from '@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton'
-
-// Import dinâmico para evitar erros de SSR com o canvas do PDF
-const FlipBook = dynamic(() => import('@/ui/components/flipbook'), {
-	ssr: false,
-	loading: () => (
-		<PageLoadingSkeleton />
-	)
-})
 
 export default function ModalFlipbook() {
 	const [file, setFile] = useState<File | null>(null)

@@ -1,8 +1,8 @@
 'use client'
 
-import { useRef, useState } from 'react'
 import { RESOURCES } from '@repo/constants'
 import type { CreateDocumentSchema, DocumentSchema } from '@repo/schemas'
+import { useRef } from 'react'
 import toast from 'react-hot-toast'
 import { apiAction } from '@/lib/api/actions'
 import { useModalStore } from '@/lib/store/useModal'
@@ -63,7 +63,7 @@ export function CreateBookButton({
 			numPages = pdf.numPages
 			await loadingTask.destroy()
 		} catch (err) {
-			console.error("Erro ao ler número de páginas do PDF", err)
+			console.error('Erro ao ler número de páginas do PDF', err)
 		}
 
 		formData.append('pages', numPages.toString())
@@ -90,7 +90,7 @@ export function CreateBookButton({
 			toast.success(message)
 			setTimeout(() => {
 				setIsUploading?.(false)
-				useModalStore.setState({ isOpen: false })
+				useModalStore.getState().closeModal()
 			}, 500)
 		} else {
 			setIsUploading?.(false)

@@ -1,14 +1,13 @@
 'use client'
 
-import { Document } from 'react-pdf'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { pdfjs } from 'react-pdf'
+import { Document, pdfjs } from 'react-pdf'
 import { useFlipbookStore } from '@/lib/store/useFlipbook'
-import type { FlipBookType } from './type'
 import LoadingSkeleton from '@/ui/components/skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
-import { useMediaQuery, useFlipbookAudio, useContainerSize } from './hooks'
 import { FlipButton } from './components/FlipButton'
 import { Paper } from './components/Paper'
+import { useContainerSize, useFlipbookAudio, useMediaQuery } from './hooks'
+import type { FlipBookType } from './type'
 import './styles.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
@@ -29,7 +28,7 @@ const FlipBook = memo(function FlipBook({
 	file,
 	type = 'magazine',
 	width = DEFAULT_MAX_WIDTH,
-	height = DEFAULT_MAX_HEIGHT,
+	height = DEFAULT_MAX_HEIGHT
 }: FlipBookProps) {
 	const bookRef = useRef<HTMLDivElement>(null)
 	const isMobile = useMediaQuery(MOBILE_BREAKPOINT)
@@ -45,7 +44,8 @@ const FlipBook = memo(function FlipBook({
 	// Memoizar dimensões finais (container size ou mobile)
 	const dimensions = useMemo(() => {
 		if (isMobile) {
-			const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1200
+			const screenWidth =
+				typeof window !== 'undefined' ? window.innerWidth : 1200
 			const calculatedWidth = Math.min(340, screenWidth - 24)
 			return {
 				width: calculatedWidth,
@@ -58,26 +58,36 @@ const FlipBook = memo(function FlipBook({
 	// Calcular número de papers e estado máximo
 	const { numOfPapers, maxState } = useMemo(() => {
 		const papers = isMobile ? numPages : Math.ceil(numPages / 2)
-		const max = numPages > 0
-			? (isMobile ? numPages : (numPages % 2 === 0 ? papers + 1 : papers))
-			: 1
+		const max =
+			numPages > 0
+				? isMobile
+					? numPages
+					: numPages % 2 === 0
+						? papers + 1
+						: papers
+				: 1
 		return { numOfPapers: papers, maxState: max }
 	}, [numPages, isMobile])
 
 	// Sincronizar estado com currentPage do store
 	useEffect(() => {
 		if (currentPage >= 0 && numPages > 0) {
-			const targetState = isMobile ? currentPage + 1 : Math.floor(currentPage / 2) + 1
+			const targetState = isMobile
+				? currentPage + 1
+				: Math.floor(currentPage / 2) + 1
 			if (currentState !== targetState) {
 				setCurrentState(targetState)
 			}
 		}
 	}, [currentPage, numPages, isMobile, currentState])
 
-	const handleDocumentLoad = useCallback(({ numPages }: { numPages: number }) => {
-		setNumPages(numPages)
-		setTotalPages(numPages)
-	}, [setTotalPages])
+	const handleDocumentLoad = useCallback(
+		({ numPages }: { numPages: number }) => {
+			setNumPages(numPages)
+			setTotalPages(numPages)
+		},
+		[setTotalPages]
+	)
 
 	const handleFlipNext = useCallback(() => {
 		if (currentState < maxState) {
@@ -112,8 +122,12 @@ const FlipBook = memo(function FlipBook({
 		const btnOffset = dimensions.width / 2 + 24
 
 		return {
-			prevBtnTransform: isOpen ? `translateX(-${btnOffset}px)` : 'translateX(0px)',
-			nextBtnTransform: isOpen ? `translateX(${btnOffset}px)` : 'translateX(0px)'
+			prevBtnTransform: isOpen
+				? `translateX(-${btnOffset}px)`
+				: 'translateX(0px)',
+			nextBtnTransform: isOpen
+				? `translateX(${btnOffset}px)`
+				: 'translateX(0px)'
 		}
 	}, [isMobile, currentState, numOfPapers, dimensions.width])
 
@@ -123,18 +137,24 @@ const FlipBook = memo(function FlipBook({
 		return () => document.body.classList.remove('no-scroll')
 	}, [])
 
-	const pdfOptions = useMemo(() => ({
-		cMapUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/cmaps/',
-		cMapPacked: true,
-		standardFontDataUrl: 'standard_fonts/',
-	}), [])
+	const pdfOptions = useMemo(
+		() => ({
+			cMapUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/cmaps/',
+			cMapPacked: true,
+			standardFontDataUrl: 'standard_fonts/'
+		}),
+		[]
+	)
 
 	// Memoizar array de papers visíveis
 	const visiblePapers = useMemo(() => {
 		if (numPages === 0) return []
 
-		return Array.from({ length: numOfPapers }).map((_, paperIndex) => {
-			const paperNumber = paperIndex + 1
+		return Array.from(
+			{ length: numOfPapers },
+			(_, paperIndex) => paperIndex + 1
+		).map((paperNumber) => {
+			const paperIndex = paperNumber - 1
 			const isVisible = Math.abs(paperNumber - currentState) <= 2
 
 			if (!isVisible) return null
@@ -144,7 +164,7 @@ const FlipBook = memo(function FlipBook({
 
 			return (
 				<Paper
-					key={`paper-${paperIndex}`}
+					key={`paper-${paperNumber}`}
 					paperIndex={paperIndex}
 					currentState={currentState}
 					maxState={maxState}
@@ -160,7 +180,17 @@ const FlipBook = memo(function FlipBook({
 				/>
 			)
 		})
-	}, [numPages, numOfPapers, currentState, isMobile, dimensions, type, maxState, handleFlipNext, handleFlipPrev])
+	}, [
+		numPages,
+		numOfPapers,
+		currentState,
+		isMobile,
+		dimensions,
+		type,
+		maxState,
+		handleFlipNext,
+		handleFlipPrev
+	])
 
 	return (
 		<div className="custom-flipbook-container">
@@ -209,4 +239,3 @@ const FlipBook = memo(function FlipBook({
 })
 
 export default FlipBook
-

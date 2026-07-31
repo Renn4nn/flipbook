@@ -23,11 +23,14 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-
 .pageSlider {
 	-webkit-appearance: none;
 	appearance: none;
-	background: linear-gradient(to right, #666 var(--progress), rgba(180, 180, 180, 0.3) var(--progress));
+	background: linear-gradient(
+		to right,
+		#666 var(--progress),
+		rgba(180, 180, 180, 0.3) var(--progress)
+	);
 	border-radius: 8px;
 	outline: none;
 	cursor: pointer;
@@ -36,7 +39,6 @@
 	max-width: 90vw;
 	transition: height 0.2s ease;
 }
-
 
 .pageSlider::-webkit-slider-thumb {
 	-webkit-appearance: none;
@@ -48,7 +50,9 @@
 	cursor: grab;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-	transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s ease;
+	transition:
+		transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+		box-shadow 0.2s ease;
 }
 
 .pageSlider::-webkit-slider-thumb:hover,
@@ -69,7 +73,9 @@
 	cursor: grab;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-	transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s ease;
+	transition:
+		transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+		box-shadow 0.2s ease;
 }
 
 .pageSlider::-moz-range-thumb:hover,
@@ -120,7 +126,11 @@
 
 @media (prefers-color-scheme: dark) {
 	.pageSlider {
-		background: linear-gradient(to right, #ccc var(--progress), rgba(255, 255, 255, 0.2) var(--progress));
+		background: linear-gradient(
+			to right,
+			#ccc var(--progress),
+			rgba(255, 255, 255, 0.2) var(--progress)
+		);
 	}
 
 	.pageSlider::-webkit-slider-thumb,

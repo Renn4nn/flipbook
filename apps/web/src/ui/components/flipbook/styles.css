@@ -42,7 +42,6 @@ body.no-scroll {
 	color: rgba(117, 117, 117, 0.75);
 }
 
-
 .flip-btn:disabled {
 	opacity: 0.15;
 	cursor: not-allowed;
@@ -131,7 +130,11 @@ body.no-scroll {
 	inset: 0;
 	pointer-events: none;
 	z-index: 10;
-	background: linear-gradient(to right, transparent 88%, rgba(0, 0, 0, 0.08) 100%);
+	background: linear-gradient(
+		to right,
+		transparent 88%,
+		rgba(0, 0, 0, 0.08) 100%
+	);
 }
 
 .back::after {
@@ -140,7 +143,11 @@ body.no-scroll {
 	inset: 0;
 	pointer-events: none;
 	z-index: 10;
-	background: linear-gradient(to right, transparent 88%, rgba(0, 0, 0, 0.08) 100%);
+	background: linear-gradient(
+		to right,
+		transparent 88%,
+		rgba(0, 0, 0, 0.08) 100%
+	);
 }
 
 .book-document {
@@ -198,19 +205,25 @@ body.no-scroll {
 	left: 0;
 }
 
-.front .fold-zone-top:hover~.front-content {
+.front .fold-zone-top:hover ~ .front-content {
 	clip-path: polygon(0 0, calc(100% - 55px) 0, 100% 55px, 100% 100%, 0 100%);
 }
 
-.front .fold-zone-bottom:hover~.front-content {
-	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 55px), calc(100% - 55px) 100%, 0 100%);
+.front .fold-zone-bottom:hover ~ .front-content {
+	clip-path: polygon(
+		0 0,
+		100% 0,
+		100% calc(100% - 55px),
+		calc(100% - 55px) 100%,
+		0 100%
+	);
 }
 
-.back .fold-zone-top:hover~.back-content {
+.back .fold-zone-top:hover ~ .back-content {
 	clip-path: polygon(55px 0, 100% 0, 100% 100%, 0 100%, 0 55px);
 }
 
-.back .fold-zone-bottom:hover~.back-content {
+.back .fold-zone-bottom:hover ~ .back-content {
 	clip-path: polygon(0 0, 100% 0, 100% 100%, 55px 100%, 0 calc(100% - 55px));
 }
 
@@ -226,7 +239,13 @@ body.no-scroll {
 	top: 0;
 	width: 0;
 	height: 0;
-	background: linear-gradient(225deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, #eee 50%, #fff 100%);
+	background: linear-gradient(
+		225deg,
+		transparent 48%,
+		rgba(0, 0, 0, 0.1) 50%,
+		#eee 50%,
+		#fff 100%
+	);
 	pointer-events: none;
 	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -244,7 +263,13 @@ body.no-scroll {
 	bottom: 0;
 	width: 0;
 	height: 0;
-	background: linear-gradient(315deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, #eee 50%, #fff 100%);
+	background: linear-gradient(
+		315deg,
+		transparent 48%,
+		rgba(0, 0, 0, 0.1) 50%,
+		#eee 50%,
+		#fff 100%
+	);
 	pointer-events: none;
 	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -262,7 +287,13 @@ body.no-scroll {
 	top: 0;
 	width: 0;
 	height: 0;
-	background: linear-gradient(135deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, #eee 50%, #fff 100%);
+	background: linear-gradient(
+		135deg,
+		transparent 48%,
+		rgba(0, 0, 0, 0.1) 50%,
+		#eee 50%,
+		#fff 100%
+	);
 	pointer-events: none;
 	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -280,7 +311,13 @@ body.no-scroll {
 	bottom: 0;
 	width: 0;
 	height: 0;
-	background: linear-gradient(45deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, #eee 50%, #fff 100%);
+	background: linear-gradient(
+		45deg,
+		transparent 48%,
+		rgba(0, 0, 0, 0.1) 50%,
+		#eee 50%,
+		#fff 100%
+	);
 	pointer-events: none;
 	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -311,13 +348,19 @@ body.no-scroll {
 
 	.paper {
 		width: 100%;
-		transition: z-index 0s, opacity 0s 0s, visibility 0s 0s;
+		transition:
+			z-index 0s,
+			opacity 0s 0s,
+			visibility 0s 0s;
 	}
 
 	.paper.flipped {
 		opacity: 0;
 		visibility: hidden;
-		transition: z-index 0s 0.6s, opacity 0s 0.6s, visibility 0s 0.6s;
+		transition:
+			z-index 0s 0.6s,
+			opacity 0s 0.6s,
+			visibility 0s 0.6s;
 	}
 
 	.flip-btn {
@@ -354,18 +397,42 @@ body.no-scroll {
 	}
 
 	.front .fold-zone-top::before {
-		background: linear-gradient(225deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
+		background: linear-gradient(
+			225deg,
+			transparent 48%,
+			rgba(255, 255, 255, 0.1) 50%,
+			#333 50%,
+			#000 100%
+		);
 	}
 
 	.front .fold-zone-bottom::before {
-		background: linear-gradient(315deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
+		background: linear-gradient(
+			315deg,
+			transparent 48%,
+			rgba(255, 255, 255, 0.1) 50%,
+			#333 50%,
+			#000 100%
+		);
 	}
 
 	.back .fold-zone-top::before {
-		background: linear-gradient(135deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
+		background: linear-gradient(
+			135deg,
+			transparent 48%,
+			rgba(255, 255, 255, 0.1) 50%,
+			#333 50%,
+			#000 100%
+		);
 	}
 
 	.back .fold-zone-bottom::before {
-		background: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, #333 50%, #000 100%);
+		background: linear-gradient(
+			45deg,
+			transparent 48%,
+			rgba(255, 255, 255, 0.1) 50%,
+			#333 50%,
+			#000 100%
+		);
 	}
 }

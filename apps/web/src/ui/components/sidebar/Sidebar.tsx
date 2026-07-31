@@ -10,7 +10,11 @@ export default function Sidebar() {
 
 	return (
 		<div className={`link-group ${isOpen ? 'show' : ''}`}>
-			<button type="button" className="nav-link" onClick={() => openModal('new-flipbook')}>
+			<button
+				type="button"
+				className="nav-link"
+				onClick={() => openModal('new-flipbook')}
+			>
 				<Book size={20} />
 				<span>New Flipbook</span>
 			</button>

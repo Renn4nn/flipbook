@@ -1,59 +1,58 @@
 /* Grid Layout conforme imagem */
 .gridContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100dvh;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  grid-template-areas:
-    "flipbook"
-    "slider";
-  background-color: inherit;
-  overflow: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100dvh;
+	display: grid;
+	grid-template-rows: 1fr auto;
+	grid-template-areas:
+		'flipbook'
+		'slider';
+	background-color: inherit;
+	overflow: hidden;
 }
 
 /* Flipbook Area - Main content */
 .flipbookArea {
-  grid-area: flipbook;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+	grid-area: flipbook;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
 }
 
 /* Container para o TransformWrapper */
 .transformContainer {
-  position: relative;
-  width: 100%;
-  height: 100%;
+	position: relative;
+	width: 100%;
+	height: 100%;
 }
 
 /* Slider Area - Bottom */
 .sliderArea {
-  grid-area: slider;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.1rem 1rem 2rem;
-  z-index: 100;
-  background-color: transparent;
+	grid-area: slider;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0.1rem 1rem 2rem;
+	z-index: 100;
+	background-color: transparent;
 }
-
 
 /* Error state */
 .errorContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  color: #666;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	color: #666;
 }
 
 @media (prefers-color-scheme: dark) {
-  .errorContainer {
-    color: #aaa;
-  }
+	.errorContainer {
+		color: #aaa;
+	}
 }

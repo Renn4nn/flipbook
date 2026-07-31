@@ -12,9 +12,14 @@ const PAGE_TO_SPREAD = (pageIndex: number): number => {
 const Slider = memo(function Slider() {
 	const { currentPage, totalPages, goToPage } = useFlipbookStore()
 	const [isDragging, setIsDragging] = useState(false)
-	const [tempSpread, setTempSpread] = useState(() => PAGE_TO_SPREAD(currentPage))
+	const [tempSpread, setTempSpread] = useState(() =>
+		PAGE_TO_SPREAD(currentPage)
+	)
 
-	const totalSpreads = useMemo(() => Math.floor(totalPages / 2) + 1, [totalPages])
+	const totalSpreads = useMemo(
+		() => Math.floor(totalPages / 2) + 1,
+		[totalPages]
+	)
 
 	// Sincronizar tempSpread com currentPage imediatamente (para setas funcionarem)
 	useEffect(() => {
@@ -59,9 +64,7 @@ const Slider = memo(function Slider() {
 
 	return (
 		<div className={styles.sliderWrapper}>
-			<div className={styles.pageIndicator}>
-				{spreadLabel}
-			</div>
+			<div className={styles.pageIndicator}>{spreadLabel}</div>
 			<input
 				type="range"
 				min={0}
@@ -73,7 +76,9 @@ const Slider = memo(function Slider() {
 				onMouseUp={handleCommit}
 				onTouchEnd={handleCommit}
 				className={styles.pageSlider}
-				style={{ '--progress': `${progressPercentage}%` } as React.CSSProperties}
+				style={
+					{ '--progress': `${progressPercentage}%` } as React.CSSProperties
+				}
 				aria-label="Navegar entre páginas"
 			/>
 		</div>

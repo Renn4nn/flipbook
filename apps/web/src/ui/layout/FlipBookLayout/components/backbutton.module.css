@@ -1,26 +1,26 @@
 .backButtonContainer {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 1000;
+	position: fixed;
+	top: 1rem;
+	left: 1rem;
+	z-index: 1000;
 }
 
 .backButton {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+	background: rgba(255, 255, 255, 0.9);
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	font-size: 0.875rem;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
 }
 
 .backButton:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	background: rgba(255, 255, 255, 1);
+	transform: translateY(-1px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }

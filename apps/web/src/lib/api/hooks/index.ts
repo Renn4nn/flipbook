@@ -11,6 +11,11 @@ export default function useApiResponse<T extends DataType>(
 ): T | null {
 	const res = use(apiResponsePromise)
 	useEffect(() => {
+		if (!res || typeof res !== 'object') {
+			toast.error('A API retornou uma resposta inválida.')
+			return
+		}
+
 		if ('error' in res) {
 			toast.error(res.error.message)
 		}
@@ -19,6 +24,7 @@ export default function useApiResponse<T extends DataType>(
 		}
 	}, [res])
 
+	if (!res || typeof res !== 'object') return null
 	if ('data' in res) return res.data
 
 	return null
