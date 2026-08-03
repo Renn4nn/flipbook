@@ -51,7 +51,7 @@ const Slider = memo(function Slider() {
 	}, [])
 
 	const handleCommit = useCallback(() => {
-		const pageIndex = tempSpread === 0 ? 0 : tempSpread * 2 - 1
+		const pageIndex = tempSpread * 2
 		goToPage(pageIndex)
 		setIsDragging(false)
 	}, [tempSpread, goToPage])

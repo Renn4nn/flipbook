@@ -129,7 +129,6 @@ export default function Workspace({
 									<div className={styles.actionButtons}>
 										<Link
 											href={`/view/${document.id}`}
-											target="_blank"
 											rel="noopener noreferrer"
 											className={styles.actionButton}
 										>
