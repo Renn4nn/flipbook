@@ -1,16 +1,22 @@
 'use client'
 
 import { API_ROUTES, RESOURCES } from '@repo/constants'
-import type { ApiResponse, DocumentSchema } from '@repo/schemas'
-import { Eye, FolderOpen, Share, Trash, X } from 'lucide-react'
+import type {
+	ApiResponse,
+	DocumentSchema,
+	UpdateDocumentSchema
+} from '@repo/schemas'
+import { Eye, FolderOpen, Pencil, Share, Trash, X } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { apiAction } from '@/lib/api/actions'
 import useApiResponse from '@/lib/api/hooks'
 import { useModalStore } from '@/lib/store/useModal'
 import ModalDelete from '@/ui/components/modal/delete/ModalDelete'
+import ModalEditTitle from '@/ui/components/modal/edit-title/ModalEditTitle'
 import LoadingSkeleton from '@/ui/components/skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
 import styles from './workspace.module.css'
 
@@ -31,15 +37,52 @@ export default function Workspace({
 }: {
 	documents: Promise<ApiResponse<DocumentSchema[]>> // Promise
 }) {
+	const router = useRouter()
 	const documentsResponse = useApiResponse<DocumentSchema[]>(documents)
 	const [activeDocumentId, setActiveDocumentId] = useState<string | null>(null)
 	const { openModal, closeModal } = useModalStore()
 	const [documentToDelete, setDocumentToDelete] = useState<string | null>(null)
 	const [isDeleting, setIsDeleting] = useState(false)
+	const [documentToEdit, setDocumentToEdit] = useState<DocumentSchema | null>(
+		null
+	)
+	const [isUpdatingTitle, setIsUpdatingTitle] = useState(false)
 
 	function handleDeleteClick(id: string) {
 		setDocumentToDelete(id)
 		openModal('delete-document')
+	}
+
+	function handleEditTitleClick(document: DocumentSchema) {
+		setDocumentToEdit(document)
+		setActiveDocumentId(null)
+		openModal('edit-document-title')
+	}
+
+	async function confirmEditTitle(title: string) {
+		if (!documentToEdit) return
+
+		setIsUpdatingTitle(true)
+
+		const response = await apiAction<DocumentSchema, UpdateDocumentSchema>({
+			method: 'patch',
+			url: API_ROUTES.DOCUMENTS.BY_ID(documentToEdit.id),
+			data: { title },
+			tags: [RESOURCES.DOCUMENTS],
+			successMessage: 'Titulo atualizado com sucesso!'
+		})
+
+		setIsUpdatingTitle(false)
+
+		if (!response.data) {
+			toast.error(response.message)
+			return
+		}
+
+		toast.success(response.message)
+		closeModal()
+		setDocumentToEdit(null)
+		router.refresh()
 	}
 
 	async function confirmDelete() {
@@ -69,6 +112,7 @@ export default function Workspace({
 	function handleCloseModal() {
 		closeModal()
 		setDocumentToDelete(null)
+		setDocumentToEdit(null)
 	}
 
 	if (!documentsResponse || documentsResponse.length === 0) {
@@ -98,12 +142,18 @@ export default function Workspace({
 				onCancel={handleCloseModal}
 				isDeleting={isDeleting}
 			/>
+			<ModalEditTitle
+				initialTitle={documentToEdit?.title ?? documentToEdit?.filename ?? ''}
+				isSaving={isUpdatingTitle}
+				onConfirm={confirmEditTitle}
+				onCancel={handleCloseModal}
+			/>
 			<div className={styles.grid}>
 				{documentsResponse.map((document) => (
 					<div key={document.id} className={styles.card}>
 						<div className={styles.cardHeader}>
 							<h3 className={styles.title} title={document.filename}>
-								{document.title}
+								{document.title ?? document.filename}
 							</h3>
 							<span className={styles.date}>
 								Criado em{' '}
@@ -135,6 +185,14 @@ export default function Workspace({
 											<Eye />
 											Visualizar
 										</Link>
+										<button
+											type="button"
+											className={styles.actionButton}
+											onClick={() => handleEditTitleClick(document)}
+										>
+											<Pencil />
+											Editar titulo
+										</button>
 										<button
 											type="button"
 											className={styles.actionButton}
