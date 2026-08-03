@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Page } from 'react-pdf'
 import { ErrorBoundary } from '@/lib/error-boundary/ErrorBoundary'
-import { PageSkeleton } from '../../skeletons/workspace/PageSkeleton/PageSkeleton'
+import { PageSkeleton } from '../../skeletons/library/PageSkeleton/PageSkeleton'
 
 interface PageRanderProps {
 	pageNumber: number

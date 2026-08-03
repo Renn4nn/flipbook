@@ -2,7 +2,7 @@ import { API_ROUTES } from '@repo/constants'
 import type { DocumentSchema } from '@repo/schemas'
 import { Suspense } from 'react'
 import { apiRequest } from '@/lib/api/request'
-import PageLoadingSkeleton from '@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton'
+import PageLoadingSkeleton from '@/ui/components/skeletons/library/PageLoadingSkeleton/PageLoadingSkeleton'
 import FlipBookLayout from '@/ui/layout/FlipBookLayout/FlipBookLayout'
 
 export default async function PublicViewPage({

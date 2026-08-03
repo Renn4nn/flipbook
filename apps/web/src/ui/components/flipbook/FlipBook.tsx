@@ -3,7 +3,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Document, pdfjs } from 'react-pdf'
 import { useFlipbookStore } from '@/lib/store/useFlipbook'
-import LoadingSkeleton from '@/ui/components/skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
+import LoadingSkeleton from '@/ui/components/skeletons/library/LoadingSkeleton/LoadingSkeleton'
 import { FlipButton } from './components/FlipButton'
 import { Paper } from './components/Paper'
 import { useContainerSize, useFlipbookAudio, useMediaQuery } from './hooks'

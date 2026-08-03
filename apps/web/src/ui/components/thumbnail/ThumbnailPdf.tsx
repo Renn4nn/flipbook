@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import type { PDFDocumentLoadingTask } from 'pdfjs-dist'
 import { useEffect, useState } from 'react'
-import LoadingSkeleton from '../skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
+import LoadingSkeleton from '../skeletons/library/LoadingSkeleton/LoadingSkeleton'
 import styles from './thumbnail-pdf.module.css'
 
 export default function ThumbnailPdf({

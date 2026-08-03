@@ -17,8 +17,8 @@ import useApiResponse from '@/lib/api/hooks'
 import { useModalStore } from '@/lib/store/useModal'
 import ModalDelete from '@/ui/components/modal/delete/ModalDelete'
 import ModalEditTitle from '@/ui/components/modal/edit-title/ModalEditTitle'
-import LoadingSkeleton from '@/ui/components/skeletons/workspace/LoadingSkeleton/LoadingSkeleton'
-import styles from './workspace.module.css'
+import LoadingSkeleton from '@/ui/components/skeletons/library/LoadingSkeleton/LoadingSkeleton'
+import styles from './library.module.css'
 
 const ThumbnailPdf = dynamic(
 	() => import('@/ui/components/thumbnail/ThumbnailPdf'),
@@ -32,7 +32,7 @@ const ThumbnailPdf = dynamic(
 	}
 )
 
-export default function Workspace({
+export default function Library({
 	documents
 }: {
 	documents: Promise<ApiResponse<DocumentSchema[]>> // Promise

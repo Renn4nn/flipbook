@@ -5,7 +5,7 @@ import ModalFlipbook from '@/ui/components/modal/flipbook/ModalFlipbook'
 import Modal from '@/ui/components/modal/Modal'
 import MainPage from '@/ui/layout/main/MainPage'
 
-export default function WorkspaceLayout({
+export default function LibraryLayout({
 	children
 }: Readonly<{
 	children: React.ReactNode

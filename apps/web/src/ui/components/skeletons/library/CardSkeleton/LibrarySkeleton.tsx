@@ -1,7 +1,7 @@
 import { useId } from 'react'
-import styles from './workspace-skeleton.module.css'
+import styles from './library-skeleton.module.css'
 
-export default function WorkspaceSkeleton() {
+export default function LibrarySkeleton() {
 	const baseId = useId()
 	const skeletonItems = Array.from({ length: 5 }, (_, index) => ({
 		id: `${baseId}-item-${index}`

@@ -9,7 +9,7 @@ export function BackButton() {
 
 	async function handleBackClick() {
 		await exitFullscreen()
-		router.push('/workspace')
+		router.push('/library')
 	}
 
 	return (

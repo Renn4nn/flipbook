@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { useFullscreenStore } from '@/lib/store/useFullScreen'
 import type { FlipBookType } from '@/ui/components/flipbook/type'
-import PageLoadingSkeleton from '@/ui/components/skeletons/workspace/PageLoadingSkeleton/PageLoadingSkeleton'
+import PageLoadingSkeleton from '@/ui/components/skeletons/library/PageLoadingSkeleton/PageLoadingSkeleton'
 import Slider from '@/ui/components/slider/Slider'
 import styles from './flipbook-layout.module.css'
 
