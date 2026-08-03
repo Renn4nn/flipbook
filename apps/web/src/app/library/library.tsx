@@ -6,11 +6,11 @@ import type {
 	DocumentSchema,
 	UpdateDocumentSchema
 } from '@repo/schemas'
-import { Eye, FolderOpen, Pencil, Share, Trash, X } from 'lucide-react'
+import { Eye, FolderOpen, Pencil, Search, Share, Trash, X } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { apiAction } from '@/lib/api/actions'
 import useApiResponse from '@/lib/api/hooks'
@@ -47,6 +47,22 @@ export default function Library({
 		null
 	)
 	const [isUpdatingTitle, setIsUpdatingTitle] = useState(false)
+	const [searchTerm, setSearchTerm] = useState('')
+
+	const filteredDocuments = useMemo(() => {
+		const normalizedSearch = searchTerm.trim().toLowerCase()
+
+		if (!documentsResponse || !normalizedSearch) return documentsResponse ?? []
+
+		return documentsResponse.filter((document) => {
+			const searchableText = [document.title, document.filename, document.id]
+				.filter(Boolean)
+				.join(' ')
+				.toLowerCase()
+
+			return searchableText.includes(normalizedSearch)
+		})
+	}, [documentsResponse, searchTerm])
 
 	function handleDeleteClick(id: string) {
 		setDocumentToDelete(id)
@@ -148,81 +164,109 @@ export default function Library({
 				onConfirm={confirmEditTitle}
 				onCancel={handleCloseModal}
 			/>
-			<div className={styles.grid}>
-				{documentsResponse.map((document) => (
-					<div key={document.id} className={styles.card}>
-						<div className={styles.cardHeader}>
-							<h3 className={styles.title} title={document.filename}>
-								{document.title ?? document.filename}
-							</h3>
-							<span className={styles.date}>
-								Criado em{' '}
-								{new Intl.DateTimeFormat('pt-BR', {
-									day: '2-digit',
-									month: 'long',
-									year: 'numeric'
-								}).format(new Date(document.createdAt))}
-							</span>
-						</div>
-						<div className={styles.cardBody}>
-							<ThumbnailPdf
-								url={`http://localhost:3001${document.path}`}
-								className={styles.cardImage}
-							/>
-							<button
-								type="button"
-								className={styles.triggerButton}
-								onClick={() => setActiveDocumentId(document.id)}
-							/>
-							{activeDocumentId === document.id && (
-								<div className={styles.overlay}>
-									<div className={styles.actionButtons}>
-										<Link
-											href={`/view/${document.id}`}
-											rel="noopener noreferrer"
-											className={styles.actionButton}
-										>
-											<Eye />
-											Visualizar
-										</Link>
-										<button
-											type="button"
-											className={styles.actionButton}
-											onClick={() => handleEditTitleClick(document)}
-										>
-											<Pencil />
-											Editar titulo
-										</button>
-										<button
-											type="button"
-											className={styles.actionButton}
-											onClick={() => setActiveDocumentId(null)}
-										>
-											<Share />
-											Compartilhar
-										</button>
-										<button
-											type="button"
-											className={styles.actionButton}
-											onClick={() => handleDeleteClick(document.id)}
-										>
-											<Trash />
-											Excluir
-										</button>
-										<button
-											type="button"
-											className={styles.closeBtn}
-											onClick={() => setActiveDocumentId(null)}
-										>
-											<X />
-										</button>
-									</div>
-								</div>
-							)}
-						</div>
-					</div>
-				))}
+			<div className={styles.searchBar}>
+				<Search className={styles.searchIcon} size={20} aria-hidden="true" />
+				<input
+					className={styles.searchInput}
+					type="search"
+					value={searchTerm}
+					onChange={(event) => setSearchTerm(event.target.value)}
+					placeholder="Pesquisar livros"
+					aria-label="Pesquisar livros"
+				/>
+				{searchTerm && (
+					<button
+						type="button"
+						className={styles.clearSearchButton}
+						onClick={() => setSearchTerm('')}
+						aria-label="Limpar pesquisa"
+					>
+						<X size={18} />
+					</button>
+				)}
 			</div>
+			{filteredDocuments.length === 0 ? (
+				<div className={styles.noResults}>
+					<FolderOpen size={40} strokeWidth={1.3} />
+					<p>Nenhum livro encontrado.</p>
+				</div>
+			) : (
+				<div className={styles.grid}>
+					{filteredDocuments.map((document) => (
+						<div key={document.id} className={styles.card}>
+							<div className={styles.cardHeader}>
+								<h3 className={styles.title} title={document.filename}>
+									{document.title ?? document.filename}
+								</h3>
+								<span className={styles.date}>
+									Criado em{' '}
+									{new Intl.DateTimeFormat('pt-BR', {
+										day: '2-digit',
+										month: 'long',
+										year: 'numeric'
+									}).format(new Date(document.createdAt))}
+								</span>
+							</div>
+							<div className={styles.cardBody}>
+								<ThumbnailPdf
+									url={`http://localhost:3001${document.path}`}
+									className={styles.cardImage}
+								/>
+								<button
+									type="button"
+									className={styles.triggerButton}
+									onClick={() => setActiveDocumentId(document.id)}
+								/>
+								{activeDocumentId === document.id && (
+									<div className={styles.overlay}>
+										<div className={styles.actionButtons}>
+											<Link
+												href={`/view/${document.id}`}
+												rel="noopener noreferrer"
+												className={styles.actionButton}
+											>
+												<Eye />
+												Visualizar
+											</Link>
+											<button
+												type="button"
+												className={styles.actionButton}
+												onClick={() => handleEditTitleClick(document)}
+											>
+												<Pencil />
+												Editar titulo
+											</button>
+											<button
+												type="button"
+												className={styles.actionButton}
+												onClick={() => setActiveDocumentId(null)}
+											>
+												<Share />
+												Compartilhar
+											</button>
+											<button
+												type="button"
+												className={styles.actionButton}
+												onClick={() => handleDeleteClick(document.id)}
+											>
+												<Trash />
+												Excluir
+											</button>
+											<button
+												type="button"
+												className={styles.closeBtn}
+												onClick={() => setActiveDocumentId(null)}
+											>
+												<X />
+											</button>
+										</div>
+									</div>
+								)}
+							</div>
+						</div>
+					))}
+				</div>
+			)}
 		</article>
 	)
 }
