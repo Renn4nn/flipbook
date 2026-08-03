@@ -3,7 +3,7 @@
 	flex-direction: column;
 	gap: 1.5rem;
 	padding: 1rem 0;
-	color: #333;
+	color: inherit;
 }
 
 .modalActions {
@@ -38,25 +38,26 @@
 }
 
 .confirmButton {
-	background-color: #ef4444 !important;
-	color: white !important;
-	border: none !important;
-	font-weight: 700 !important;
+	background-color: #ef4444;
+	color: white;
+	border: 1px solid #ef4444;
+	font-weight: 700;
 }
 
 .cancelButton {
-	background-color: transparent !important;
-	color: #333 !important;
-	border: 1px solid #e5e7eb !important;
-	font-weight: 700 !important;
+	background-color: transparent;
+	color: #333;
+	border: 1px solid #e5e7eb;
+	font-weight: 700;
 }
 
 .cancelButton:hover:not(:disabled) {
-	background-color: #f3f4f6 !important;
+	background-color: #f3f4f6;
 }
 
 .confirmButton:hover:not(:disabled) {
-	background-color: #dc2626 !important;
+	background-color: #dc2626;
+	border-color: #dc2626;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -71,5 +72,22 @@
 
 	.modalActions button:hover:not(:disabled) {
 		background-color: #374151;
+	}
+
+	.confirmButton {
+		background-color: #ef4444;
+		border-color: #ef4444;
+		color: #fff;
+	}
+
+	.confirmButton:hover:not(:disabled) {
+		background-color: #dc2626;
+		border-color: #dc2626;
+	}
+
+	.cancelButton {
+		background-color: transparent;
+		border-color: #4b5563;
+		color: #f3f4f6;
 	}
 }

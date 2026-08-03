@@ -19,7 +19,7 @@ export default function ModalFlipbook() {
 			</div>
 
 			{file && (
-				<>
+				<div className={styles.uploadSection}>
 					{isUploading && (
 						<div className={styles.progressContainer}>
 							<div className={styles.progressLabel}>Enviando documento...</div>
@@ -40,7 +40,7 @@ export default function ModalFlipbook() {
 							disabled={isUploading}
 						/>
 					</div>
-				</>
+				</div>
 			)}
 		</div>
 	)

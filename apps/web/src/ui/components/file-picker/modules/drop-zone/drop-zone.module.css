@@ -5,6 +5,7 @@
 	cursor: pointer;
 	display: flex;
 	flex-direction: column;
+	color: inherit;
 }
 
 .drop-zone:focus-visible {
@@ -33,4 +34,10 @@
 	display: flex;
 	justify-content: center;
 	margin-bottom: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+	.drop-zone:focus-visible {
+		outline-color: #60a5fa;
+	}
 }

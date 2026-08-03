@@ -13,6 +13,7 @@
 	align-items: center;
 	justify-content: center;
 	max-width: 200px;
+	width: 100%;
 }
 
 .button:hover {
@@ -22,7 +23,7 @@
 
 .button-group {
 	display: flex;
-	justify-content: space-around;
+	justify-content: center;
 	gap: 1rem;
-	padding: 0 1rem;
+	width: 100%;
 }

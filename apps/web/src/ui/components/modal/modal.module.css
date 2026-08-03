@@ -2,7 +2,7 @@
 	position: fixed;
 	top: 0;
 	left: 0;
-	height: 100vh;
+	height: 100dvh;
 	width: 100vw;
 	background-color: rgba(0, 0, 0, 0.6);
 	backdrop-filter: blur(4px);
@@ -15,17 +15,20 @@
 
 .content {
 	background: white;
+	border: 1px solid #e5e7eb;
 	padding: 1.5rem;
 	border-radius: 8px;
-	box-shadow: var(--page-shadow);
+	box-shadow: var(--page-shadow, 0 20px 45px rgba(0, 0, 0, 0.2));
 	animation: fadeIn 0.2s ease-out;
+	color: #1f2937;
 	display: flex;
 	flex-direction: column;
 	padding-top: 0.5rem;
 
+	width: min(100%, 32rem);
 	max-width: 1200px;
 	max-height: 90vh;
-	overflow: hidden;
+	overflow-y: auto;
 }
 
 .lineBreak {
@@ -44,7 +47,7 @@
 .modalTitle {
 	font-size: 1.25rem;
 	font-weight: 600;
-	color: #333;
+	color: inherit;
 }
 
 .closeBtn {
@@ -66,6 +69,23 @@
 
 .closeBtn:hover {
 	background-color: #8f000e;
+}
+
+@media (prefers-color-scheme: dark) {
+	.overlay {
+		background-color: rgba(0, 0, 0, 0.72);
+	}
+
+	.content {
+		background: #1f1f1f;
+		border-color: #3a3a3a;
+		color: #f3f4f6;
+		box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+	}
+
+	.lineBreak {
+		background-color: #3a3a3a;
+	}
 }
 
 @keyframes fadeIn {

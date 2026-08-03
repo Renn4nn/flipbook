@@ -3,6 +3,7 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 1rem;
+	width: 100%;
 }
 
 .item {
@@ -19,8 +20,8 @@
 	padding: 0.75rem 1rem;
 	border-radius: 8px;
 	width: 100%;
-	max-width: 400px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	min-width: 0;
 }
 
 .item span {
@@ -29,6 +30,7 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	min-width: 0;
 }
 
 .remove-button {
@@ -36,8 +38,10 @@
 	text-align: center;
 	padding: 0.2rem 0.3rem 0.1rem 0.3rem;
 	background-color: rgb(165, 42, 42);
+	color: #fff;
 	border-radius: 5px;
 	cursor: pointer;
+	flex-shrink: 0;
 
 	transition: transform 0.2s ease-in-out;
 }
@@ -45,4 +49,13 @@
 .remove-button:hover {
 	background-color: rgb(165, 70, 70);
 	transform: scale(1.2);
+}
+
+@media (prefers-color-scheme: dark) {
+	.item {
+		background-color: #1f2937;
+		border-color: #60a5fa;
+		color: #f3f4f6;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+	}
 }
