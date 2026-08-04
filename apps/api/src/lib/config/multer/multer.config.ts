@@ -15,7 +15,7 @@ export const multerConfig = {
 		// acrescentar uuid ao nome do arquivo
 		filename: (_req, file, cb) => {
 			const documentId = randomUUID()
-			const extension = extname(file.originalname)
+			const extension = extname(file.originalname).toLowerCase()
 			_req.body.id = documentId
 
 			cb(null, `${documentId}${extension}`)

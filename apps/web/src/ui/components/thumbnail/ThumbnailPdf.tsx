@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import type { PDFDocumentLoadingTask } from 'pdfjs-dist'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import LoadingSkeleton from '../skeletons/library/LoadingSkeleton/LoadingSkeleton'
 import styles from './thumbnail-pdf.module.css'
 
@@ -19,6 +20,8 @@ export default function ThumbnailPdf({
 	useEffect(() => {
 		let isMounted = true
 		let loadingTask: PDFDocumentLoadingTask | null = null
+		setLoading(true)
+		setThumbnail(null)
 
 		async function generate() {
 			try {
@@ -53,8 +56,10 @@ export default function ThumbnailPdf({
 					await loadingTask.destroy()
 					loadingTask = null
 				}
-			} catch (err) {
-				console.error('Erro ao gerar thumbnail:', err)
+			} catch (error) {
+				if (!isMounted) return
+
+				console.error('Erro ao gerar thumbnail')
 			} finally {
 				if (isMounted) setLoading(false)
 			}
@@ -65,7 +70,7 @@ export default function ThumbnailPdf({
 		return () => {
 			isMounted = false
 			if (loadingTask) {
-				loadingTask.destroy().catch(() => {})
+				loadingTask.destroy().catch(() => { })
 			}
 		}
 	}, [url])

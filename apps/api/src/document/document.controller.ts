@@ -1,3 +1,5 @@
+import { rmSync } from 'node:fs'
+import { basename, join, parse } from 'node:path'
 import {
 	Body,
 	Controller,
@@ -20,12 +22,10 @@ import {
 	UpdateDocumentDto
 } from 'src/lib/types/dto/document.dto'
 import { DocumentService } from './document.service'
-import * as path from "path";
-import * as fs from "fs";
 
 @Controller(RESOURCES.DOCUMENTS)
 export class DocumentController {
-	constructor(private readonly service: DocumentService) { }
+	constructor(private readonly service: DocumentService) {}
 
 	@Get(':id')
 	async getDocumentById(
@@ -53,10 +53,10 @@ export class DocumentController {
 		@UploadedFile() _file: Express.Multer.File,
 		@Request() _req: unknown
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
-		const documentId = _file.filename
+		const documentId = parse(_file.filename).name
 		const result = await this.service.createDocument({
 			...documentData,
-			id: documentId.split('.pdf')[0],
+			id: documentId,
 			filename: _file.originalname,
 			path: `/uploads/${_file.filename}`
 		})
@@ -86,11 +86,11 @@ export class DocumentController {
 
 		if (result.path) {
 			try {
-				const filename = path.basename(result.path);
-				const filePath = path.join(process.cwd(), 'uploads', filename)
-				fs.unlinkSync(filePath)
+				const filename = basename(result.path)
+				const filePath = join(process.cwd(), 'uploads', filename)
+				rmSync(filePath, { force: true })
 			} catch (error) {
-				console.error("Failed to delete file:", error)
+				console.error('Failed to delete file:', error)
 			}
 		}
 		return {
