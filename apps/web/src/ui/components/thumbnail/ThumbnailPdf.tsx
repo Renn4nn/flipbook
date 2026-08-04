@@ -59,7 +59,10 @@ export default function ThumbnailPdf({
 			} catch (error) {
 				if (!isMounted) return
 
-				console.error('Erro ao gerar thumbnail')
+				console.error('Erro ao gerar thumbnail:', error)
+				toast.error('Não foi possível carregar a miniatura deste PDF.', {
+					id: `thumbnail-error:${url}`
+				})
 			} finally {
 				if (isMounted) setLoading(false)
 			}
@@ -70,7 +73,7 @@ export default function ThumbnailPdf({
 		return () => {
 			isMounted = false
 			if (loadingTask) {
-				loadingTask.destroy().catch(() => { })
+				loadingTask.destroy().catch(() => {})
 			}
 		}
 	}, [url])

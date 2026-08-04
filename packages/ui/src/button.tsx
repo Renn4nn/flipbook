@@ -8,11 +8,7 @@ interface ButtonProps {
 	onClick: () => void
 }
 
-export const Button = ({
-	children,
-	className,
-	onClick
-}: ButtonProps) => {
+export const Button = ({ children, className, onClick }: ButtonProps) => {
 	return (
 		<button type="button" className={className} onClick={onClick}>
 			{children}

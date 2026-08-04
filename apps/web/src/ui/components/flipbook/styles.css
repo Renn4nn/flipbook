@@ -165,7 +165,9 @@ body.no-scroll {
 }
 
 .react-pdf__Page__canvas {
+	/* biome-ignore lint/complexity/noImportantStyles: react-pdf defines canvas dimensions inline. */
 	width: 100% !important;
+	/* biome-ignore lint/complexity/noImportantStyles: react-pdf defines canvas dimensions inline. */
 	height: 100% !important;
 	display: block;
 	position: absolute;
@@ -177,7 +179,7 @@ body.no-scroll {
 	position: absolute;
 	width: 5rem;
 	height: 5rem;
-	z-index: 1000 !important;
+	z-index: 1000;
 	pointer-events: auto;
 	cursor: pointer;
 	background-color: transparent;
@@ -330,7 +332,7 @@ body.no-scroll {
 
 @media (max-width: 950px) {
 	.custom-flipbook-container {
-		display: grid !important;
+		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
 		column-gap: 30px;
@@ -342,6 +344,7 @@ body.no-scroll {
 	.book {
 		grid-column: 1 / -1;
 		grid-row: 1;
+		/* biome-ignore lint/complexity/noImportantStyles: Mobile layout must override the inline page transform. */
 		transform: none !important;
 		margin: 0 auto;
 	}
@@ -364,6 +367,7 @@ body.no-scroll {
 	}
 
 	.flip-btn {
+		/* biome-ignore lint/complexity/noImportantStyles: Mobile layout must override the inline button transform. */
 		transform: none !important;
 		position: relative;
 		z-index: 1000;

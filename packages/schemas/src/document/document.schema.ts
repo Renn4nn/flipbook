@@ -3,10 +3,9 @@ import type { Prisma, Document } from '@repo/database'
 import type { ApiSuccessResponse } from '../api/api.response.types.js'
 
 // Cria um validador de data que aceita string ISO ou Date, sem usar z.date() para evitar o erro do Zod 4 no JSON Schema
-const safeDateTransform = z.union([
-	z.string().datetime(),
-	z.custom<Date>((val) => val instanceof Date)
-]).transform((val) => new Date(val as string | Date));
+const safeDateTransform = z
+	.union([z.string().datetime(), z.custom<Date>((val) => val instanceof Date)])
+	.transform((val) => new Date(val as string | Date))
 
 export const createDocumentSchema = z.strictObject({
 	id: z.string().uuid().optional(),
@@ -15,7 +14,9 @@ export const createDocumentSchema = z.strictObject({
 	title: z.string().trim().nullish(),
 	size: z.string().nonempty(),
 	pages: z.coerce.number(),
-	isPublic: z.preprocess((val) => val === 'true' || val === true, z.boolean()).optional(),
+	isPublic: z
+		.preprocess((val) => val === 'true' || val === true, z.boolean())
+		.optional(),
 	accessToken: z.string().nullish(),
 	expiresAt: z.string().datetime().nullish() // API input sempre é string
 }) satisfies z.ZodType<Prisma.DocumentCreateInput>
