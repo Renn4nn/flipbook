@@ -17,9 +17,6 @@
 }
 
 .searchBar {
-	position: sticky;
-	top: 0;
-	z-index: 20;
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
@@ -50,6 +47,10 @@
 
 .searchInput::placeholder {
 	color: #64748b;
+}
+
+.searchInput::-webkit-search-cancel-button {
+	appearance: none;
 }
 
 .clearSearchButton {
