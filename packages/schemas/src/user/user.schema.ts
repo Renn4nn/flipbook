@@ -17,7 +17,7 @@ const documentIdsSchema = z
 	})
 
 export const createUserSchema = z.strictObject({
-	email: z.string().trim().toLowerCase().email(),
+	login: z.string().trim().toLowerCase().min(3).max(100),
 	password: z.string().min(8),
 	documentIds: documentIdsSchema.optional()
 })
@@ -26,7 +26,7 @@ export const updateUserSchema = createUserSchema.partial()
 
 export const userSchema = z.strictObject({
 	id: z.string().uuid(),
-	email: z.string().email(),
+	login: z.string(),
 	createdAt: safeDateTransform,
 	updatedAt: safeDateTransform,
 	documents: z.array(documentSchema)

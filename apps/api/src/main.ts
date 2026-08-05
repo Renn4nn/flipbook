@@ -9,6 +9,7 @@ import {
 	SwaggerCustomOptions,
 	SwaggerModule
 } from '@nestjs/swagger'
+import cookieParser from 'cookie-parser'
 import { cleanupOpenApiDoc } from 'nestjs-zod'
 import { AppModule } from './app.module'
 import {
@@ -22,8 +23,13 @@ async function bootstrap() {
 	app.useStaticAssets(join(__dirname, '..', 'public'))
 
 	const { httpAdapter } = app.get(HttpAdapterHost)
-	const PORT = app.get(ConfigService).getOrThrow('API_PORT')
-	app.enableCors()
+	const configService = app.get(ConfigService)
+	const PORT = configService.getOrThrow('API_PORT')
+	app.use(cookieParser())
+	app.enableCors({
+		origin: configService.getOrThrow('WEB_ORIGIN'),
+		credentials: true
+	})
 
 	const config = new DocumentBuilder()
 		.setTitle('CTD FlipBook API')

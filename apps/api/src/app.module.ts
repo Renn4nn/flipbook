@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { CustomPrismaModule } from 'nestjs-prisma/dist/custom'
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod'
+import { AuthModule } from './auth/auth.module'
 import { DocumentModule } from './document/document.module'
 import { config, validate } from './lib/config/env'
 import { HttpExceptionFilter } from './lib/filters/http.exception.filter'
@@ -23,6 +24,7 @@ import { UserModule } from './user/user.module'
 			useFactory: PrismaClientFactory,
 			inject: [ConfigService]
 		}),
+		AuthModule,
 		DocumentModule,
 		UserModule
 	],

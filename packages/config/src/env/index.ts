@@ -27,7 +27,12 @@ export type GenerateDatabaseUrlOutput = z.output<typeof transformDatabaseUrl>
 export const apiEnvSchema = z.object({
 	NODE_ENV: nodeEnv,
 	API_PORT: z.coerce.number(),
-	DATABASE_URL: z.string()
+	DATABASE_URL: z.string(),
+	WEB_ORIGIN: z.string().url(),
+	JWT_ACCESS_SECRET: z.string().min(32),
+	JWT_REFRESH_SECRET: z.string().min(32),
+	JWT_ACCESS_EXPIRES_IN: z.coerce.number().int().positive(),
+	JWT_REFRESH_EXPIRES_IN: z.coerce.number().int().positive()
 })
 
 export type ApiEnvDtoInput = z.input<typeof apiEnvSchema>

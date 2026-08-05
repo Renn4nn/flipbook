@@ -4,7 +4,7 @@ import type { CreateUserDto, UpdateUserDto } from '../dto/user.dto'
 
 export const userSelect = {
 	id: true,
-	email: true,
+	login: true,
 	createdAt: true,
 	updatedAt: true,
 	documents: {

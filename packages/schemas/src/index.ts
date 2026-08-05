@@ -1,5 +1,6 @@
 export * from '@repo/config'
 export * from './api/api.response.types.js'
+export * from './auth/auth.schema.js'
 export * from './common/common.types.js'
 export * from './document/document.schema.js'
 export * from './user/user.schema.js'

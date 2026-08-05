@@ -1,13 +1,10 @@
-import { randomBytes, scrypt } from 'node:crypto'
-import { promisify } from 'node:util'
 import { Injectable } from '@nestjs/common'
 import type { Prisma } from '@repo/database'
 import type { UserSchema } from '@repo/schemas'
+import * as bcrypt from 'bcrypt'
 import type { CreateUserDto, UpdateUserDto } from '../lib/types/dto/user.dto'
 import type { IUserService } from '../lib/types/interfaces/user.interface'
 import { UserRepository } from './user.repository'
-
-const scryptAsync = promisify(scrypt)
 
 @Injectable()
 export class UserService implements IUserService {
@@ -23,10 +20,12 @@ export class UserService implements IUserService {
 
 	async createUser(data: CreateUserDto): Promise<UserSchema> {
 		const { documentIds, password, ...userData } = data
+		const salt = await bcrypt.genSalt()
+		const hashedPassword = await bcrypt.hash(password, salt)
 
 		return this.repository.createUser({
 			...userData,
-			password: await this.hashPassword(password),
+			password: hashedPassword,
 			documents: documentIds
 				? { connect: documentIds.map((id) => ({ id })) }
 				: undefined
@@ -35,9 +34,16 @@ export class UserService implements IUserService {
 
 	async updateUserById(id: string, data: UpdateUserDto): Promise<UserSchema> {
 		const { documentIds, password, ...userData } = data
+		let hashedPassword: string | undefined
+
+		if (password) {
+			const salt = await bcrypt.genSalt()
+			hashedPassword = await bcrypt.hash(password, salt)
+		}
+
 		const updateData: Prisma.UserUpdateInput = {
 			...userData,
-			password: password ? await this.hashPassword(password) : undefined,
+			password: hashedPassword,
 			documents:
 				documentIds !== undefined
 					? { set: documentIds.map((documentId) => ({ id: documentId })) }
@@ -49,12 +55,5 @@ export class UserService implements IUserService {
 
 	deleteUserById(id: string): Promise<UserSchema> {
 		return this.repository.deleteUser({ id })
-	}
-
-	private async hashPassword(password: string): Promise<string> {
-		const salt = randomBytes(16).toString('hex')
-		const hash = (await scryptAsync(password, salt, 64)) as Buffer
-
-		return `scrypt:${salt}:${hash.toString('hex')}`
 	}
 }
