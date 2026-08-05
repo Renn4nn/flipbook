@@ -1,12 +1,12 @@
 'use client'
 
 import { Logo } from '@repo/ui/logo'
+import { ArrowRightIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { loginAction } from '@/lib/auth/actions'
 import type { LoginActionState } from '@/lib/auth/types'
 import styles from './login.module.css'
-import { ArrowRightIcon } from 'lucide-react'
 
 const INITIAL_STATE: LoginActionState = { message: null }
 
@@ -75,5 +75,5 @@ export default function LoginForm() {
 				</form>
 			</section>
 		</div>
-	);
+	)
 }

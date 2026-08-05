@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { AUTH_ROUTES } from '@repo/constants'
 import type { ApiResponse, AuthResultSchema } from '@repo/schemas'
 import { API_BASE_URL } from './config'
 import type { AccessValidation, SessionTokens } from './types'
@@ -14,7 +15,7 @@ export async function authenticate(
 	| { success: false; message: string }
 > {
 	try {
-		const response = await fetch(`${API_BASE_URL}/auth/signin`, {
+		const response = await fetch(`${API_BASE_URL}${AUTH_ROUTES.SIGN_IN}`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ login, password }),
@@ -54,7 +55,7 @@ export async function validateAccessToken(
 	accessToken: string
 ): Promise<AccessValidation> {
 	try {
-		const response = await fetch(`${API_BASE_URL}/auth/me`, {
+		const response = await fetch(`${API_BASE_URL}${AUTH_ROUTES.ME}`, {
 			headers: { Authorization: `Bearer ${accessToken}` },
 			cache: 'no-store'
 		})
@@ -71,7 +72,7 @@ export async function requestTokenRefresh(
 	refreshToken: string
 ): Promise<SessionTokens | null> {
 	try {
-		const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+		const response = await fetch(`${API_BASE_URL}${AUTH_ROUTES.REFRESH}`, {
 			method: 'POST',
 			headers: { Cookie: `refreshToken=${encodeURIComponent(refreshToken)}` },
 			cache: 'no-store'
@@ -99,7 +100,7 @@ export async function notifyBackendLogout(
 	refreshToken?: string
 ): Promise<void> {
 	try {
-		await fetch(`${API_BASE_URL}/auth/logout`, {
+		await fetch(`${API_BASE_URL}${AUTH_ROUTES.LOGOUT}`, {
 			method: 'POST',
 			headers: refreshToken
 				? { Cookie: `refreshToken=${encodeURIComponent(refreshToken)}` }

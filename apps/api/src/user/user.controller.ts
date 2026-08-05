@@ -6,14 +6,17 @@ import {
 	Param,
 	ParseUUIDPipe,
 	Patch,
-	Post
+	Post,
+	UseGuards
 } from '@nestjs/common'
 import { RESOURCES } from '@repo/constants'
 import type { ApiSuccessResponse, UserSchema } from '@repo/schemas'
+import { JwtAuthGuard } from '../auth/guards/JwtGuard'
 import { CreateUserDto, UpdateUserDto } from '../lib/types/dto/user.dto'
 import { UserService } from './user.service'
 
 @Controller(RESOURCES.USERS)
+@UseGuards(JwtAuthGuard)
 export class UserController {
 	constructor(private readonly service: UserService) {}
 

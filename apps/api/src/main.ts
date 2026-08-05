@@ -9,6 +9,7 @@ import {
 	SwaggerCustomOptions,
 	SwaggerModule
 } from '@nestjs/swagger'
+import { API_PREFIX } from '@repo/constants'
 import cookieParser from 'cookie-parser'
 import { cleanupOpenApiDoc } from 'nestjs-zod'
 import { AppModule } from './app.module'
@@ -21,6 +22,7 @@ import {
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule)
 	app.useStaticAssets(join(__dirname, '..', 'public'))
+	app.setGlobalPrefix(API_PREFIX.slice(1))
 
 	const { httpAdapter } = app.get(HttpAdapterHost)
 	const configService = app.get(ConfigService)
@@ -39,8 +41,16 @@ async function bootstrap() {
 
 	const openApiDoc = SwaggerModule.createDocument(app, config)
 
+	app.use(`${API_PREFIX}/docs`, (_request, response, next) => {
+		response.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate')
+		next()
+	})
+
 	const customOptions: SwaggerCustomOptions = {
-		jsonDocumentUrl: 'api/json',
+		jsonDocumentUrl: `${API_PREFIX}/docs/json`,
+		swaggerOptions: {
+			url: `${API_PREFIX}/docs/json`
+		},
 		customSiteTitle: 'CTD Resource - Docs',
 		customfavIcon: '/favicon.ico',
 		customCss: `
@@ -59,7 +69,12 @@ async function bootstrap() {
 		`
 	}
 
-	SwaggerModule.setup('api', app, cleanupOpenApiDoc(openApiDoc), customOptions)
+	SwaggerModule.setup(
+		`${API_PREFIX.slice(1)}/docs`,
+		app,
+		cleanupOpenApiDoc(openApiDoc),
+		customOptions
+	)
 
 	app.useGlobalFilters(new ZodValidationExceptionFilter())
 	app.useGlobalFilters(new ZodSerializationExceptionFilter())

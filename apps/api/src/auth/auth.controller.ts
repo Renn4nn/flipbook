@@ -11,6 +11,7 @@ import {
 	UseGuards
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { API_PREFIX } from '@repo/constants'
 import type { ApiSuccessResponse } from '@repo/schemas'
 import type { CookieOptions, Request, Response } from 'express'
 import type {
@@ -111,7 +112,7 @@ export class AuthController {
 			httpOnly: true,
 			secure: this.configService.get('NODE_ENV') === 'production',
 			sameSite: 'strict',
-			path: '/auth'
+			path: `${API_PREFIX}/auth`
 		}
 	}
 }
