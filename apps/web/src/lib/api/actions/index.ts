@@ -20,7 +20,10 @@ export async function apiAction<
 		message: successMessage
 	}
 
-	const apiRes = await apiRequest<T, D>(apiProps)
+	const apiRes = await apiRequest<T, D>({
+		...apiProps,
+		refreshOnUnauthorized: true
+	})
 
 	if ('error' in apiRes) actionReturn.message = apiRes.error.message
 	if ('errors' in apiRes)

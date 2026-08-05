@@ -1,16 +1,19 @@
-import { rmSync } from 'node:fs'
+import { createReadStream, existsSync, rmSync } from 'node:fs'
 import { basename, join, parse } from 'node:path'
 import {
 	Body,
 	Controller,
 	Delete,
 	Get,
+	NotFoundException,
 	Param,
 	ParseUUIDPipe,
 	Patch,
 	Post,
 	Request,
+	StreamableFile,
 	UploadedFile,
+	UseGuards,
 	UseInterceptors
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
@@ -21,11 +24,31 @@ import {
 	CreateDocumentDto,
 	UpdateDocumentDto
 } from 'src/lib/types/dto/document.dto'
+import { JwtAuthGuard } from '../auth/guards/JwtGuard'
 import { DocumentService } from './document.service'
 
 @Controller(RESOURCES.DOCUMENTS)
+@UseGuards(JwtAuthGuard)
 export class DocumentController {
 	constructor(private readonly service: DocumentService) {}
+
+	@Get(':id/file')
+	async getDocumentFile(
+		@Param('id', ParseUUIDPipe) id: string
+	): Promise<StreamableFile> {
+		const document = await this.service.getDocumentById(id)
+		const filePath = join(process.cwd(), 'uploads', basename(document.path))
+
+		if (!existsSync(filePath)) {
+			throw new NotFoundException('Arquivo do documento não encontrado.')
+		}
+
+		return new StreamableFile(createReadStream(filePath), {
+			type: 'application/pdf',
+			disposition: `inline; filename*=UTF-8''${encodeURIComponent(document.filename)}`,
+			length: Number(document.size)
+		})
+	}
 
 	@Get(':id')
 	async getDocumentById(

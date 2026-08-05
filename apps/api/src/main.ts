@@ -64,10 +64,6 @@ async function bootstrap() {
 	app.useGlobalFilters(new ZodValidationExceptionFilter())
 	app.useGlobalFilters(new ZodSerializationExceptionFilter())
 	app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter))
-	app.useStaticAssets(join(process.cwd(), 'uploads'), {
-		prefix: '/uploads/'
-	})
-
 	await app.listen(PORT)
 	console.info(`Running on port ${PORT}`)
 }

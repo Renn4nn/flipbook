@@ -1,5 +1,4 @@
 'use client'
-import '../globals.css'
 import Header from '@/ui/components/header/Header'
 import ModalFlipbook from '@/ui/components/modal/flipbook/ModalFlipbook'
 import Modal from '@/ui/components/modal/Modal'

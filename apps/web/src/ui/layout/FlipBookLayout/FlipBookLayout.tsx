@@ -85,7 +85,7 @@ const FlipBookLayout = memo(function FlipBookLayout({
 							>
 								<FlipBook
 									type="magazine"
-									file={`http://localhost:3001${data.path}`}
+									file={`/api/documents/${data.id}/file`}
 									width={500}
 									height={665}
 								/>

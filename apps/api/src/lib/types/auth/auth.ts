@@ -1,3 +1,5 @@
+import type { AuthenticatedUserSchema, AuthResultSchema } from '@repo/schemas'
+
 export type TokenType = 'access' | 'refresh'
 
 export type JwtPayload = {
@@ -7,10 +9,7 @@ export type JwtPayload = {
 	jti: string
 }
 
-export type AuthenticatedUser = {
-	id: string
-	login: string
-}
+export type AuthenticatedUser = AuthenticatedUserSchema
 
 export type AuthenticatedRequestUser = {
 	userId: string
@@ -23,8 +22,4 @@ export type AuthTokens = {
 	expiresIn: number
 }
 
-export type AuthResult = {
-	user: AuthenticatedUser
-	accessToken: string
-	expiresIn: number
-}
+export type AuthResult = AuthResultSchema

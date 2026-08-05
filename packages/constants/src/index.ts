@@ -8,12 +8,18 @@ type RouteProps = {
 	BY_ID: (id: string | number) => string
 }
 
-type ROUTES = Record<keyof typeof RESOURCES, RouteProps>
+type ROUTES = {
+	DOCUMENTS: RouteProps & {
+		FILE: (id: string | number) => string
+	}
+	USERS: RouteProps
+}
 
 export const API_ROUTES: ROUTES = {
 	DOCUMENTS: {
 		BASE: `/${RESOURCES.DOCUMENTS}`,
-		BY_ID: (id: string | number) => `/${RESOURCES.DOCUMENTS}/${id}`
+		BY_ID: (id: string | number) => `/${RESOURCES.DOCUMENTS}/${id}`,
+		FILE: (id: string | number) => `/${RESOURCES.DOCUMENTS}/${id}/file`
 	},
 	USERS: {
 		BASE: `/${RESOURCES.USERS}`,

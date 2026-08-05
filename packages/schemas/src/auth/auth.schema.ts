@@ -6,6 +6,17 @@ export const signInSchema = z.strictObject({
 	password: z.string().min(1)
 })
 
+export const authenticatedUserSchema = z.strictObject({
+	id: z.string().uuid(),
+	login: z.string()
+})
+
+export const authResultSchema = z.strictObject({
+	user: authenticatedUserSchema,
+	accessToken: z.string(),
+	expiresIn: z.number().int().positive()
+})
+
 export const signUpSchema = createUserSchema
 	.pick({ login: true, password: true })
 	.extend({
@@ -18,3 +29,5 @@ export const signUpSchema = createUserSchema
 
 export type SignInSchema = z.infer<typeof signInSchema>
 export type SignUpSchema = z.infer<typeof signUpSchema>
+export type AuthenticatedUserSchema = z.infer<typeof authenticatedUserSchema>
+export type AuthResultSchema = z.infer<typeof authResultSchema>

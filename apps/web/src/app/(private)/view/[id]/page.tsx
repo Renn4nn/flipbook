@@ -5,7 +5,7 @@ import { apiRequest } from '@/lib/api/request'
 import PageLoadingSkeleton from '@/ui/components/skeletons/library/PageLoadingSkeleton/PageLoadingSkeleton'
 import FlipBookLayout from '@/ui/layout/FlipBookLayout/FlipBookLayout'
 
-export default async function PublicViewPage({
+export default async function DocumentViewPage({
 	params
 }: {
 	params: Promise<{ id: string }>

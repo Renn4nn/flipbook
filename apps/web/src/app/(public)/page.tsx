@@ -1,5 +1,6 @@
 'use client'
 import { Logo } from '@repo/ui/logo'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useFullscreenStore } from '@/lib/store/useFullScreen'
 import FilePicker from '@/ui/components/file-picker/FilePicker'
@@ -32,13 +33,23 @@ export default function LandingPage() {
 					</div>
 				</div>
 				{file && (
-					<button
-						type="button"
-						className={styles.removeButton}
-						onClick={() => setFile(null)}
-					>
-						Remover arquivo
-					</button>
+					<div className={styles.headerActions}>
+						<button
+							type="button"
+							className={styles.removeButton}
+							onClick={() => setFile(null)}
+						>
+							Remover arquivo
+						</button>
+						<Link href="/login" className={styles.loginButton}>
+							Entrar
+						</Link>
+					</div>
+				)}
+				{!file && (
+					<Link href="/login" className={styles.loginButton}>
+						Entrar
+					</Link>
 				)}
 			</header>
 

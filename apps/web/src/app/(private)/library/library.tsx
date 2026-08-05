@@ -108,7 +108,7 @@ export default function Library({
 
 		const response = await apiAction({
 			method: 'delete',
-			url: `http://localhost:3001${API_ROUTES.DOCUMENTS.BY_ID(documentToDelete)}`,
+			url: API_ROUTES.DOCUMENTS.BY_ID(documentToDelete),
 			tags: [RESOURCES.DOCUMENTS],
 			successMessage: 'Documento Excluído com Sucesso!'
 		})
@@ -209,7 +209,7 @@ export default function Library({
 							</div>
 							<div className={styles.cardBody}>
 								<ThumbnailPdf
-									url={`http://localhost:3001${document.path}`}
+									url={`/api/documents/${document.id}/file`}
 									className={styles.cardImage}
 								/>
 								<button

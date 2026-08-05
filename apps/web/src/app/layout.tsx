@@ -1,4 +1,3 @@
-'use client'
 import './globals.css'
 
 export default function RootLayout({
@@ -7,7 +6,7 @@ export default function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang="pt" suppressHydrationWarning>
+		<html lang="pt-BR" suppressHydrationWarning>
 			<body suppressHydrationWarning>{children}</body>
 		</html>
 	)
