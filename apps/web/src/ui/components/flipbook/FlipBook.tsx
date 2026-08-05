@@ -22,13 +22,15 @@ interface FlipBookProps {
 	file: File | string
 	width?: number
 	height?: number
+	embedded?: boolean
 }
 
 const FlipBook = memo(function FlipBook({
 	file,
 	type = 'magazine',
 	width = DEFAULT_MAX_WIDTH,
-	height = DEFAULT_MAX_HEIGHT
+	height = DEFAULT_MAX_HEIGHT,
+	embedded = false
 }: FlipBookProps) {
 	const bookRef = useRef<HTMLDivElement>(null)
 	const isMobile = useMediaQuery(MOBILE_BREAKPOINT)
@@ -193,7 +195,9 @@ const FlipBook = memo(function FlipBook({
 	])
 
 	return (
-		<div className="custom-flipbook-container">
+		<div
+			className={`custom-flipbook-container ${embedded ? 'embedded-flipbook-container' : ''}`}
+		>
 			<FlipButton
 				direction="prev"
 				onClick={handleFlipPrev}

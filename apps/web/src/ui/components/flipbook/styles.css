@@ -12,6 +12,10 @@ body.no-scroll {
 	margin-bottom: -3rem;
 }
 
+.custom-flipbook-container.embedded-flipbook-container {
+	margin-bottom: 0;
+}
+
 .loading-container {
 	display: flex;
 	justify-content: center;
@@ -339,6 +343,10 @@ body.no-scroll {
 		row-gap: 1px;
 		padding-bottom: 20px;
 		padding-top: 5rem;
+	}
+
+	.custom-flipbook-container.embedded-flipbook-container {
+		padding-top: 1rem;
 	}
 
 	.book {

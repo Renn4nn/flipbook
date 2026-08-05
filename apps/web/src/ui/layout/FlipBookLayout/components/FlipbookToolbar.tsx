@@ -6,6 +6,7 @@ import styles from './toolbar.module.css'
 
 interface FlipbookToolbarProps {
 	isFullscreen: boolean
+	embedded?: boolean
 	onToggleFullscreen: () => void
 	onZoomIn: () => void
 	onZoomOut: () => void
@@ -13,12 +14,15 @@ interface FlipbookToolbarProps {
 
 export const FlipbookToolbar = memo(function FlipbookToolbar({
 	isFullscreen,
+	embedded = false,
 	onToggleFullscreen,
 	onZoomIn,
 	onZoomOut
 }: FlipbookToolbarProps) {
 	return (
-		<div className={styles.toolbar}>
+		<div
+			className={`${styles.toolbar} ${embedded ? styles.embeddedToolbar : ''}`}
+		>
 			<button
 				onClick={onToggleFullscreen}
 				className={styles.toolbarButton}

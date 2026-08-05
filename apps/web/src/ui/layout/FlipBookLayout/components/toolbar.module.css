@@ -7,6 +7,10 @@
 	gap: 0.5rem;
 }
 
+.embeddedToolbar {
+	top: 2rem;
+}
+
 .toolbarButton {
 	background: rgba(255, 255, 255, 0.7);
 	backdrop-filter: blur(10px);
