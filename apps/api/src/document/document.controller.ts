@@ -10,6 +10,7 @@ import {
 	ParseUUIDPipe,
 	Patch,
 	Post,
+	Put,
 	Request,
 	StreamableFile,
 	UploadedFile,
@@ -18,12 +19,17 @@ import {
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { RESOURCES } from '@repo/constants'
-import { ApiSuccessResponse, DocumentSchema } from '@repo/schemas'
+import {
+	ApiSuccessResponse,
+	DocumentSchema,
+	DocumentSharingSchema
+} from '@repo/schemas'
 import { multerConfig } from 'src/lib/config/multer/multer.config'
 import type { AuthenticatedRequestUser } from 'src/lib/types/auth/auth'
 import {
 	CreateDocumentDto,
-	UpdateDocumentDto
+	UpdateDocumentDto,
+	UpdateDocumentSharingDto
 } from 'src/lib/types/dto/document.dto'
 import { JwtAuthGuard } from '../auth/guards/JwtGuard'
 import { OptionalJwtAuthGuard } from '../auth/guards/OptionalJwtGuard'
@@ -32,6 +38,33 @@ import { DocumentService } from './document.service'
 @Controller(RESOURCES.DOCUMENTS)
 export class DocumentController {
 	constructor(private readonly service: DocumentService) {}
+
+	@Get(':id/sharing')
+	@UseGuards(JwtAuthGuard)
+	async getDocumentSharing(
+		@Param('id', ParseUUIDPipe) id: string,
+		@Request() request: { user: AuthenticatedRequestUser }
+	): Promise<ApiSuccessResponse<DocumentSharingSchema>> {
+		return {
+			data: await this.service.getDocumentSharing(id, request.user.userId)
+		}
+	}
+
+	@Put(':id/sharing')
+	@UseGuards(JwtAuthGuard)
+	async updateDocumentSharing(
+		@Param('id', ParseUUIDPipe) id: string,
+		@Body() data: UpdateDocumentSharingDto,
+		@Request() request: { user: AuthenticatedRequestUser }
+	): Promise<ApiSuccessResponse<DocumentSharingSchema>> {
+		return {
+			data: await this.service.updateDocumentSharing(
+				id,
+				data,
+				request.user.userId
+			)
+		}
+	}
 
 	@Get(':id/file')
 	@UseGuards(OptionalJwtAuthGuard)

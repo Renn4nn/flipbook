@@ -21,6 +21,7 @@ type RouteProps = {
 type ROUTES = {
 	DOCUMENTS: RouteProps & {
 		FILE: (id: string | number) => string
+		SHARING: (id: string | number) => string
 	}
 	USERS: RouteProps
 }
@@ -31,11 +32,12 @@ export const API_ROUTES: ROUTES = {
 		BY_ID: (id: string | number) =>
 			`${API_PREFIX}/${RESOURCES.DOCUMENTS}/${id}`,
 		FILE: (id: string | number) =>
-			`${API_PREFIX}/${RESOURCES.DOCUMENTS}/${id}/file`
+			`${API_PREFIX}/${RESOURCES.DOCUMENTS}/${id}/file`,
+		SHARING: (id: string | number) =>
+			`${API_PREFIX}/${RESOURCES.DOCUMENTS}/${id}/sharing`
 	},
 	USERS: {
 		BASE: `${API_PREFIX}/${RESOURCES.USERS}`,
-		BY_ID: (id: string | number) =>
-			`${API_PREFIX}/${RESOURCES.USERS}/${id}`
+		BY_ID: (id: string | number) => `${API_PREFIX}/${RESOURCES.USERS}/${id}`
 	}
 } as const

@@ -1,6 +1,15 @@
 import type { Prisma } from '@repo/database'
-import type { ApiSuccessResponse, DocumentSchema } from '@repo/schemas'
-import type { CreateDocumentDto, UpdateDocumentDto } from '../dto/document.dto'
+import type {
+	ApiSuccessResponse,
+	DocumentSchema,
+	DocumentSharingSchema
+} from '@repo/schemas'
+import type { SelectedDocument } from '../../selects'
+import type {
+	CreateDocumentDto,
+	UpdateDocumentDto,
+	UpdateDocumentSharingDto
+} from '../dto/document.dto'
 
 export type GetDocumentsParams = {
 	skip?: number
@@ -15,14 +24,30 @@ export type UpdateDocumentParams = {
 	data: Prisma.DocumentUpdateInput
 }
 
+export type DocumentSharingRecord = {
+	isPublic: boolean
+	ownerId: string
+	users: { id: string }[]
+}
+
+export type SharingUser = { id: string; login: string }
+
 export interface IDocumentRepository {
-	document(where: Prisma.DocumentWhereInput): Promise<DocumentSchema>
-	documents(params: GetDocumentsParams): Promise<DocumentSchema[]>
-	createDocument(data: Prisma.DocumentCreateInput): Promise<DocumentSchema>
-	updateDocument(params: UpdateDocumentParams): Promise<DocumentSchema>
+	document(where: Prisma.DocumentWhereInput): Promise<SelectedDocument>
+	documents(params: GetDocumentsParams): Promise<SelectedDocument[]>
+	createDocument(data: Prisma.DocumentCreateInput): Promise<SelectedDocument>
+	updateDocument(params: UpdateDocumentParams): Promise<SelectedDocument>
 	deleteDocument(
 		where: Prisma.DocumentWhereUniqueInput
-	): Promise<DocumentSchema>
+	): Promise<SelectedDocument>
+	documentSharing(
+		where: Prisma.DocumentWhereInput
+	): Promise<DocumentSharingRecord>
+	sharingUsers(ownerId: string): Promise<SharingUser[]>
+	updateDocumentSharing(
+		where: Prisma.DocumentWhereUniqueInput,
+		data: Prisma.DocumentUpdateInput
+	): Promise<void>
 }
 
 export interface IDocumentService {
@@ -38,6 +63,12 @@ export interface IDocumentService {
 		userId: string
 	): Promise<DocumentSchema>
 	deleteDocumentById(id: string, userId: string): Promise<DocumentSchema>
+	getDocumentSharing(id: string, userId: string): Promise<DocumentSharingSchema>
+	updateDocumentSharing(
+		id: string,
+		data: UpdateDocumentSharingDto,
+		userId: string
+	): Promise<DocumentSharingSchema>
 }
 
 export interface IDocumentController {

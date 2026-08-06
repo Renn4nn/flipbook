@@ -49,4 +49,34 @@ export class DocumentRepository implements IDocumentRepository {
 			select: DOCUMENT_SELECT
 		})
 	}
+
+	documentSharing(where: Prisma.DocumentWhereInput) {
+		return this.prisma.client.document.findFirstOrThrow({
+			where,
+			select: {
+				isPublic: true,
+				ownerId: true,
+				users: { select: { id: true } }
+			}
+		})
+	}
+
+	sharingUsers(ownerId: string) {
+		return this.prisma.client.user.findMany({
+			where: { id: { not: ownerId } },
+			select: { id: true, login: true },
+			orderBy: { login: 'asc' }
+		})
+	}
+
+	async updateDocumentSharing(
+		where: Prisma.DocumentWhereUniqueInput,
+		data: Prisma.DocumentUpdateInput
+	): Promise<void> {
+		await this.prisma.client.document.update({
+			where,
+			data,
+			select: { id: true }
+		})
+	}
 }

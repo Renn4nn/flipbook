@@ -1,10 +1,10 @@
 'use client'
 
-import { API_ROUTES, RESOURCES } from '@repo/constants'
-import type { CreateDocumentSchema, DocumentSchema } from '@repo/schemas'
+import { API_ROUTES } from '@repo/constants'
+import type { ApiResponse, DocumentSchema } from '@repo/schemas'
+import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
 import toast from 'react-hot-toast'
-import { apiAction } from '@/lib/api/actions'
 import { useModalStore } from '@/lib/store/useModal'
 import styles from './create-button.module.css'
 
@@ -21,6 +21,7 @@ export function CreateBookButton({
 	setUploadProgress,
 	disabled
 }: CreateBookButtonProps) {
+	const router = useRouter()
 	const progressIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
 	async function handleCreate() {
@@ -68,34 +69,37 @@ export function CreateBookButton({
 
 		formData.append('pages', numPages.toString())
 
-		const actionPromise = apiAction<DocumentSchema, CreateDocumentSchema>({
-			method: 'post',
-			url: API_ROUTES.DOCUMENTS.BASE,
-			data: formData as unknown as CreateDocumentSchema,
-			successMessage: 'Documento criado com sucesso!',
-			tags: [RESOURCES.DOCUMENTS]
-		})
+		const loadingToast = toast.loading('Criando documento...')
 
-		const { data, message } = await toast.promise(actionPromise, {
-			loading: 'Criando documento...'
-		})
+		try {
+			const response = await fetch(API_ROUTES.DOCUMENTS.BASE, {
+				method: 'POST',
+				body: formData
+			})
+			const result = (await response.json()) as ApiResponse<DocumentSchema>
 
-		// Completa o progresso
-		if (progressIntervalRef.current) {
-			clearInterval(progressIntervalRef.current)
-		}
-		setUploadProgress?.(100)
+			if (!response.ok || !('data' in result)) {
+				toast.error(getApiErrorMessage(result), { id: loadingToast })
+				setUploadProgress?.(0)
+				return
+			}
 
-		if (data) {
-			toast.success(message)
-			setTimeout(() => {
-				setIsUploading?.(false)
-				useModalStore.getState().closeModal()
-			}, 500)
-		} else {
+			setUploadProgress?.(100)
+			toast.success('Documento criado com sucesso!', { id: loadingToast })
+			useModalStore.getState().closeModal()
+			router.refresh()
+		} catch {
+			toast.error('Não foi possível enviar o documento.', {
+				id: loadingToast
+			})
 			setIsUploading?.(false)
 			setUploadProgress?.(0)
-			toast.error(message)
+		} finally {
+			if (progressIntervalRef.current) {
+				clearInterval(progressIntervalRef.current)
+				progressIntervalRef.current = null
+			}
+			setIsUploading?.(false)
 		}
 	}
 
@@ -111,4 +115,12 @@ export function CreateBookButton({
 			</button>
 		</div>
 	)
+}
+
+function getApiErrorMessage(response: ApiResponse<DocumentSchema>): string {
+	if ('error' in response) return response.error.message
+	if ('errors' in response) {
+		return response.errors[0]?.message ?? 'Não foi possível criar o documento.'
+	}
+	return 'Não foi possível criar o documento.'
 }

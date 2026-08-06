@@ -17,6 +17,7 @@ import useApiResponse from '@/lib/api/hooks'
 import { useModalStore } from '@/lib/store/useModal'
 import ModalDelete from '@/ui/components/modal/delete/ModalDelete'
 import ModalEditTitle from '@/ui/components/modal/edit-title/ModalEditTitle'
+import ModalShareDocument from '@/ui/components/modal/share/ModalShareDocument'
 import LoadingSkeleton from '@/ui/components/skeletons/library/LoadingSkeleton/LoadingSkeleton'
 import styles from './library.module.css'
 
@@ -47,6 +48,9 @@ export default function Library({
 		null
 	)
 	const [isUpdatingTitle, setIsUpdatingTitle] = useState(false)
+	const [documentToShare, setDocumentToShare] = useState<DocumentSchema | null>(
+		null
+	)
 	const [searchTerm, setSearchTerm] = useState('')
 
 	const filteredDocuments = useMemo(() => {
@@ -73,6 +77,12 @@ export default function Library({
 		setDocumentToEdit(document)
 		setActiveDocumentId(null)
 		openModal('edit-document-title')
+	}
+
+	function handleShareClick(document: DocumentSchema) {
+		setDocumentToShare(document)
+		setActiveDocumentId(null)
+		openModal('share-document')
 	}
 
 	async function confirmEditTitle(title: string) {
@@ -129,6 +139,7 @@ export default function Library({
 		closeModal()
 		setDocumentToDelete(null)
 		setDocumentToEdit(null)
+		setDocumentToShare(null)
 	}
 
 	if (!documentsResponse || documentsResponse.length === 0) {
@@ -163,6 +174,14 @@ export default function Library({
 				isSaving={isUpdatingTitle}
 				onConfirm={confirmEditTitle}
 				onCancel={handleCloseModal}
+			/>
+			<ModalShareDocument
+				document={documentToShare}
+				onCancel={handleCloseModal}
+				onSaved={() => {
+					handleCloseModal()
+					router.refresh()
+				}}
 			/>
 			<div className={styles.searchBar}>
 				<Search className={styles.searchIcon} size={20} aria-hidden="true" />
@@ -228,30 +247,34 @@ export default function Library({
 												<Eye />
 												Visualizar
 											</Link>
-											<button
-												type="button"
-												className={styles.actionButton}
-												onClick={() => handleEditTitleClick(document)}
-											>
-												<Pencil />
-												Editar titulo
-											</button>
-											<button
-												type="button"
-												className={styles.actionButton}
-												onClick={() => setActiveDocumentId(null)}
-											>
-												<Share />
-												Compartilhar
-											</button>
-											<button
-												type="button"
-												className={styles.actionButton}
-												onClick={() => handleDeleteClick(document.id)}
-											>
-												<Trash />
-												Excluir
-											</button>
+											{document.canManage && (
+												<>
+													<button
+														type="button"
+														className={styles.actionButton}
+														onClick={() => handleEditTitleClick(document)}
+													>
+														<Pencil />
+														Editar titulo
+													</button>
+													<button
+														type="button"
+														className={styles.actionButton}
+														onClick={() => handleShareClick(document)}
+													>
+														<Share />
+														Compartilhar
+													</button>
+													<button
+														type="button"
+														className={styles.actionButton}
+														onClick={() => handleDeleteClick(document.id)}
+													>
+														<Trash />
+														Excluir
+													</button>
+												</>
+											)}
 											<button
 												type="button"
 												className={styles.closeBtn}

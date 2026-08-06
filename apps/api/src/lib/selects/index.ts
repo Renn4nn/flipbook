@@ -18,6 +18,11 @@ export const DOCUMENT_SELECT = {
 	size: true,
 	pages: true,
 	isPublic: true,
+	ownerId: true,
 	createdAt: true,
 	updatedAt: true
 } satisfies Prisma.DocumentSelect
+
+export type SelectedDocument = Prisma.DocumentGetPayload<{
+	select: typeof DOCUMENT_SELECT
+}>
