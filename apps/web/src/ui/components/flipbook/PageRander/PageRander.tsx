@@ -7,14 +7,14 @@ interface PageRanderProps {
 	pageNumber: number
 	width: number
 	height: number
-	scale?: number
+	zoomScale?: number
 }
 
 export const PageRander = ({
 	pageNumber,
 	width,
 	height,
-	scale = 1.5
+	zoomScale = 1
 }: PageRanderProps) => {
 	const [isRendered, setIsRendered] = useState(false)
 	const isMounted = useRef(true)
@@ -31,6 +31,16 @@ export const PageRander = ({
 			setIsRendered(true)
 		}
 	}
+
+	// O zoom visual usa CSS; renderizar novamente em uma escala proporcional
+	// preserva a nitidez do texto vetorial sem deixar o canvas ilimitado.
+	const renderScale = Math.min(Math.max(zoomScale * 1.5, 1.75), 3)
+	const devicePixelRatio = Math.min(
+		typeof window !== 'undefined'
+			? Math.max(window.devicePixelRatio, 1.5)
+			: 1.5,
+		2
+	)
 
 	return (
 		<div style={{ position: 'relative', width, height }}>
@@ -51,15 +61,11 @@ export const PageRander = ({
 					fallback={<PageSkeleton width={width} height={height} />}
 				>
 					<Page
-						key={`page_${pageNumber}`}
+						key={`page_${pageNumber}_${renderScale}`}
 						width={width}
-						height={height}
-						scale={scale}
+						scale={renderScale}
 						pageNumber={pageNumber}
-						devicePixelRatio={Math.min(
-							typeof window !== 'undefined' ? window.devicePixelRatio : 1,
-							2
-						)}
+						devicePixelRatio={devicePixelRatio}
 						renderAnnotationLayer={false}
 						renderTextLayer={false}
 						canvasBackground="#ffffff"

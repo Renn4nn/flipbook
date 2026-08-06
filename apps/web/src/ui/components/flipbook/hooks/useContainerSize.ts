@@ -9,8 +9,9 @@ interface Size {
 
 export function useContainerSize<T extends HTMLElement>(
 	ref: RefObject<T | null>,
-	maxWidth: number = 500,
-	maxHeight: number = 700
+	maxWidth: number = 580,
+	maxHeight: number = 820,
+	pageAspectRatio: number = maxWidth / maxHeight
 ): Size {
 	const [size, setSize] = useState<Size>({ width: maxWidth, height: maxHeight })
 
@@ -21,31 +22,37 @@ export function useContainerSize<T extends HTMLElement>(
 		if (!container) return
 
 		const containerRect = container.getBoundingClientRect()
-		const padding = 40 // padding total (20px cada lado)
-		const toolbarOffset = 80 // espaço para toolbar
-		const sliderOffset = 100 // espaço para slider
+		const padding = 24
+		const toolbarOffset = 72
+		const navigationOffset = 120
 
-		// Calcular espaço disponível considerando toolbar e slider
-		const availableWidth = containerRect.width - padding
-		const availableHeight =
-			containerRect.height - padding - toolbarOffset - sliderOffset
+		// O slider já ocupa outra linha no grid. Aqui reservamos apenas a toolbar
+		// e a navegação lateral para manter as duas páginas abertas na tela.
+		const availableWidth = Math.min(
+			containerRect.width - padding,
+			(containerRect.width - navigationOffset) / 2
+		)
+		const availableHeight = containerRect.height - padding - toolbarOffset
 
 		// Calcular dimensões mantendo aspect ratio
-		const aspectRatio = maxHeight / maxWidth
-
 		let newWidth = maxWidth
-		let newHeight = maxHeight
+		let newHeight = newWidth / pageAspectRatio
+
+		if (newHeight > maxHeight) {
+			newHeight = maxHeight
+			newWidth = newHeight * pageAspectRatio
+		}
 
 		// Se a largura disponível for menor que a largura máxima
 		if (availableWidth < maxWidth) {
 			newWidth = availableWidth
-			newHeight = newWidth * aspectRatio
+			newHeight = newWidth / pageAspectRatio
 		}
 
 		// Se a altura calculada for maior que a altura disponível
 		if (newHeight > availableHeight) {
 			newHeight = availableHeight
-			newWidth = newHeight / aspectRatio
+			newWidth = newHeight * pageAspectRatio
 		}
 
 		// Limite mínimo de largura
@@ -53,11 +60,11 @@ export function useContainerSize<T extends HTMLElement>(
 
 		if (newWidth < minWidth) {
 			newWidth = minWidth
-			newHeight = newWidth * aspectRatio
+			newHeight = newWidth / pageAspectRatio
 		}
 
 		setSize({ width: Math.floor(newWidth), height: Math.floor(newHeight) })
-	}, [ref, maxWidth, maxHeight])
+	}, [ref, maxWidth, maxHeight, pageAspectRatio])
 
 	useEffect(() => {
 		if (!ref.current) return

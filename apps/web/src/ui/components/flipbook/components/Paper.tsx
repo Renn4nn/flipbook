@@ -13,6 +13,7 @@ interface PaperProps {
 	numPages: number
 	finalWidth: number
 	finalHeight: number
+	zoomScale: number
 	type: string
 	onFlipNext: () => void
 	onFlipPrev: () => void
@@ -28,6 +29,7 @@ export const Paper = memo(function Paper({
 	numPages,
 	finalWidth,
 	finalHeight,
+	zoomScale,
 	type,
 	onFlipNext,
 	onFlipPrev
@@ -85,6 +87,7 @@ export const Paper = memo(function Paper({
 							pageNumber={pageFront}
 							width={finalWidth}
 							height={finalHeight}
+							zoomScale={zoomScale}
 						/>
 					</div>
 				</div>
@@ -113,6 +116,7 @@ export const Paper = memo(function Paper({
 								pageNumber={pageBack}
 								width={finalWidth}
 								height={finalHeight}
+								zoomScale={zoomScale}
 							/>
 						) : (
 							<div

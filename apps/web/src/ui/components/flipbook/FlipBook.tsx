@@ -1,6 +1,14 @@
 'use client'
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+	type ComponentProps,
+	memo,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState
+} from 'react'
 import { Document, pdfjs } from 'react-pdf'
 import { useFlipbookStore } from '@/lib/store/useFlipbook'
 import LoadingSkeleton from '@/ui/components/skeletons/library/LoadingSkeleton/LoadingSkeleton'
@@ -14,8 +22,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 const ASPECT_RATIO = 0.70796
 const MOBILE_BREAKPOINT = 900
-const DEFAULT_MAX_WIDTH = 500
-const DEFAULT_MAX_HEIGHT = 700
+const DEFAULT_MAX_WIDTH = 580
+const DEFAULT_MAX_HEIGHT = 820
 
 interface FlipBookProps {
 	type?: FlipBookType
@@ -23,14 +31,20 @@ interface FlipBookProps {
 	width?: number
 	height?: number
 	embedded?: boolean
+	zoomScale?: number
 }
+
+type LoadedPdfDocument = Parameters<
+	NonNullable<ComponentProps<typeof Document>['onLoadSuccess']>
+>[0]
 
 const FlipBook = memo(function FlipBook({
 	file,
 	type = 'magazine',
 	width = DEFAULT_MAX_WIDTH,
 	height = DEFAULT_MAX_HEIGHT,
-	embedded = false
+	embedded = false,
+	zoomScale = 1
 }: FlipBookProps) {
 	const bookRef = useRef<HTMLDivElement>(null)
 	const isMobile = useMediaQuery(MOBILE_BREAKPOINT)
@@ -39,9 +53,15 @@ const FlipBook = memo(function FlipBook({
 
 	const [numPages, setNumPages] = useState(0)
 	const [currentState, setCurrentState] = useState(1)
+	const [pageAspectRatio, setPageAspectRatio] = useState(ASPECT_RATIO)
 
 	// Usar container size para dimensões responsivas
-	const containerSize = useContainerSize(bookRef, width, height)
+	const containerSize = useContainerSize(
+		bookRef,
+		width,
+		height,
+		pageAspectRatio
+	)
 
 	// Memoizar dimensões finais (container size ou mobile)
 	const dimensions = useMemo(() => {
@@ -51,11 +71,11 @@ const FlipBook = memo(function FlipBook({
 			const calculatedWidth = Math.min(340, screenWidth - 24)
 			return {
 				width: calculatedWidth,
-				height: Math.round(calculatedWidth / ASPECT_RATIO)
+				height: Math.round(calculatedWidth / pageAspectRatio)
 			}
 		}
 		return containerSize
-	}, [isMobile, containerSize])
+	}, [isMobile, containerSize, pageAspectRatio])
 
 	// Calcular número de papers e estado máximo
 	const { numOfPapers, maxState } = useMemo(() => {
@@ -84,9 +104,13 @@ const FlipBook = memo(function FlipBook({
 	}, [currentPage, numPages, isMobile, currentState])
 
 	const handleDocumentLoad = useCallback(
-		({ numPages }: { numPages: number }) => {
-			setNumPages(numPages)
-			setTotalPages(numPages)
+		async (document: LoadedPdfDocument) => {
+			setNumPages(document.numPages)
+			setTotalPages(document.numPages)
+
+			const firstPage = await document.getPage(1)
+			const viewport = firstPage.getViewport({ scale: 1 })
+			setPageAspectRatio(viewport.width / viewport.height)
 		},
 		[setTotalPages]
 	)
@@ -157,7 +181,9 @@ const FlipBook = memo(function FlipBook({
 			(_, paperIndex) => paperIndex + 1
 		).map((paperNumber) => {
 			const paperIndex = paperNumber - 1
-			const isVisible = Math.abs(paperNumber - currentState) <= 2
+			// A página atual e as vizinhas são suficientes para a animação.
+			// Limitar o restante libera memória para um canvas inicial mais nítido.
+			const isVisible = Math.abs(paperNumber - currentState) <= 1
 
 			if (!isVisible) return null
 
@@ -176,6 +202,7 @@ const FlipBook = memo(function FlipBook({
 					numPages={numPages}
 					finalWidth={dimensions.width}
 					finalHeight={dimensions.height}
+					zoomScale={zoomScale}
 					type={type}
 					onFlipNext={handleFlipNext}
 					onFlipPrev={handleFlipPrev}
@@ -188,6 +215,7 @@ const FlipBook = memo(function FlipBook({
 		currentState,
 		isMobile,
 		dimensions,
+		zoomScale,
 		type,
 		maxState,
 		handleFlipNext,
@@ -226,7 +254,6 @@ const FlipBook = memo(function FlipBook({
 					}
 					noData="Nenhum arquivo PDF selecionado"
 					options={pdfOptions}
-					scale={10}
 				>
 					{visiblePapers}
 				</Document>

@@ -45,10 +45,18 @@ const Slider = memo(function Slider() {
 		return (tempSpread / (totalSpreads - 1)) * 100
 	}, [tempSpread, totalSpreads])
 
-	const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		const newSpread = parseInt(e.target.value, 10)
-		setTempSpread(newSpread)
-	}, [])
+	const handleChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			const newSpread = Number.parseInt(e.target.value, 10)
+			setTempSpread(newSpread)
+
+			// Teclado não dispara pointer events; nesse caso a navegação é imediata.
+			if (!isDragging) {
+				goToPage(newSpread * 2)
+			}
+		},
+		[goToPage, isDragging]
+	)
 
 	const handleCommit = useCallback(() => {
 		const pageIndex = tempSpread * 2
@@ -64,22 +72,32 @@ const Slider = memo(function Slider() {
 
 	return (
 		<div className={styles.sliderWrapper}>
-			<div className={styles.pageIndicator}>{spreadLabel}</div>
+			<output
+				className={styles.pageIndicator}
+				htmlFor="page-navigation"
+				aria-live="polite"
+			>
+				{spreadLabel}
+				<span aria-hidden="true">/</span>
+				<span className={styles.totalPages}>{totalPages}</span>
+			</output>
 			<input
+				id="page-navigation"
 				type="range"
 				min={0}
 				max={Math.max(0, totalSpreads - 1)}
 				value={tempSpread}
-				onMouseDown={handleStart}
-				onTouchStart={handleStart}
+				onPointerDown={handleStart}
 				onChange={handleChange}
-				onMouseUp={handleCommit}
-				onTouchEnd={handleCommit}
+				onPointerUp={handleCommit}
+				onPointerCancel={handleCommit}
+				onBlur={handleCommit}
 				className={styles.pageSlider}
 				style={
 					{ '--progress': `${progressPercentage}%` } as React.CSSProperties
 				}
 				aria-label="Navegar entre páginas"
+				aria-valuetext={`Página ${spreadLabel} de ${totalPages}`}
 			/>
 		</div>
 	)

@@ -1,7 +1,8 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import type { ReactZoomPanPinchRef } from 'react-zoom-pan-pinch'
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import { useFlipbookStore } from '@/lib/store/useFlipbook'
 import { useFullscreenStore } from '@/lib/store/useFullScreen'
@@ -29,6 +30,16 @@ export default function FlipBookViewer({
 }: FlipBookViewerProps) {
 	const { reset } = useFlipbookStore()
 	const { isFullscreen, toggleFullscreen, setFullscreen } = useFullscreenStore()
+	const [zoomScale, setZoomScale] = useState(1)
+
+	const syncRenderScale = useCallback((ref: ReactZoomPanPinchRef) => {
+		setZoomScale((currentScale) => {
+			const nextScale = ref.state.scale
+			return Math.abs(currentScale - nextScale) < 0.01
+				? currentScale
+				: nextScale
+		})
+	}, [])
 
 	useEffect(() => {
 		reset()
@@ -60,6 +71,9 @@ export default function FlipBookViewer({
 					centerZoomedOut
 					limitToBounds
 					doubleClick={{ disabled: true }}
+					onZoomStop={syncRenderScale}
+					onWheelStop={syncRenderScale}
+					onPinchStop={syncRenderScale}
 				>
 					{({ zoomIn, zoomOut }) => (
 						<div className={styles.transformContainer}>
@@ -85,8 +99,9 @@ export default function FlipBookViewer({
 								<FlipBook
 									type="magazine"
 									file={file}
-									width={500}
-									height={665}
+									width={580}
+									height={820}
+									zoomScale={zoomScale}
 									embedded={embedded && !isFullscreen}
 								/>
 							</TransformComponent>
