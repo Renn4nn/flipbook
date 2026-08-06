@@ -62,7 +62,7 @@ export const PageRander = ({
 						)}
 						renderAnnotationLayer={false}
 						renderTextLayer={false}
-						canvasBackground="transparent"
+						canvasBackground="#ffffff"
 						loading={<div style={{ width, height }} />}
 						error={<PageSkeleton width={width} height={height} />}
 						onRenderSuccess={handleRenderSuccess}

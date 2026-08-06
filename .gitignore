@@ -37,4 +37,4 @@ yarn-error.log*
 *.pem
 
 # Uploaded files - too large for Git
-apps/api/uploads/
+# apps/api/uploads/

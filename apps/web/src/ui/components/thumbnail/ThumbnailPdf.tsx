@@ -45,7 +45,8 @@ export default function ThumbnailPdf({
 					await page.render({
 						canvasContext: context,
 						viewport: viewport,
-						canvas: canvas
+						canvas: canvas,
+						background: '#ffffff'
 					}).promise
 
 					setThumbnail(canvas.toDataURL('image/jpeg'))
