@@ -1,7 +1,6 @@
 import { z } from '@repo/config'
-import type { Document, User } from '@repo/database'
+import type { User } from '@repo/database'
 import type { ApiSuccessResponse } from '../api/api.response.types.js'
-import { documentSchema } from '../document/document.schema.js'
 
 const safeDateTransform = z
 	.union([
@@ -10,16 +9,9 @@ const safeDateTransform = z
 	])
 	.transform((value) => new Date(value as string | Date))
 
-const documentIdsSchema = z
-	.array(z.string().uuid())
-	.refine((ids) => new Set(ids).size === ids.length, {
-		message: 'Os documentos não podem ser repetidos.'
-	})
-
 export const createUserSchema = z.strictObject({
 	login: z.string().trim().toLowerCase().min(3).max(100),
-	password: z.string().min(8),
-	documentIds: documentIdsSchema.optional()
+	password: z.string().min(8)
 })
 
 export const updateUserSchema = createUserSchema.partial()
@@ -28,9 +20,8 @@ export const userSchema = z.strictObject({
 	id: z.string().uuid(),
 	login: z.string(),
 	createdAt: safeDateTransform,
-	updatedAt: safeDateTransform,
-	documents: z.array(documentSchema)
-}) satisfies z.ZodType<Omit<User, 'password'> & { documents: Document[] }>
+	updatedAt: safeDateTransform
+}) satisfies z.ZodType<Omit<User, 'password'>>
 
 export const userResponseSchema = z.strictObject({
 	data: userSchema

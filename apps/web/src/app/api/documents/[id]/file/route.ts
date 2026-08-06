@@ -10,19 +10,9 @@ export async function GET(
 	const { id } = await params
 	let accessToken = await getAccessToken()
 
-	if (!accessToken) {
-		return NextResponse.json(
-			{ error: 'Sessão não encontrada.' },
-			{ status: 401 }
-		)
-	}
-
 	let response = await fetchDocument(id, accessToken, request)
-	if (response.status === 401) {
+	if (response.status === 401 && accessToken) {
 		accessToken = (await renewSession()) ?? undefined
-		if (!accessToken) {
-			return NextResponse.json({ error: 'Sessão expirada.' }, { status: 401 })
-		}
 		response = await fetchDocument(id, accessToken, request)
 	}
 
@@ -54,13 +44,13 @@ export async function GET(
 
 function fetchDocument(
 	id: string,
-	accessToken: string,
+	accessToken: string | undefined,
 	request: NextRequest
 ): Promise<Response> {
 	const range = request.headers.get('range')
 	return fetch(`${API_BASE_URL}${API_ROUTES.DOCUMENTS.FILE(id)}`, {
 		headers: {
-			Authorization: `Bearer ${accessToken}`,
+			...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
 			...(range ? { Range: range } : {})
 		},
 		cache: 'no-store'

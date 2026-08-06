@@ -8,6 +8,7 @@ export type ApiRequestParams<T extends DataType> = {
 	url: string
 	data?: T
 	refreshOnUnauthorized?: boolean
+	anonymousFallback?: boolean
 }
 
 export type ApiRequestReturn<T extends DataType> = Promise<ApiResponse<T>>

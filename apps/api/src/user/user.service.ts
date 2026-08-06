@@ -19,21 +19,18 @@ export class UserService implements IUserService {
 	}
 
 	async createUser(data: CreateUserDto): Promise<UserSchema> {
-		const { documentIds, password, ...userData } = data
+		const { password, ...userData } = data
 		const salt = await bcrypt.genSalt()
 		const hashedPassword = await bcrypt.hash(password, salt)
 
 		return this.repository.createUser({
 			...userData,
-			password: hashedPassword,
-			documents: documentIds
-				? { connect: documentIds.map((id) => ({ id })) }
-				: undefined
+			password: hashedPassword
 		})
 	}
 
 	async updateUserById(id: string, data: UpdateUserDto): Promise<UserSchema> {
-		const { documentIds, password, ...userData } = data
+		const { password, ...userData } = data
 		let hashedPassword: string | undefined
 
 		if (password) {
@@ -43,11 +40,7 @@ export class UserService implements IUserService {
 
 		const updateData: Prisma.UserUpdateInput = {
 			...userData,
-			password: hashedPassword,
-			documents:
-				documentIds !== undefined
-					? { set: documentIds.map((documentId) => ({ id: documentId })) }
-					: undefined
+			password: hashedPassword
 		}
 
 		return this.repository.updateUser({ where: { id }, data: updateData })

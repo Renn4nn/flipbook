@@ -11,26 +11,46 @@ import { DocumentRepository } from './document.repository'
 export class DocumentService implements IDocumentService {
 	constructor(private repository: DocumentRepository) {}
 
-	getDocuments(): Promise<DocumentSchema[]> {
-		return this.repository.documents({ orderBy: { createdAt: 'asc' } })
+	getDocuments(userId: string): Promise<DocumentSchema[]> {
+		return this.repository.documents({
+			where: { users: { some: { id: userId } } },
+			orderBy: { createdAt: 'asc' }
+		})
 	}
 
-	getDocumentById(id: string): Promise<DocumentSchema> {
-		return this.repository.document({ id })
+	getDocumentById(id: string, userId?: string): Promise<DocumentSchema> {
+		return this.repository.document({
+			id,
+			OR: [
+				{ isPublic: true },
+				...(userId ? [{ users: { some: { id: userId } } }] : [])
+			]
+		})
 	}
 
-	createDocument(data: CreateDocumentDto): Promise<DocumentSchema> {
-		return this.repository.createDocument(data)
+	createDocument(
+		data: CreateDocumentDto,
+		userId: string
+	): Promise<DocumentSchema> {
+		return this.repository.createDocument({
+			...data,
+			owner: { connect: { id: userId } },
+			users: { connect: { id: userId } }
+		})
 	}
 
 	updateDocumentById(
 		id: string,
-		data: UpdateDocumentDto
+		data: UpdateDocumentDto,
+		userId: string
 	): Promise<DocumentSchema> {
-		return this.repository.updateDocument({ where: { id }, data })
+		return this.repository.updateDocument({
+			where: { id, ownerId: userId },
+			data
+		})
 	}
 
-	deleteDocumentById(id: string): Promise<DocumentSchema> {
-		return this.repository.deleteDocument({ id })
+	deleteDocumentById(id: string, userId: string): Promise<DocumentSchema> {
+		return this.repository.deleteDocument({ id, ownerId: userId })
 	}
 }

@@ -7,6 +7,13 @@ const safeDateTransform = z
 	.union([z.string().datetime(), z.custom<Date>((val) => val instanceof Date)])
 	.transform((val) => new Date(val as string | Date))
 
+type CreateDocumentInput = Pick<
+	Prisma.DocumentUncheckedCreateInput,
+	'id' | 'filename' | 'path' | 'title' | 'size' | 'pages' | 'isPublic'
+>
+
+type PublicDocument = Omit<Document, 'ownerId'>
+
 export const createDocumentSchema = z.strictObject({
 	id: z.string().uuid().optional(),
 	filename: z.string().trim().nonempty(),
@@ -16,10 +23,8 @@ export const createDocumentSchema = z.strictObject({
 	pages: z.coerce.number(),
 	isPublic: z
 		.preprocess((val) => val === 'true' || val === true, z.boolean())
-		.optional(),
-	accessToken: z.string().nullish(),
-	expiresAt: z.string().datetime().nullish() // API input sempre é string
-}) satisfies z.ZodType<Prisma.DocumentCreateInput>
+		.optional()
+}) satisfies z.ZodType<CreateDocumentInput>
 
 export const updateDocumentSchema = createDocumentSchema.partial()
 
@@ -29,15 +34,13 @@ export const documentSchema = z.strictObject({
 	title: z.string().nullable(),
 	size: z.string(),
 	isPublic: z.boolean(),
-	accessToken: z.string().nullable(),
-	expiresAt: safeDateTransform.nullable(),
 	updatedAt: safeDateTransform,
 	createdAt: safeDateTransform
-}) satisfies z.ZodType<Document>
+}) satisfies z.ZodType<PublicDocument>
 
 export const documentResponseSchema = z.strictObject({
 	data: documentSchema
-}) satisfies z.ZodType<ApiSuccessResponse<Document>>
+}) satisfies z.ZodType<ApiSuccessResponse<PublicDocument>>
 
 export type DocumentSchema = z.infer<typeof documentSchema>
 export type DocumentResponseSchema = z.infer<typeof documentResponseSchema>

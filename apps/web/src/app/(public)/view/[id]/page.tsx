@@ -20,11 +20,12 @@ export default async function DocumentViewPage({
 async function ViewContainer({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params
 
-	if (!id) return <div>ID não fornecido</div>
+	if (!id) return <div>Documento não encontrado.</div>
 
 	const responsePromise = apiRequest<DocumentSchema>({
 		method: 'get',
-		url: API_ROUTES.DOCUMENTS.BY_ID(id)
+		url: API_ROUTES.DOCUMENTS.BY_ID(id),
+		anonymousFallback: true
 	})
 
 	return <FlipBookLayout documentPromise={responsePromise} />

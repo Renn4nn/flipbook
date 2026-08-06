@@ -9,3 +9,15 @@ export const AUTHENTICATION_USER_SELECT = {
 	...AUTH_USER_SELECT,
 	password: true
 } satisfies Prisma.UserSelect
+
+export const DOCUMENT_SELECT = {
+	id: true,
+	filename: true,
+	path: true,
+	title: true,
+	size: true,
+	pages: true,
+	isPublic: true,
+	createdAt: true,
+	updatedAt: true
+} satisfies Prisma.DocumentSelect

@@ -20,23 +20,29 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { RESOURCES } from '@repo/constants'
 import { ApiSuccessResponse, DocumentSchema } from '@repo/schemas'
 import { multerConfig } from 'src/lib/config/multer/multer.config'
+import type { AuthenticatedRequestUser } from 'src/lib/types/auth/auth'
 import {
 	CreateDocumentDto,
 	UpdateDocumentDto
 } from 'src/lib/types/dto/document.dto'
 import { JwtAuthGuard } from '../auth/guards/JwtGuard'
+import { OptionalJwtAuthGuard } from '../auth/guards/OptionalJwtGuard'
 import { DocumentService } from './document.service'
 
 @Controller(RESOURCES.DOCUMENTS)
-@UseGuards(JwtAuthGuard)
 export class DocumentController {
 	constructor(private readonly service: DocumentService) {}
 
 	@Get(':id/file')
+	@UseGuards(OptionalJwtAuthGuard)
 	async getDocumentFile(
-		@Param('id', ParseUUIDPipe) id: string
+		@Param('id', ParseUUIDPipe) id: string,
+		@Request() request: { user?: AuthenticatedRequestUser }
 	): Promise<StreamableFile> {
-		const document = await this.service.getDocumentById(id)
+		const document = await this.service.getDocumentById(
+			id,
+			request.user?.userId
+		)
 		const filePath = join(process.cwd(), 'uploads', basename(document.path))
 
 		if (!existsSync(filePath)) {
@@ -51,38 +57,47 @@ export class DocumentController {
 	}
 
 	@Get(':id')
+	@UseGuards(OptionalJwtAuthGuard)
 	async getDocumentById(
-		@Param('id', ParseUUIDPipe) id: string
+		@Param('id', ParseUUIDPipe) id: string,
+		@Request() request: { user?: AuthenticatedRequestUser }
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
-		const result = await this.service.getDocumentById(id)
+		const result = await this.service.getDocumentById(id, request.user?.userId)
 		return {
 			data: result
 		}
 	}
 
 	@Get()
-	async getDocuments(): Promise<ApiSuccessResponse<DocumentSchema[]>> {
-		const result = await this.service.getDocuments()
+	@UseGuards(JwtAuthGuard)
+	async getDocuments(
+		@Request() request: { user: AuthenticatedRequestUser }
+	): Promise<ApiSuccessResponse<DocumentSchema[]>> {
+		const result = await this.service.getDocuments(request.user.userId)
 		return {
 			data: result
 		}
 	}
 
 	@Post()
+	@UseGuards(JwtAuthGuard)
 	// ZodResponse({ type: DocumentDto }) This feature is currently disabled due to issues with SwaggerApi and Zod integration
 	@UseInterceptors(FileInterceptor('file', multerConfig))
 	async createDocument(
 		@Body() documentData: CreateDocumentDto,
 		@UploadedFile() _file: Express.Multer.File,
-		@Request() _req: unknown
+		@Request() request: { user: AuthenticatedRequestUser }
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
 		const documentId = parse(_file.filename).name
-		const result = await this.service.createDocument({
-			...documentData,
-			id: documentId,
-			filename: _file.originalname,
-			path: `/uploads/${_file.filename}`
-		})
+		const result = await this.service.createDocument(
+			{
+				...documentData,
+				id: documentId,
+				filename: _file.originalname,
+				path: `/uploads/${_file.filename}`
+			},
+			request.user.userId
+		)
 
 		return {
 			data: result
@@ -90,22 +105,33 @@ export class DocumentController {
 	}
 
 	@Patch(':id')
+	@UseGuards(JwtAuthGuard)
 	// ZodResponse({ type: DocumentDto }) This feature is currently disabled due to issues with SwaggerApi and Zod integration
 	async updateDocument(
 		@Param('id', ParseUUIDPipe) id: string,
-		@Body() data: UpdateDocumentDto
+		@Body() data: UpdateDocumentDto,
+		@Request() request: { user: AuthenticatedRequestUser }
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
-		const result = await this.service.updateDocumentById(id, data)
+		const result = await this.service.updateDocumentById(
+			id,
+			data,
+			request.user.userId
+		)
 		return {
 			data: result
 		}
 	}
 
 	@Delete(':id')
+	@UseGuards(JwtAuthGuard)
 	async deleteDocument(
-		@Param('id', ParseUUIDPipe) id: string
+		@Param('id', ParseUUIDPipe) id: string,
+		@Request() request: { user: AuthenticatedRequestUser }
 	): Promise<ApiSuccessResponse<DocumentSchema>> {
-		const result = await this.service.deleteDocumentById(id)
+		const result = await this.service.deleteDocumentById(
+			id,
+			request.user.userId
+		)
 
 		if (result.path) {
 			try {

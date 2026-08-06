@@ -13,17 +13,16 @@ async function main() {
 	await seedDatabase({
 		prisma,
 		models: {
-			document: {
-				data: seedDocuments,
-				// sujeito a erro por conta do id
-				whereCb: (item: unknown) => ({
-					id: (item as Prisma.DocumentCreateInput).id
-				})
-			},
 			user: {
 				data: seedUsers,
 				whereCb: (item: unknown) => ({
 					id: (item as Prisma.UserCreateInput).id
+				})
+			},
+			document: {
+				data: seedDocuments,
+				whereCb: (item: unknown) => ({
+					id: (item as Prisma.DocumentCreateInput).id
 				})
 			}
 		}

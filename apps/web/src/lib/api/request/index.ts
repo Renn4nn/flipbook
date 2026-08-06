@@ -13,7 +13,8 @@ export async function apiRequest<
 	method,
 	url,
 	data,
-	refreshOnUnauthorized = false
+	refreshOnUnauthorized = false,
+	anonymousFallback = false
 }: ApiRequestParams<D>): ApiRequestReturn<T> {
 	const request = async (accessToken?: string) =>
 		api.request<ApiResponse<T>, AxiosResponse<ApiResponse<T>>, D>({
@@ -29,11 +30,10 @@ export async function apiRequest<
 		const response = await request(await getAccessToken())
 		return asyncApiTryCatch(Promise.resolve(response))
 	} catch (error) {
-		if (
-			refreshOnUnauthorized &&
-			axios.isAxiosError(error) &&
-			error.response?.status === 401
-		) {
+		const unauthorized =
+			axios.isAxiosError(error) && error.response?.status === 401
+
+		if (unauthorized && refreshOnUnauthorized) {
 			const renewedAccessToken = await renewSession()
 			if (renewedAccessToken) {
 				try {
@@ -42,6 +42,15 @@ export async function apiRequest<
 				} catch (retryError) {
 					return asyncApiTryCatch(Promise.reject(retryError))
 				}
+			}
+		}
+
+		if (unauthorized && anonymousFallback) {
+			try {
+				const response = await request()
+				return asyncApiTryCatch(Promise.resolve(response))
+			} catch (anonymousError) {
+				return asyncApiTryCatch(Promise.reject(anonymousError))
 			}
 		}
 

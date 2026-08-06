@@ -6,12 +6,7 @@ export const userSelect = {
 	id: true,
 	login: true,
 	createdAt: true,
-	updatedAt: true,
-	documents: {
-		orderBy: {
-			createdAt: 'asc'
-		}
-	}
+	updatedAt: true
 } satisfies Prisma.UserSelect
 
 export type GetUsersParams = {

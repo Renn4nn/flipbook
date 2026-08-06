@@ -15,25 +15,28 @@ datasource db {
 }
 
 model Document {
-  id          String    @id @default(uuid())
-  filename    String
-  path        String
-  title       String?
-  size        String
-  pages       Int
-  isPublic    Boolean   @default(false)
-  accessToken String?   @unique
-  expiresAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  users       User[]
+  id        String   @id @default(uuid())
+  filename  String
+  path      String
+  title     String?
+  size      String
+  pages     Int
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ownerId   String
+  owner     User     @relation("DocumentOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  users     User[]   @relation("DocumentToUser")
+
+  @@index([ownerId])
 }
 
 model User {
-  id        String     @id @default(uuid())
-  login     String     @unique
-  password  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  documents Document[]
+  id             String     @id @default(uuid())
+  login          String     @unique
+  password       String
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  documents      Document[] @relation("DocumentToUser")
+  ownedDocuments Document[] @relation("DocumentOwner")
 }

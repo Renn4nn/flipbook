@@ -16,11 +16,9 @@ export type UpdateDocumentParams = {
 }
 
 export interface IDocumentRepository {
-	document(
-		documentWhereUniqueInput: Prisma.DocumentWhereUniqueInput
-	): Promise<DocumentSchema>
+	document(where: Prisma.DocumentWhereInput): Promise<DocumentSchema>
 	documents(params: GetDocumentsParams): Promise<DocumentSchema[]>
-	createDocument(data: CreateDocumentDto): Promise<DocumentSchema>
+	createDocument(data: Prisma.DocumentCreateInput): Promise<DocumentSchema>
 	updateDocument(params: UpdateDocumentParams): Promise<DocumentSchema>
 	deleteDocument(
 		where: Prisma.DocumentWhereUniqueInput
@@ -28,14 +26,18 @@ export interface IDocumentRepository {
 }
 
 export interface IDocumentService {
-	getDocuments(): Promise<DocumentSchema[]>
-	getDocumentById(id: string): Promise<DocumentSchema>
-	createDocument(data: CreateDocumentDto): Promise<DocumentSchema>
+	getDocuments(userId: string): Promise<DocumentSchema[]>
+	getDocumentById(id: string, userId?: string): Promise<DocumentSchema>
+	createDocument(
+		data: CreateDocumentDto,
+		userId: string
+	): Promise<DocumentSchema>
 	updateDocumentById(
 		id: string,
-		data: UpdateDocumentDto
+		data: UpdateDocumentDto,
+		userId: string
 	): Promise<DocumentSchema>
-	deleteDocumentById(id: string): Promise<DocumentSchema>
+	deleteDocumentById(id: string, userId: string): Promise<DocumentSchema>
 }
 
 export interface IDocumentController {

@@ -6,6 +6,7 @@ import { AuthRepository } from './auth.repository'
 import { AuthService } from './auth.service'
 import { JwtAuthGuard } from './guards/JwtGuard'
 import { JwtStrategy } from './guards/JwtStrategy'
+import { OptionalJwtAuthGuard } from './guards/OptionalJwtGuard'
 import { TokenService } from './token.service'
 
 @Module({
@@ -19,8 +20,9 @@ import { TokenService } from './token.service'
 		AuthRepository,
 		TokenService,
 		JwtStrategy,
-		JwtAuthGuard
+		JwtAuthGuard,
+		OptionalJwtAuthGuard
 	],
-	exports: [AuthService, JwtAuthGuard]
+	exports: [AuthService, JwtAuthGuard, OptionalJwtAuthGuard]
 })
 export class AuthModule {}

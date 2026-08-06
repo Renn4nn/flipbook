@@ -1,6 +1,6 @@
 'use client'
 
-import { RESOURCES } from '@repo/constants'
+import { API_ROUTES, RESOURCES } from '@repo/constants'
 import type { CreateDocumentSchema, DocumentSchema } from '@repo/schemas'
 import { useRef } from 'react'
 import toast from 'react-hot-toast'
@@ -70,7 +70,7 @@ export function CreateBookButton({
 
 		const actionPromise = apiAction<DocumentSchema, CreateDocumentSchema>({
 			method: 'post',
-			url: '/documents',
+			url: API_ROUTES.DOCUMENTS.BASE,
 			data: formData as unknown as CreateDocumentSchema,
 			successMessage: 'Documento criado com sucesso!',
 			tags: [RESOURCES.DOCUMENTS]

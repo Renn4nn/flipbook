@@ -6,6 +6,7 @@ import type {
 	IDocumentRepository,
 	UpdateDocumentParams
 } from 'src/lib/types/interfaces/document.inteface'
+import { DOCUMENT_SELECT } from '../lib/selects'
 
 @Injectable()
 export class DocumentRepository implements IDocumentRepository {
@@ -14,27 +15,38 @@ export class DocumentRepository implements IDocumentRepository {
 		private readonly prisma: CustomPrismaClient
 	) {}
 
-	document(
-		where: Prisma.DocumentWhereUniqueInput
-	): Promise<Prisma.DocumentModel> {
-		return this.prisma.client.document.findUniqueOrThrow({
-			where
+	document(where: Prisma.DocumentWhereInput) {
+		return this.prisma.client.document.findFirstOrThrow({
+			where,
+			select: DOCUMENT_SELECT
 		})
 	}
 
 	documents(params: GetDocumentsParams) {
-		return this.prisma.client.document.findMany({ ...params })
+		return this.prisma.client.document.findMany({
+			...params,
+			select: DOCUMENT_SELECT
+		})
 	}
 
 	createDocument(data: Prisma.DocumentCreateInput) {
-		return this.prisma.client.document.create({ data })
+		return this.prisma.client.document.create({
+			data,
+			select: DOCUMENT_SELECT
+		})
 	}
 
 	updateDocument(params: UpdateDocumentParams) {
-		return this.prisma.client.document.update({ ...params })
+		return this.prisma.client.document.update({
+			...params,
+			select: DOCUMENT_SELECT
+		})
 	}
 
 	deleteDocument(where: Prisma.DocumentWhereUniqueInput) {
-		return this.prisma.client.document.delete({ where })
+		return this.prisma.client.document.delete({
+			where,
+			select: DOCUMENT_SELECT
+		})
 	}
 }

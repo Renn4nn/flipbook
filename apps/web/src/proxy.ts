@@ -9,20 +9,18 @@ import {
 import type { SessionTokens } from '@/lib/auth/types'
 
 function isPrivateRoute(pathname: string): boolean {
-	return (
-		pathname === '/library' ||
-		pathname.startsWith('/library/') ||
-		pathname === '/view' ||
-		pathname.startsWith('/view/')
-	)
+	return pathname === '/library' || pathname.startsWith('/library/')
 }
 
 export default async function proxy(request: NextRequest) {
 	const pathname = request.nextUrl.pathname
 	const privateRoute = isPrivateRoute(pathname)
 	const loginRoute = pathname === '/login'
+	const publicDocumentRoute = pathname.startsWith('/view/')
 
-	if (!privateRoute && !loginRoute) return NextResponse.next()
+	if (!privateRoute && !loginRoute && !publicDocumentRoute) {
+		return NextResponse.next()
+	}
 
 	const accessToken = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value
 	const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value

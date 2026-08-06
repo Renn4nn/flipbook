@@ -7,7 +7,9 @@ export const seedDocuments: Prisma.DocumentCreateInput[] = [
 		path: '/uploads/d2cccaf2-32d8-4707-a76d-a7e90f111ea1.pdf',
 		pages: 217,
 		size: '15728640',
-		isPublic: true
+		isPublic: true,
+		owner: { connect: { id: '123e4567-e89b-12d3-a456-426614174000' } },
+		users: { connect: { id: '123e4567-e89b-12d3-a456-426614174000' } }
 	},
 	{
 		id: '3e4198c3-8955-4e2f-8998-e14decaf0421',
@@ -16,7 +18,9 @@ export const seedDocuments: Prisma.DocumentCreateInput[] = [
 		title: 'Naruto',
 		pages: 180,
 		size: '28968841',
-		isPublic: true
+		isPublic: true,
+		owner: { connect: { id: '123e4567-e89b-12d3-a456-426614174000' } },
+		users: { connect: { id: '123e4567-e89b-12d3-a456-426614174000' } }
 	},
 	{
 		id: '4ad55d44-5793-40fc-87d3-606844d03522',
@@ -24,6 +28,8 @@ export const seedDocuments: Prisma.DocumentCreateInput[] = [
 		path: '/uploads/4ad55d44-5793-40fc-87d3-606844d03522.pdf',
 		pages: 100,
 		size: '14680064',
-		isPublic: false
+		isPublic: false,
+		owner: { connect: { id: '123e4567-e89b-12d3-a456-426614174000' } },
+		users: { connect: { id: '123e4567-e89b-12d3-a456-426614174000' } }
 	}
 ]

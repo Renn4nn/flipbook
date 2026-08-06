@@ -10,8 +10,7 @@ describe('UserService', () => {
 		id: 'd6e6fa16-78b0-4bbc-9ae4-66f46f67ea8f',
 		login: 'user',
 		createdAt: new Date('2026-08-04T12:00:00.000Z'),
-		updatedAt: new Date('2026-08-04T12:00:00.000Z'),
-		documents: []
+		updatedAt: new Date('2026-08-04T12:00:00.000Z')
 	}
 
 	beforeEach(() => {
@@ -25,38 +24,21 @@ describe('UserService', () => {
 		service = new UserService(repository)
 	})
 
-	it('hashes the password and connects documents when creating a user', async () => {
-		const documentId = '5edb42c7-9913-47ec-83df-5e73949f2eec'
+	it('hashes the password when creating a user', async () => {
 		repository.createUser.mockResolvedValue(user)
 
 		await service.createUser({
 			login: user.login,
-			password: 'password123',
-			documentIds: [documentId]
+			password: 'password123'
 		})
 
 		expect(repository.createUser).toHaveBeenCalledWith({
 			login: user.login,
-			password: expect.stringMatching(/^\$2[aby]\$\d{2}\$.{53}$/),
-			documents: { connect: [{ id: documentId }] }
+			password: expect.stringMatching(/^\$2[aby]\$\d{2}\$.{53}$/)
 		})
 	})
 
-	it('clears all document relations when documentIds is empty', async () => {
-		repository.updateUser.mockResolvedValue(user)
-
-		await service.updateUserById(user.id, { documentIds: [] })
-
-		expect(repository.updateUser).toHaveBeenCalledWith({
-			where: { id: user.id },
-			data: {
-				password: undefined,
-				documents: { set: [] }
-			}
-		})
-	})
-
-	it('keeps document relations unchanged when documentIds is omitted', async () => {
+	it('updates scalar user data without changing document relations', async () => {
 		repository.updateUser.mockResolvedValue(user)
 
 		await service.updateUserById(user.id, { login: 'new-user' })
@@ -65,8 +47,7 @@ describe('UserService', () => {
 			where: { id: user.id },
 			data: {
 				login: 'new-user',
-				password: undefined,
-				documents: undefined
+				password: undefined
 			}
 		})
 	})
