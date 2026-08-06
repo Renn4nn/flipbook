@@ -181,9 +181,10 @@ const FlipBook = memo(function FlipBook({
 			(_, paperIndex) => paperIndex + 1
 		).map((paperNumber) => {
 			const paperIndex = paperNumber - 1
-			// A página atual e as vizinhas são suficientes para a animação.
-			// Limitar o restante libera memória para um canvas inicial mais nítido.
-			const isVisible = Math.abs(paperNumber - currentState) <= 1
+			// Ao avançar, o estado muda antes de a animação terminar. Manter duas
+			// folhas anteriores evita desmontar a página esquerda durante a virada.
+			const isVisible =
+				paperNumber >= currentState - 2 && paperNumber <= currentState + 1
 
 			if (!isVisible) return null
 
