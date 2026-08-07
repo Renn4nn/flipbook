@@ -16,7 +16,7 @@ export default function LandingPage() {
 				className={`${styles.header} ${isFullscreen ? styles.hidden : ''}`}
 			>
 				<div className={styles.headerContent}>
-					<Logo />
+					<Logo className={styles.logoEstilo} />
 					<div className={styles.headerText}>
 						<h1>CTD Flipbook</h1>
 						<p>Visualize seus documentos de forma interativa e moderna</p>
@@ -61,7 +61,7 @@ export default function LandingPage() {
 			<footer
 				className={`${styles.footer} ${isFullscreen ? styles.hidden : ''}`}
 			>
-				<p>CTD - Companhia de Tecnologia e Desenvolvimento</p>
+				<p>CTD</p>
 			</footer>
 		</div>
 	)
