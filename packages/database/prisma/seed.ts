@@ -1,7 +1,7 @@
 import { PrismaPg } from '@prisma/adapter-pg'
 import { transformDatabaseUrl } from '@repo/config'
 import { type Prisma, PrismaClient } from '../src/generated/prisma/client'
-import { seedDocuments, seedUsers } from '../src/lib/seed/data'
+import { seedUsers } from '../src/lib/seed/data'
 import { seedDatabase } from '../src/lib/utils'
 
 const connectionString = transformDatabaseUrl.parse(process.env)
@@ -18,15 +18,17 @@ async function main() {
 				whereCb: (item: unknown) => ({
 					id: (item as Prisma.UserCreateInput).id
 				})
-			},
-			document: {
-				data: seedDocuments,
-				whereCb: (item: unknown) => ({
-					id: (item as Prisma.DocumentCreateInput).id
-				})
 			}
 		}
 	})
+
+	console.log('\n--- Tabela de Usuários ---')
+	console.table(
+		seedUsers.map((u) => ({
+			Login: u.login,
+			PasswordHash: u.password
+		}))
+	)
 }
 
 main()

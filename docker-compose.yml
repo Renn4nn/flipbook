@@ -1,14 +1,14 @@
 services:
-  ctd-resource-db:
-    image: postgres:alpine3.23
+  ctd-flipbook-db:
+    image: postgres:17-alpine
     hostname: db
-    container_name: ctd-resource-db
+    container_name: ctd-flipbook-db
     restart: always
     env_file: .env.database.production
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     networks:
-      - ctd-resource-network
+      - ctd-flipbook-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
@@ -16,13 +16,13 @@ services:
       start_period: 30s
       timeout: 10s
 
-  ctd-resource-api:
+  ctd-flipbook-api:
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile
-    image: ctd-resource-api:latest
+    image: ctd-flipbook-api:latest
     hostname: api
-    container_name: ctd-resource-api
+    container_name: ctd-flipbook-api
     restart: always
     env_file:
       - .env.database.production
@@ -30,33 +30,33 @@ services:
     ports:
       - "${API_PORT:-3001}:${API_PORT:-3001}"
     depends_on:
-      ctd-resource-db:
+      ctd-flipbook-db:
         condition: service_healthy
         restart: true
     networks:
-      - ctd-resource-network
+      - ctd-flipbook-network
 
-  ctd-resource-web:
+  ctd-flipbook-web:
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
-    image: ctd-resource-web:latest
+    image: ctd-flipbook-web:latest
     hostname: web
-    container_name: ctd-resource-web
+    container_name: ctd-flipbook-web
     restart: always
     env_file:
       - ./apps/web/.env.production
     ports:
       - '3000:3000'
     depends_on:
-      ctd-resource-db:
+      ctd-flipbook-db:
         condition: service_healthy
         restart: true
-      ctd-resource-api:
+      ctd-flipbook-api:
         condition: service_started
     networks:
-      - ctd-resource-network
+      - ctd-flipbook-network
 
 networks:
-  ctd-resource-network:
-    name: ctd-resource-network
+  ctd-flipbook-network:
+    name: ctd-flipbook-network
