@@ -32,7 +32,7 @@ export default function LandingPage() {
 							className={styles.removeButton}
 							onClick={() => setFile(null)}
 						>
-							Trocar PDF
+							Remover PDF
 						</button>
 						<Link href="/login" className={styles.loginButton}>
 							Entrar

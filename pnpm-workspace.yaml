@@ -1,3 +1,15 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+overrides:
+  "@types/react": "19.2.2"
+  "ajv@>=7.0.0-alpha.0 <8.18.0": "8.18.0"
+  "js-yaml@>=5.0.0 <5.2.2": "5.2.2"
+
+onlyBuiltDependencies:
+  - "@prisma/engines"
+  - "bcrypt"
+  - "esbuild"
+  - "prisma"
+  - "unrs-resolver"

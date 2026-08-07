@@ -5,7 +5,7 @@
 	left: 0;
 	width: 100vw;
 	height: 100dvh;
-	background-color: inherit;
+	background-color: #e7e9ec;
 	overflow: hidden;
 }
 
@@ -54,6 +54,10 @@
 }
 
 @media (prefers-color-scheme: dark) {
+	.gridContainer {
+		background-color: #24272b;
+	}
+
 	.errorContainer {
 		color: #aaa;
 	}
