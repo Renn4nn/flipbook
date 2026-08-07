@@ -6,31 +6,31 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN npm install -g pnpm@10.34.5
 WORKDIR /app
 
-FROM base AS pruner
+FROM base as pruner
 RUN pnpm install -g turbo
 COPY . .
-RUN turbo prune --scope=api --docker
+RUN turbo prune --scope=web --docker
 
-FROM base AS installer
+FROM base as installer
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 
-FROM base AS builder
+FROM base as builder
 COPY --from=installer /app/ .
 COPY --from=pruner /app/out/full .
 RUN pnpm run build
-RUN apk add dos2unix
-RUN dos2unix ./apps/api/entrypoint.sh
 
-FROM base AS runner
+FROM base as runner
 ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nestjs
-USER nestjs
+RUN adduser --system --uid 1001 nextjs
+USER nextjs
 
-COPY --from=builder --chown=nestjs:nodejs /app .
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
-RUN chmod +x ./apps/api/entrypoint.sh
+EXPOSE 3000
 
-CMD ["./apps/api/entrypoint.sh"]
+CMD ["node","apps/web/server.js"]
