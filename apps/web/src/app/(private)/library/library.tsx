@@ -19,6 +19,9 @@ import ModalDelete from '@/ui/components/modal/delete/ModalDelete'
 import ModalEditTitle from '@/ui/components/modal/edit-title/ModalEditTitle'
 import ModalShareDocument from '@/ui/components/modal/share/ModalShareDocument'
 import LoadingSkeleton from '@/ui/components/skeletons/library/LoadingSkeleton/LoadingSkeleton'
+import DocumentLibraryFilter, {
+	type DocumentLibraryFilterValue
+} from './DocumentLibraryFilter'
 import styles from './library.module.css'
 
 const ThumbnailPdf = dynamic(
@@ -52,13 +55,33 @@ export default function Library({
 		null
 	)
 	const [searchTerm, setSearchTerm] = useState('')
+	const [documentFilter, setDocumentFilter] =
+		useState<DocumentLibraryFilterValue>('all')
+
+	const documentCounts = useMemo(() => {
+		const documents = documentsResponse ?? []
+
+		return {
+			total: documents.length,
+			owned: documents.filter((document) => document.canManage).length,
+			shared: documents.filter((document) => !document.canManage).length
+		}
+	}, [documentsResponse])
 
 	const filteredDocuments = useMemo(() => {
 		const normalizedSearch = searchTerm.trim().toLowerCase()
+		const documents = documentsResponse ?? []
 
-		if (!documentsResponse || !normalizedSearch) return documentsResponse ?? []
+		const documentsByOwnership = documents.filter((document) => {
+			if (documentFilter === 'owned') return document.canManage
+			if (documentFilter === 'shared') return !document.canManage
 
-		return documentsResponse.filter((document) => {
+			return true
+		})
+
+		if (!normalizedSearch) return documentsByOwnership
+
+		return documentsByOwnership.filter((document) => {
 			const searchableText = [document.title, document.filename, document.id]
 				.filter(Boolean)
 				.join(' ')
@@ -66,7 +89,7 @@ export default function Library({
 
 			return searchableText.includes(normalizedSearch)
 		})
-	}, [documentsResponse, searchTerm])
+	}, [documentFilter, documentsResponse, searchTerm])
 
 	function handleDeleteClick(id: string) {
 		setDocumentToDelete(id)
@@ -183,26 +206,35 @@ export default function Library({
 					router.refresh()
 				}}
 			/>
-			<div className={styles.searchBar}>
-				<Search className={styles.searchIcon} size={20} aria-hidden="true" />
-				<input
-					className={styles.searchInput}
-					type="search"
-					value={searchTerm}
-					onChange={(event) => setSearchTerm(event.target.value)}
-					placeholder="Pesquisar livros"
-					aria-label="Pesquisar livros"
+			<div className={styles.toolbar}>
+				<div className={styles.searchBar}>
+					<Search className={styles.searchIcon} size={20} aria-hidden="true" />
+					<input
+						className={styles.searchInput}
+						type="search"
+						value={searchTerm}
+						onChange={(event) => setSearchTerm(event.target.value)}
+						placeholder="Pesquisar livros"
+						aria-label="Pesquisar livros"
+					/>
+					{searchTerm && (
+						<button
+							type="button"
+							className={styles.clearSearchButton}
+							onClick={() => setSearchTerm('')}
+							aria-label="Limpar pesquisa"
+						>
+							<X size={18} />
+						</button>
+					)}
+				</div>
+				<DocumentLibraryFilter
+					value={documentFilter}
+					totalCount={documentCounts.total}
+					ownedCount={documentCounts.owned}
+					sharedCount={documentCounts.shared}
+					onChange={setDocumentFilter}
 				/>
-				{searchTerm && (
-					<button
-						type="button"
-						className={styles.clearSearchButton}
-						onClick={() => setSearchTerm('')}
-						aria-label="Limpar pesquisa"
-					>
-						<X size={18} />
-					</button>
-				)}
 			</div>
 			{filteredDocuments.length === 0 ? (
 				<div className={styles.noResults}>

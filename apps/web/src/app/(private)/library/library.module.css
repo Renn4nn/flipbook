@@ -16,12 +16,18 @@
 	max-width: 100%;
 }
 
+.toolbar {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin-bottom: 1.5rem;
+}
+
 .searchBar {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
 	width: 100%;
-	margin-bottom: 1.5rem;
 	border: 1px solid #d7dde4;
 	border-radius: 8px;
 	background-color: #fff;
@@ -73,6 +79,80 @@
 .clearSearchButton:hover {
 	background-color: #eef2f7;
 	color: #111827;
+}
+
+.filterGroup {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.35rem;
+	width: 100%;
+	border: 1px solid #d7dde4;
+	border-radius: 8px;
+	background-color: #fff;
+	padding: 0.35rem;
+	box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.filterButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.45rem;
+	min-width: 0;
+	min-height: 2.5rem;
+	border: none;
+	border-radius: 6px;
+	background-color: transparent;
+	color: #64748b;
+	font-size: 0.9rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.filterButton span:first-of-type {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.filterButton:hover {
+	background-color: #eef2f7;
+	color: #111827;
+}
+
+.filterButtonActive {
+	background-color: #111827;
+	color: #fff;
+	box-shadow: 0 6px 14px rgba(15, 23, 42, 0.14);
+}
+
+.filterButtonActive:hover {
+	background-color: #111827;
+	color: #fff;
+}
+
+.filterCount {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	min-width: 1.5rem;
+	height: 1.5rem;
+	border-radius: 999px;
+	background-color: #e2e8f0;
+	color: #334155;
+	font-size: 0.75rem;
+	line-height: 1;
+	padding: 0 0.35rem;
+}
+
+.filterButtonActive .filterCount {
+	background-color: rgba(255, 255, 255, 0.18);
+	color: #fff;
 }
 
 .noResults {
@@ -316,6 +396,41 @@
 		color: #fff;
 	}
 
+	.filterGroup {
+		background-color: #212121;
+		border-color: #404040;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+	}
+
+	.filterButton {
+		color: #d3d0d0;
+	}
+
+	.filterButton:hover {
+		background-color: #333;
+		color: #fff;
+	}
+
+	.filterButtonActive {
+		background-color: #fff;
+		color: #121212;
+	}
+
+	.filterButtonActive:hover {
+		background-color: #fff;
+		color: #121212;
+	}
+
+	.filterCount {
+		background-color: #333;
+		color: #d3d0d0;
+	}
+
+	.filterButtonActive .filterCount {
+		background-color: rgba(18, 18, 18, 0.12);
+		color: #121212;
+	}
+
 	.noResults {
 		background-color: rgba(33, 33, 33, 0.75);
 		border-color: #404040;
@@ -346,8 +461,29 @@
 	}
 }
 
+@media (max-width: 720px) {
+	.container {
+		padding: 1.25rem;
+	}
+
+	.filterGroup {
+		grid-template-columns: 1fr;
+	}
+
+	.filterButton {
+		justify-content: flex-start;
+		padding: 0 0.75rem;
+	}
+}
+
 /* Laptops (acima de 1024px) */
 @media (min-width: 1024px) {
+	.toolbar {
+		display: grid;
+		grid-template-columns: minmax(18rem, 1fr) minmax(32rem, auto);
+		align-items: center;
+	}
+
 	.grid {
 		grid-template-columns: repeat(3, 1fr);
 	}
