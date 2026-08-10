@@ -18,6 +18,7 @@ import {
 	UseInterceptors
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { Throttle } from '@nestjs/throttler'
 import { RESOURCES } from '@repo/constants'
 import {
 	ApiSuccessResponse,
@@ -25,6 +26,7 @@ import {
 	DocumentSharingSchema
 } from '@repo/schemas'
 import { multerConfig } from 'src/lib/config/multer/multer.config'
+import { THROTTLE_LIMITS } from 'src/lib/config/throttle/throttle.config'
 import type { AuthenticatedRequestUser } from 'src/lib/types/auth/auth'
 import {
 	CreateDocumentDto,
@@ -113,6 +115,7 @@ export class DocumentController {
 	}
 
 	@Post()
+	@Throttle({ default: THROTTLE_LIMITS.UPLOAD })
 	@UseGuards(JwtAuthGuard)
 	// ZodResponse({ type: DocumentDto }) This feature is currently disabled due to issues with SwaggerApi and Zod integration
 	@UseInterceptors(FileInterceptor('file', multerConfig))

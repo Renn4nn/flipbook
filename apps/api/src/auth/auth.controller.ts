@@ -11,9 +11,11 @@ import {
 	UseGuards
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { Throttle } from '@nestjs/throttler'
 import { API_PREFIX } from '@repo/constants'
 import type { ApiSuccessResponse } from '@repo/schemas'
 import type { CookieOptions, Request, Response } from 'express'
+import { THROTTLE_LIMITS } from '../lib/config/throttle/throttle.config'
 import type {
 	AuthenticatedRequestUser,
 	AuthenticatedUser,
@@ -33,9 +35,10 @@ export class AuthController {
 	constructor(
 		private readonly authService: AuthService,
 		private readonly configService: ConfigService
-	) {}
+	) { }
 
 	@Post('signup')
+	@Throttle({ default: THROTTLE_LIMITS.AUTH })
 	async signUp(
 		@Body() dto: SignUpDto,
 		@Res({ passthrough: true }) response: Response
@@ -47,6 +50,7 @@ export class AuthController {
 	}
 
 	@Post('signin')
+	@Throttle({ default: THROTTLE_LIMITS.AUTH })
 	@HttpCode(HttpStatus.OK)
 	async signIn(
 		@Body() dto: SignInDto,
@@ -59,6 +63,7 @@ export class AuthController {
 	}
 
 	@Post('refresh')
+	@Throttle({ default: THROTTLE_LIMITS.AUTH })
 	@HttpCode(HttpStatus.OK)
 	async refresh(
 		@Req() request: AuthRequest,
